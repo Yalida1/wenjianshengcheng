@@ -1,0 +1,10 @@
+{
+  "description": "Streamlines project document creation by enabling users to generate, edit, and review linked files across key project phases with role-based workflows.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
