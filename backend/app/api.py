@@ -51,6 +51,7 @@ from .models import (
     ProjectStage,
     Role,
     Template,
+    TemplateExtractionJob,
     TemplateSection,
     TemplateVariable,
     TemplateVersion,
@@ -93,6 +94,8 @@ from .schemas import (
     StageSourceRequest,
     StageView,
     TemplateCreate,
+    TemplateExtractionConfirmRequest,
+    TemplateExtractionJobView,
     TemplateVersionCreate,
     TemplateVersionView,
     TemplateView,
@@ -111,6 +114,7 @@ from .security import (
     verify_password,
 )
 from .services.generation import build_generation_job, document_version_sha256
+from .services.providers import TEMPLATE_EXTRACTION_PROMPT_VERSION
 from .services.storage import (
     get_storage,
     object_key,
@@ -118,9 +122,15 @@ from .services.storage import (
     sha256_bytes,
     validate_upload,
 )
-from .services.templates import preflight_docx_template
+from .services.template_extraction import build_candidate_template_docx
+from .services.templates import DEMO_TEMPLATE_CONTENT_TYPE, preflight_docx_template
 from .services.validation import validate_contract_payments, validate_document_version
-from .tasks import export_document_task, generate_document_task, parse_file_task
+from .tasks import (
+    export_document_task,
+    extract_template_task,
+    generate_document_task,
+    parse_file_task,
+)
 from .template_catalog import NATIONAL_OFFICIAL_TEXT
 
 router = APIRouter(prefix="/api/v1")
@@ -129,6 +139,7 @@ project_router = APIRouter(prefix="/projects", tags=["projects"])
 file_router = APIRouter(prefix="/files", tags=["files"])
 field_router = APIRouter(prefix="/field-values", tags=["fields"])
 template_router = APIRouter(prefix="/templates", tags=["templates"])
+template_extraction_router = APIRouter(prefix="/template-extractions", tags=["templates"])
 generation_router = APIRouter(prefix="/generation-jobs", tags=["generation"])
 document_router = APIRouter(prefix="/documents", tags=["documents"])
 validation_router = APIRouter(prefix="/validation-runs", tags=["validation"])
@@ -1078,6 +1089,350 @@ def confirm_field_value(
     return _field_view(db, field)
 
 
+def _validate_template_source_metadata(
+    source_kind: str,
+    issuing_authority: str | None,
+    source_url: str | None,
+) -> None:
+    if source_kind == "adapted_from_official_outline" and (
+        not issuing_authority or not source_url
+    ):
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "依据正式大纲适配的模板必须填写发布机关和官方来源链接",
+        )
+    if source_kind == "other_official_template" and not issuing_authority:
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "其他正式模板必须填写发布机关或确认单位",
+        )
+    if source_kind == NATIONAL_OFFICIAL_TEXT:
+        raise APIError(
+            422,
+            "official_text_managed_by_platform",
+            "国家正式文本由平台内置目录维护，不能作为普通生成模板新建",
+        )
+
+
+def _get_template_extraction_job(
+    extraction_job_id: str,
+    db: Session,
+    user: User,
+) -> TemplateExtractionJob:
+    job = db.get(TemplateExtractionJob, extraction_job_id)
+    if job is None or job.organization_id != user.organization_id:
+        raise APIError(404, "template_extraction_not_found", "模板提取任务不存在")
+    return job
+
+
+@template_extraction_router.post("", response_model=TemplateExtractionJobView, status_code=201)
+async def create_template_extraction(
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+    upload: Annotated[UploadFile, UploadMarker()],
+    stage: Annotated[str, Query(...)],
+    authorized_external_processing: Annotated[bool, Query(...)],
+) -> TemplateExtractionJob:
+    _validate_stage(stage)
+    if not authorized_external_processing:
+        raise APIError(
+            422,
+            "external_processing_consent_required",
+            "请先确认文件已获授权并同意发送至当前配置的模型服务",
+        )
+    content = await upload.read(get_settings().max_upload_bytes + 1)
+    extension, mime_type = validate_upload(
+        upload.filename or "finished-document.docx", upload.content_type, content
+    )
+    if extension != ".docx":
+        raise APIError(415, "template_extraction_requires_docx", "模板反向提取当前仅支持 DOCX")
+    file_record = File(
+        organization_id=user.organization_id,
+        project_id=None,
+        stage=stage,
+        original_name=safe_filename(upload.filename or "finished-document.docx"),
+        extension=extension,
+        mime_type=mime_type,
+        size_bytes=len(content),
+        status="template_extract_queued",
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(file_record)
+    db.flush()
+    key = object_key(user.organization_id, file_record.id, 1, file_record.original_name)
+    get_storage().put(key, content, mime_type)
+    version = FileVersion(
+        organization_id=user.organization_id,
+        file_id=file_record.id,
+        version=1,
+        sha256=sha256_bytes(content),
+        storage_key=key,
+        size_bytes=len(content),
+        mime_type=mime_type,
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(version)
+    db.flush()
+    job = TemplateExtractionJob(
+        organization_id=user.organization_id,
+        file_version_id=version.id,
+        stage=stage,
+        status="queued",
+        prompt_version=TEMPLATE_EXTRACTION_PROMPT_VERSION,
+        result_json={},
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(job)
+    db.flush()
+    record_audit(
+        db,
+        request,
+        user,
+        "template.extraction.create",
+        "template_extraction_job",
+        job.id,
+        after={"filename": file_record.original_name, "sha256": version.sha256, "stage": stage},
+    )
+    db.commit()
+    result = extract_template_task.delay(job.id)
+    db.expire_all()
+    refreshed = db.get(TemplateExtractionJob, job.id)
+    if refreshed and refreshed.task_id is None:
+        refreshed.task_id = result.id
+        db.commit()
+    return db.get(TemplateExtractionJob, job.id) or job
+
+
+@template_extraction_router.get("", response_model=list[TemplateExtractionJobView])
+def list_template_extractions(
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+) -> list[TemplateExtractionJob]:
+    return list(
+        db.scalars(
+            select(TemplateExtractionJob)
+            .where(TemplateExtractionJob.organization_id == user.organization_id)
+            .order_by(TemplateExtractionJob.created_at.desc())
+        )
+    )
+
+
+@template_extraction_router.get(
+    "/{extraction_job_id}", response_model=TemplateExtractionJobView
+)
+def get_template_extraction(
+    extraction_job_id: str,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+) -> TemplateExtractionJob:
+    return _get_template_extraction_job(extraction_job_id, db, user)
+
+
+@template_extraction_router.post(
+    "/{extraction_job_id}/retry", response_model=TemplateExtractionJobView
+)
+def retry_template_extraction(
+    extraction_job_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+) -> TemplateExtractionJob:
+    job = _get_template_extraction_job(extraction_job_id, db, user)
+    if job.status != "failed":
+        raise APIError(409, "template_extraction_not_retryable", "只有失败的模板提取任务可以重试")
+    if job.attempt >= job.max_attempts:
+        raise APIError(409, "template_extraction_attempts_exhausted", "模板提取任务已达到最大尝试次数")
+    job.status = "queued"
+    job.error = None
+    job.finished_at = None
+    job.revision += 1
+    record_audit(
+        db,
+        request,
+        user,
+        "template.extraction.retry",
+        "template_extraction_job",
+        job.id,
+        after={"attempt": job.attempt},
+    )
+    db.commit()
+    result = extract_template_task.delay(job.id)
+    db.expire_all()
+    refreshed = db.get(TemplateExtractionJob, job.id)
+    if refreshed:
+        refreshed.task_id = result.id
+        db.commit()
+        return refreshed
+    return job
+
+
+@template_extraction_router.post(
+    "/{extraction_job_id}/confirm", response_model=TemplateView
+)
+def confirm_template_extraction(
+    extraction_job_id: str,
+    payload: TemplateExtractionConfirmRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+) -> Template:
+    job = _get_template_extraction_job(extraction_job_id, db, user)
+    if job.confirmed_template_id:
+        existing = db.get(Template, job.confirmed_template_id)
+        if existing is not None:
+            return existing
+    if job.status != "review_required":
+        raise APIError(409, "template_extraction_not_ready", "模板候选尚未进入人工确认阶段")
+    if job.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "模板提取结果已被其他用户更新")
+    _validate_template_source_metadata(
+        payload.source_kind,
+        payload.issuing_authority,
+        payload.source_url,
+    )
+    raw_sections = job.result_json.get("sections", [])
+    raw_variables = job.result_json.get("variables", [])
+    if not isinstance(raw_sections, list) or not isinstance(raw_variables, list):
+        raise APIError(409, "template_extraction_result_invalid", "模板提取结果结构无效")
+    selected_section_ids = set(payload.selected_section_ids)
+    selected_variable_ids = set(payload.selected_variable_ids)
+    sections = [
+        item
+        for item in raw_sections
+        if isinstance(item, dict) and item.get("id") in selected_section_ids
+    ]
+    variables = [
+        item
+        for item in raw_variables
+        if isinstance(item, dict) and item.get("id") in selected_variable_ids
+    ]
+    if len(sections) != len(selected_section_ids):
+        raise APIError(422, "template_section_selection_invalid", "所选章节包含不存在的候选项")
+    if len(variables) != len(selected_variable_ids):
+        raise APIError(422, "template_variable_selection_invalid", "所选变量包含不存在的候选项")
+    file_version = db.get(FileVersion, job.file_version_id)
+    file_record = db.get(File, file_version.file_id) if file_version else None
+    if file_version is None or file_record is None:
+        raise APIError(409, "template_extraction_source_missing", "模板提取源文件不存在")
+    source_content = get_storage().get(file_version.storage_key)
+    candidate_content = build_candidate_template_docx(
+        source_content,
+        template_name=payload.template_name,
+        source_filename=file_record.original_name,
+    )
+    preflight = preflight_docx_template(candidate_content)
+    if not preflight.valid:
+        raise APIError(
+            422,
+            "template_preflight_failed",
+            "提取生成的候选模板预检未通过",
+            details={"warnings": preflight.warnings},
+        )
+    template = Template(
+        organization_id=user.organization_id,
+        name=payload.template_name,
+        stage=job.stage,
+        source_kind=payload.source_kind,
+        issuing_authority=payload.issuing_authority,
+        document_number=payload.document_number,
+        publish_year=payload.publish_year,
+        source_url=payload.source_url,
+        applicability=payload.applicability,
+        is_builtin=False,
+        generation_enabled=True,
+        status="draft",
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(template)
+    db.flush()
+    template_version = TemplateVersion(
+        organization_id=user.organization_id,
+        template_id=template.id,
+        version=1,
+        status="draft",
+        format_profile={"page_size": "A4", "standard": "customer_template"},
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(template_version)
+    db.flush()
+    template_key = f"{user.organization_id}/templates/{template.id}/v1/template.docx"
+    get_storage().put(template_key, candidate_content, DEMO_TEMPLATE_CONTENT_TYPE)
+    template_version.storage_key = template_key
+    template_version.sha256 = sha256_bytes(candidate_content)
+    used_keys: set[str] = set()
+    for sequence, section in enumerate(sections):
+        key = str(section.get("key") or f"section_{sequence + 1}")[:120]
+        if key in used_keys:
+            key = f"{key[:110]}_{sequence + 1}"
+        used_keys.add(key)
+        db.add(
+            TemplateSection(
+                organization_id=user.organization_id,
+                template_version_id=template_version.id,
+                sequence=sequence,
+                key=key,
+                title=str(section.get("title") or f"章节 {sequence + 1}")[:300],
+                section_type="editable",
+                required=True,
+                content=None,
+                created_by=user.id,
+                updated_by=user.id,
+            )
+        )
+    for variable in variables:
+        variable_key = str(variable.get("variable_key", ""))[:120]
+        if not variable_key:
+            continue
+        db.add(
+            TemplateVariable(
+                organization_id=user.organization_id,
+                template_version_id=template_version.id,
+                variable_key=variable_key,
+                field_key=variable_key,
+                required=True,
+                default_value=None,
+                created_by=user.id,
+                updated_by=user.id,
+            )
+        )
+    result_json = dict(job.result_json)
+    result_json["confirmation"] = {
+        "selected_section_ids": payload.selected_section_ids,
+        "selected_variable_ids": payload.selected_variable_ids,
+        "template_id": template.id,
+    }
+    job.result_json = result_json
+    job.confirmed_template_id = template.id
+    job.status = "confirmed"
+    job.revision += 1
+    job.updated_by = user.id
+    file_record.status = "template_candidate_confirmed"
+    record_audit(
+        db,
+        request,
+        user,
+        "template.extraction.confirm",
+        "template_extraction_job",
+        job.id,
+        after={
+            "template_id": template.id,
+            "section_count": len(sections),
+            "variable_count": len(variables),
+            "source_sha256": file_version.sha256,
+        },
+    )
+    db.commit()
+    return template
+
+
 @template_router.get("", response_model=list[TemplateView])
 def list_templates(
     db: DbSession,
@@ -1130,6 +1485,37 @@ def list_template_versions(
             .where(TemplateVersion.template_id == template.id)
             .order_by(TemplateVersion.version.desc())
         )
+    )
+
+
+@template_router.get("/{template_id}/versions/{version_number}/source")
+def download_template_source(
+    template_id: str,
+    version_number: int,
+    db: DbSession,
+    user: CurrentUser,
+) -> StreamingResponse:
+    template = db.get(Template, template_id)
+    version = db.scalar(
+        select(TemplateVersion).where(
+            TemplateVersion.template_id == template_id,
+            TemplateVersion.version == version_number,
+        )
+    )
+    if (
+        template is None
+        or version is None
+        or template.organization_id != user.organization_id
+        or version.organization_id != user.organization_id
+        or not version.storage_key
+    ):
+        raise APIError(404, "template_source_not_found", "模板 DOCX 源不存在")
+    return StreamingResponse(
+        iter([get_storage().get(version.storage_key)]),
+        media_type=DEMO_TEMPLATE_CONTENT_TYPE,
+        headers={
+            "Content-Disposition": f'attachment; filename="template-v{version.version}.docx"'
+        },
     )
 
 
@@ -1305,26 +1691,11 @@ def create_template(
     db: DbSession,
     user: Annotated[User, Depends(require_permission("template.manage"))],
 ) -> Template:
-    if payload.source_kind == "adapted_from_official_outline" and (
-        not payload.issuing_authority or not payload.source_url
-    ):
-        raise APIError(
-            422,
-            "official_source_metadata_missing",
-            "依据正式大纲适配的模板必须填写发布机关和官方来源链接",
-        )
-    if payload.source_kind == "other_official_template" and not payload.issuing_authority:
-        raise APIError(
-            422,
-            "official_source_metadata_missing",
-            "其他正式模板必须填写发布机关或确认单位",
-        )
-    if payload.source_kind == NATIONAL_OFFICIAL_TEXT:
-        raise APIError(
-            422,
-            "official_text_managed_by_platform",
-            "国家正式文本由平台内置目录维护，不能作为普通生成模板新建",
-        )
+    _validate_template_source_metadata(
+        payload.source_kind,
+        payload.issuing_authority,
+        payload.source_url,
+    )
     template = Template(
         organization_id=user.organization_id,
         name=payload.name,
@@ -1408,20 +1779,11 @@ def publish_template(
         raise APIError(404, "template_not_found", "模板不存在")
     if template.is_builtin:
         raise APIError(409, "builtin_template_immutable", "内置模板由平台版本维护，不能手工发布")
-    if template.source_kind == "adapted_from_official_outline" and (
-        not template.issuing_authority or not template.source_url
-    ):
-        raise APIError(
-            422,
-            "official_source_metadata_missing",
-            "依据正式大纲适配的模板必须填写发布机关和官方来源链接",
-        )
-    if template.source_kind == "other_official_template" and not template.issuing_authority:
-        raise APIError(
-            422,
-            "official_source_metadata_missing",
-            "其他正式模板必须填写发布机关或确认单位",
-        )
+    _validate_template_source_metadata(
+        template.source_kind,
+        template.issuing_authority,
+        template.source_url,
+    )
     version = db.scalar(
         select(TemplateVersion).where(
             TemplateVersion.template_id == template.id,
@@ -2502,6 +2864,7 @@ router.include_router(project_router)
 router.include_router(file_router)
 router.include_router(field_router)
 router.include_router(template_router)
+router.include_router(template_extraction_router)
 router.include_router(generation_router)
 router.include_router(document_router)
 router.include_router(validation_router)

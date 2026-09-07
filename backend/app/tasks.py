@@ -18,12 +18,15 @@ from .models import (
     GenerationJob,
     ParsedDocument,
     ParsedTable,
+    TemplateExtractionJob,
     utc_now,
 )
 from .services.exporting import export_sha256, export_version
 from .services.generation import execute_generation_job
 from .services.parsing import parse_file
+from .services.providers import TEMPLATE_EXTRACTION_PROMPT_VERSION, get_provider
 from .services.storage import get_storage
+from .services.template_extraction import analyze_finished_document
 
 
 @celery_app.task(bind=True, max_retries=3, default_retry_delay=5)
@@ -116,6 +119,56 @@ def parse_file_task(self: Task, parse_job_id: str) -> str:
                 failed_file = db.get(File, failed_version.file_id) if failed_version else None
                 if failed_file and self.request.retries >= self.max_retries:
                     failed_file.status = "parse_failed"
+                db.commit()
+            raise self.retry(exc=exc) from exc
+
+
+@celery_app.task(bind=True, max_retries=2, default_retry_delay=10)
+def extract_template_task(self: Task, extraction_job_id: str) -> str:
+    with SessionLocal() as db:
+        job = db.get(TemplateExtractionJob, extraction_job_id)
+        if job is None:
+            return "missing"
+        version = db.get(FileVersion, job.file_version_id)
+        file_record = db.get(File, version.file_id) if version else None
+        try:
+            if version is None or file_record is None:
+                raise ValueError("Template extraction source file was not found")
+            provider = get_provider()
+            job.status = "running"
+            job.attempt += 1
+            job.provider_name = provider.name
+            job.model_name = provider.model
+            job.prompt_version = TEMPLATE_EXTRACTION_PROMPT_VERSION
+            job.started_at = utc_now()
+            job.error = None
+            db.commit()
+            content = get_storage().get(version.storage_key)
+            job = db.get(TemplateExtractionJob, extraction_job_id)
+            if job is None:
+                return "missing"
+            job.result_json = analyze_finished_document(
+                content,
+                filename=file_record.original_name,
+                stage=job.stage,
+                provider=provider,
+            )
+            job.status = "review_required"
+            job.finished_at = utc_now()
+            job.revision += 1
+            file_record.status = "template_review"
+            db.commit()
+            return job.status
+        except Exception as exc:
+            db.rollback()
+            job = db.get(TemplateExtractionJob, extraction_job_id)
+            if job:
+                job.status = "retrying" if self.request.retries < self.max_retries else "failed"
+                job.error = str(exc)[:2_000]
+                job.finished_at = utc_now() if self.request.retries >= self.max_retries else None
+                job.revision += 1
+                if file_record and self.request.retries >= self.max_retries:
+                    file_record.status = "template_extract_failed"
                 db.commit()
             raise self.retry(exc=exc) from exc
 

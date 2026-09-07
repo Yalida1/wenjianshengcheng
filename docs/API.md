@@ -4,4 +4,14 @@
 
 登录成功后使用 HttpOnly 会话 Cookie；修改请求同时校验权限、组织/项目对象访问权和 revision。错误统一返回错误码、中文消息、详情和 request id。列表支持分页。上传使用 multipart/form-data；下载端点返回对象内容。生成、解析和导出先返回作业，再查询状态/事件。
 
+模板反向提取接口位于 `/template-extractions`：
+
+- `POST /template-extractions`：上传 DOCX，传入阶段和 `authorized_external_processing=true` 后创建异步提取任务。
+- `GET /template-extractions`、`GET /template-extractions/{id}`：查询列表、进度、模型信息、候选项和失败原因。
+- `POST /template-extractions/{id}/retry`：仅对可重试失败任务重新排队。
+- `POST /template-extractions/{id}/confirm`：提交 revision、来源元数据及勾选的候选 ID，幂等建立模板草稿。
+- `GET /templates/{template_id}/versions/{version}/source`：下载确认后生成的候选 DOCX 源文件。
+
+任务状态包括 `queued`、`running`、`retrying`、`review_required`、`failed` 和 `confirmed`。确认接口不会发布模板；发布仍使用现有模板发布端点及预检门禁。
+
 前端类型由 `pnpm generate:api` 从契约生成。`python -m backend.scripts.export_openapi --check` 会在契约漂移时失败，避免前后端静默失配。

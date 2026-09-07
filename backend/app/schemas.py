@@ -318,6 +318,107 @@ class TemplateVersionView(ORMModel):
     revision: int
 
 
+class TemplateExtractionSummary(BaseModel):
+    filename: str
+    stage: str
+    provider: str
+    model: str
+    block_count: int
+    llm_chunk_count: int
+    truncated_for_llm: bool
+    paragraph_count: int
+    table_count: int
+    section_count: int
+    header_paragraph_count: int
+    footer_paragraph_count: int
+    style_names: list[str]
+    layout_preserved: bool
+
+
+class TemplateExtractionSectionCandidate(BaseModel):
+    id: str
+    key: str
+    title: str
+    source_block_ids: list[str]
+    confidence: float
+    basis: str
+    selected: bool
+
+
+class TemplateExtractionVariableCandidate(BaseModel):
+    id: str
+    variable_key: str
+    label: str
+    data_type: str
+    exact_text: str
+    source_block_ids: list[str]
+    confidence: float
+    rationale: str
+    selected: bool
+
+
+class TemplateExtractionConfirmation(BaseModel):
+    selected_section_ids: list[str]
+    selected_variable_ids: list[str]
+    template_id: str
+
+
+class TemplateExtractionResult(BaseModel):
+    summary: TemplateExtractionSummary
+    sections: list[TemplateExtractionSectionCandidate]
+    variables: list[TemplateExtractionVariableCandidate]
+    warnings: list[str]
+    confirmation: TemplateExtractionConfirmation | None = None
+
+
+class TemplateExtractionJobView(ORMModel):
+    id: str
+    file_version_id: str
+    stage: str
+    status: str
+    task_id: str | None
+    attempt: int
+    max_attempts: int
+    provider_name: str | None
+    model_name: str | None
+    prompt_version: str
+    result_json: TemplateExtractionResult | None
+    error: str | None
+    confirmed_template_id: str | None
+    started_at: datetime | None
+    finished_at: datetime | None
+    revision: int
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("result_json", mode="before")
+    @classmethod
+    def empty_result_as_none(cls, value: object) -> object:
+        return value or None
+
+
+class TemplateExtractionConfirmRequest(BaseModel):
+    revision: int = Field(ge=1)
+    template_name: str = Field(min_length=2, max_length=300)
+    source_kind: Literal[
+        "adapted_from_official_outline",
+        "platform_reference_template",
+        "other_official_template",
+    ]
+    issuing_authority: str | None = Field(default=None, max_length=300)
+    document_number: str | None = Field(default=None, max_length=120)
+    publish_year: int | None = Field(default=None, ge=1949, le=2100)
+    source_url: str | None = Field(default=None, max_length=1000)
+    applicability: str | None = Field(default=None, max_length=2000)
+    selected_section_ids: list[str] = Field(min_length=1)
+    selected_variable_ids: list[str] = []
+
+    @field_validator("source_url")
+    @classmethod
+    def validate_source_url(cls, value: str | None) -> str | None:
+        return TemplateCreate.validate_source_url(value)
+
+
 class FormatProfileCreate(BaseModel):
     key: str = Field(min_length=2, max_length=120, pattern=r"^[a-z0-9_]+$")
     name: str = Field(min_length=2, max_length=300)

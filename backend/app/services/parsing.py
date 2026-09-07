@@ -37,7 +37,12 @@ def parse_docx(content: bytes) -> ParseResult:
         if not text:
             continue
         style_name = paragraph.style.name if paragraph.style else ""
-        kind = "heading" if style_name.lower().startswith("heading") else "paragraph"
+        normalized_style = style_name.strip().lower()
+        kind = (
+            "heading"
+            if normalized_style.startswith("heading") or style_name.strip().startswith("标题")
+            else "paragraph"
+        )
         if kind == "heading":
             section = text
         blocks.append(

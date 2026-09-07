@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     openai_base_url: str | None = None
     openai_api_key: str | None = None
     openai_model: str | None = None
+    llm_timeout_seconds: int = 90
     session_cookie_secure: bool = False
     session_ttl_seconds: int = 28_800
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:8080", "http://localhost:8443"]

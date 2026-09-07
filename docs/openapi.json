@@ -1,6 +1,20 @@
 {
   "components": {
     "schemas": {
+      "Body_create_template_extraction_api_v1_template_extractions_post": {
+        "properties": {
+          "upload": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Upload",
+            "type": "string"
+          }
+        },
+        "required": [
+          "upload"
+        ],
+        "title": "Body_create_template_extraction_api_v1_template_extractions_post",
+        "type": "object"
+      },
       "Body_upload_file_api_v1_files_post": {
         "properties": {
           "upload": {
@@ -1721,6 +1735,530 @@
           "stage"
         ],
         "title": "TemplateCreate",
+        "type": "object"
+      },
+      "TemplateExtractionConfirmRequest": {
+        "properties": {
+          "applicability": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applicability"
+          },
+          "document_number": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Number"
+          },
+          "issuing_authority": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issuing Authority"
+          },
+          "publish_year": {
+            "anyOf": [
+              {
+                "maximum": 2100.0,
+                "minimum": 1949.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publish Year"
+          },
+          "revision": {
+            "minimum": 1.0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "selected_section_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Selected Section Ids",
+            "type": "array"
+          },
+          "selected_variable_ids": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Selected Variable Ids",
+            "type": "array"
+          },
+          "source_kind": {
+            "enum": [
+              "adapted_from_official_outline",
+              "platform_reference_template",
+              "other_official_template"
+            ],
+            "title": "Source Kind",
+            "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "template_name": {
+            "maxLength": 300,
+            "minLength": 2,
+            "title": "Template Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision",
+          "template_name",
+          "source_kind",
+          "selected_section_ids"
+        ],
+        "title": "TemplateExtractionConfirmRequest",
+        "type": "object"
+      },
+      "TemplateExtractionConfirmation": {
+        "properties": {
+          "selected_section_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Selected Section Ids",
+            "type": "array"
+          },
+          "selected_variable_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Selected Variable Ids",
+            "type": "array"
+          },
+          "template_id": {
+            "title": "Template Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "selected_section_ids",
+          "selected_variable_ids",
+          "template_id"
+        ],
+        "title": "TemplateExtractionConfirmation",
+        "type": "object"
+      },
+      "TemplateExtractionJobView": {
+        "properties": {
+          "attempt": {
+            "title": "Attempt",
+            "type": "integer"
+          },
+          "confirmed_template_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed Template Id"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "file_version_id": {
+            "title": "File Version Id",
+            "type": "string"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "max_attempts": {
+            "title": "Max Attempts",
+            "type": "integer"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
+          },
+          "prompt_version": {
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "provider_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Name"
+          },
+          "result_json": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TemplateExtractionResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "stage": {
+            "title": "Stage",
+            "type": "string"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "file_version_id",
+          "stage",
+          "status",
+          "task_id",
+          "attempt",
+          "max_attempts",
+          "provider_name",
+          "model_name",
+          "prompt_version",
+          "result_json",
+          "error",
+          "confirmed_template_id",
+          "started_at",
+          "finished_at",
+          "revision",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TemplateExtractionJobView",
+        "type": "object"
+      },
+      "TemplateExtractionResult": {
+        "properties": {
+          "confirmation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TemplateExtractionConfirmation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/TemplateExtractionSectionCandidate"
+            },
+            "title": "Sections",
+            "type": "array"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/TemplateExtractionSummary"
+          },
+          "variables": {
+            "items": {
+              "$ref": "#/components/schemas/TemplateExtractionVariableCandidate"
+            },
+            "title": "Variables",
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "summary",
+          "sections",
+          "variables",
+          "warnings"
+        ],
+        "title": "TemplateExtractionResult",
+        "type": "object"
+      },
+      "TemplateExtractionSectionCandidate": {
+        "properties": {
+          "basis": {
+            "title": "Basis",
+            "type": "string"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "selected": {
+            "title": "Selected",
+            "type": "boolean"
+          },
+          "source_block_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source Block Ids",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "title",
+          "source_block_ids",
+          "confidence",
+          "basis",
+          "selected"
+        ],
+        "title": "TemplateExtractionSectionCandidate",
+        "type": "object"
+      },
+      "TemplateExtractionSummary": {
+        "properties": {
+          "block_count": {
+            "title": "Block Count",
+            "type": "integer"
+          },
+          "filename": {
+            "title": "Filename",
+            "type": "string"
+          },
+          "footer_paragraph_count": {
+            "title": "Footer Paragraph Count",
+            "type": "integer"
+          },
+          "header_paragraph_count": {
+            "title": "Header Paragraph Count",
+            "type": "integer"
+          },
+          "layout_preserved": {
+            "title": "Layout Preserved",
+            "type": "boolean"
+          },
+          "llm_chunk_count": {
+            "title": "Llm Chunk Count",
+            "type": "integer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "paragraph_count": {
+            "title": "Paragraph Count",
+            "type": "integer"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "section_count": {
+            "title": "Section Count",
+            "type": "integer"
+          },
+          "stage": {
+            "title": "Stage",
+            "type": "string"
+          },
+          "style_names": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Style Names",
+            "type": "array"
+          },
+          "table_count": {
+            "title": "Table Count",
+            "type": "integer"
+          },
+          "truncated_for_llm": {
+            "title": "Truncated For Llm",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "filename",
+          "stage",
+          "provider",
+          "model",
+          "block_count",
+          "llm_chunk_count",
+          "truncated_for_llm",
+          "paragraph_count",
+          "table_count",
+          "section_count",
+          "header_paragraph_count",
+          "footer_paragraph_count",
+          "style_names",
+          "layout_preserved"
+        ],
+        "title": "TemplateExtractionSummary",
+        "type": "object"
+      },
+      "TemplateExtractionVariableCandidate": {
+        "properties": {
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "data_type": {
+            "title": "Data Type",
+            "type": "string"
+          },
+          "exact_text": {
+            "title": "Exact Text",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "selected": {
+            "title": "Selected",
+            "type": "boolean"
+          },
+          "source_block_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source Block Ids",
+            "type": "array"
+          },
+          "variable_key": {
+            "title": "Variable Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "variable_key",
+          "label",
+          "data_type",
+          "exact_text",
+          "source_block_ids",
+          "confidence",
+          "rationale",
+          "selected"
+        ],
+        "title": "TemplateExtractionVariableCandidate",
         "type": "object"
       },
       "TemplateVersionCreate": {
@@ -10273,6 +10811,686 @@
         ]
       }
     },
+    "/api/v1/template-extractions": {
+      "get": {
+        "operationId": "list_template_extractions_api_v1_template_extractions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateExtractionJobView"
+                  },
+                  "title": "Response List Template Extractions Api V1 Template Extractions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "List Template Extractions",
+        "tags": [
+          "templates"
+        ]
+      },
+      "post": {
+        "operationId": "create_template_extraction_api_v1_template_extractions_post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "stage",
+            "required": true,
+            "schema": {
+              "title": "Stage",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "authorized_external_processing",
+            "required": true,
+            "schema": {
+              "title": "Authorized External Processing",
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_template_extraction_api_v1_template_extractions_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateExtractionJobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "Create Template Extraction",
+        "tags": [
+          "templates"
+        ]
+      }
+    },
+    "/api/v1/template-extractions/{extraction_job_id}": {
+      "get": {
+        "operationId": "get_template_extraction_api_v1_template_extractions__extraction_job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "extraction_job_id",
+            "required": true,
+            "schema": {
+              "title": "Extraction Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateExtractionJobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "Get Template Extraction",
+        "tags": [
+          "templates"
+        ]
+      }
+    },
+    "/api/v1/template-extractions/{extraction_job_id}/confirm": {
+      "post": {
+        "operationId": "confirm_template_extraction_api_v1_template_extractions__extraction_job_id__confirm_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "extraction_job_id",
+            "required": true,
+            "schema": {
+              "title": "Extraction Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateExtractionConfirmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "Confirm Template Extraction",
+        "tags": [
+          "templates"
+        ]
+      }
+    },
+    "/api/v1/template-extractions/{extraction_job_id}/retry": {
+      "post": {
+        "operationId": "retry_template_extraction_api_v1_template_extractions__extraction_job_id__retry_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "extraction_job_id",
+            "required": true,
+            "schema": {
+              "title": "Extraction Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateExtractionJobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "Retry Template Extraction",
+        "tags": [
+          "templates"
+        ]
+      }
+    },
     "/api/v1/templates": {
       "get": {
         "operationId": "list_templates_api_v1_templates_get",
@@ -11397,6 +12615,143 @@
       }
     },
     "/api/v1/templates/{template_id}/versions/{version_number}/source": {
+      "get": {
+        "operationId": "download_template_source_api_v1_templates__template_id__versions__version_number__source_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "template_id",
+            "required": true,
+            "schema": {
+              "title": "Template Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "version_number",
+            "required": true,
+            "schema": {
+              "title": "Version Number",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求不符合业务规则"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "身份认证失败"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "没有操作权限"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "资源不存在"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "数据版本冲突"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "上传内容过大"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "不支持的媒体类型"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求参数校验失败"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "请求过于频繁"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "服务端处理失败"
+          }
+        },
+        "summary": "Download Template Source",
+        "tags": [
+          "templates"
+        ]
+      },
       "post": {
         "operationId": "upload_template_source_api_v1_templates__template_id__versions__version_number__source_post",
         "parameters": [

@@ -895,6 +895,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/template-extractions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Template Extractions */
+    get: operations["list_template_extractions_api_v1_template_extractions_get"];
+    put?: never;
+    /** Create Template Extraction */
+    post: operations["create_template_extraction_api_v1_template_extractions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/template-extractions/{extraction_job_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Template Extraction */
+    get: operations["get_template_extraction_api_v1_template_extractions__extraction_job_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/template-extractions/{extraction_job_id}/confirm": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Confirm Template Extraction */
+    post: operations["confirm_template_extraction_api_v1_template_extractions__extraction_job_id__confirm_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/template-extractions/{extraction_job_id}/retry": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Template Extraction */
+    post: operations["retry_template_extraction_api_v1_template_extractions__extraction_job_id__retry_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/templates": {
     parameters: {
       query?: never;
@@ -1006,7 +1075,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** Download Template Source */
+    get: operations["download_template_source_api_v1_templates__template_id__versions__version_number__source_get"];
     put?: never;
     /** Upload Template Source */
     post: operations["upload_template_source_api_v1_templates__template_id__versions__version_number__source_post"];
@@ -1140,6 +1210,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** Body_create_template_extraction_api_v1_template_extractions_post */
+    Body_create_template_extraction_api_v1_template_extractions_post: {
+      /** Upload */
+      upload: string;
+    };
     /** Body_upload_file_api_v1_files_post */
     Body_upload_file_api_v1_files_post: {
       /** Upload */
@@ -1757,6 +1832,171 @@ export interface components {
        * @enum {string}
        */
       stage: "requirement" | "feasibility" | "tender" | "contract";
+    };
+    /** TemplateExtractionConfirmRequest */
+    TemplateExtractionConfirmRequest: {
+      /** Applicability */
+      applicability?: string | null;
+      /** Document Number */
+      document_number?: string | null;
+      /** Issuing Authority */
+      issuing_authority?: string | null;
+      /** Publish Year */
+      publish_year?: number | null;
+      /** Revision */
+      revision: number;
+      /** Selected Section Ids */
+      selected_section_ids: string[];
+      /**
+       * Selected Variable Ids
+       * @default []
+       */
+      selected_variable_ids: string[];
+      /**
+       * Source Kind
+       * @enum {string}
+       */
+      source_kind:
+        | "adapted_from_official_outline"
+        | "platform_reference_template"
+        | "other_official_template";
+      /** Source Url */
+      source_url?: string | null;
+      /** Template Name */
+      template_name: string;
+    };
+    /** TemplateExtractionConfirmation */
+    TemplateExtractionConfirmation: {
+      /** Selected Section Ids */
+      selected_section_ids: string[];
+      /** Selected Variable Ids */
+      selected_variable_ids: string[];
+      /** Template Id */
+      template_id: string;
+    };
+    /** TemplateExtractionJobView */
+    TemplateExtractionJobView: {
+      /** Attempt */
+      attempt: number;
+      /** Confirmed Template Id */
+      confirmed_template_id: string | null;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Error */
+      error: string | null;
+      /** File Version Id */
+      file_version_id: string;
+      /** Finished At */
+      finished_at: string | null;
+      /** Id */
+      id: string;
+      /** Max Attempts */
+      max_attempts: number;
+      /** Model Name */
+      model_name: string | null;
+      /** Prompt Version */
+      prompt_version: string;
+      /** Provider Name */
+      provider_name: string | null;
+      result_json: components["schemas"]["TemplateExtractionResult"] | null;
+      /** Revision */
+      revision: number;
+      /** Stage */
+      stage: string;
+      /** Started At */
+      started_at: string | null;
+      /** Status */
+      status: string;
+      /** Task Id */
+      task_id: string | null;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+    };
+    /** TemplateExtractionResult */
+    TemplateExtractionResult: {
+      confirmation?: components["schemas"]["TemplateExtractionConfirmation"] | null;
+      /** Sections */
+      sections: components["schemas"]["TemplateExtractionSectionCandidate"][];
+      summary: components["schemas"]["TemplateExtractionSummary"];
+      /** Variables */
+      variables: components["schemas"]["TemplateExtractionVariableCandidate"][];
+      /** Warnings */
+      warnings: string[];
+    };
+    /** TemplateExtractionSectionCandidate */
+    TemplateExtractionSectionCandidate: {
+      /** Basis */
+      basis: string;
+      /** Confidence */
+      confidence: number;
+      /** Id */
+      id: string;
+      /** Key */
+      key: string;
+      /** Selected */
+      selected: boolean;
+      /** Source Block Ids */
+      source_block_ids: string[];
+      /** Title */
+      title: string;
+    };
+    /** TemplateExtractionSummary */
+    TemplateExtractionSummary: {
+      /** Block Count */
+      block_count: number;
+      /** Filename */
+      filename: string;
+      /** Footer Paragraph Count */
+      footer_paragraph_count: number;
+      /** Header Paragraph Count */
+      header_paragraph_count: number;
+      /** Layout Preserved */
+      layout_preserved: boolean;
+      /** Llm Chunk Count */
+      llm_chunk_count: number;
+      /** Model */
+      model: string;
+      /** Paragraph Count */
+      paragraph_count: number;
+      /** Provider */
+      provider: string;
+      /** Section Count */
+      section_count: number;
+      /** Stage */
+      stage: string;
+      /** Style Names */
+      style_names: string[];
+      /** Table Count */
+      table_count: number;
+      /** Truncated For Llm */
+      truncated_for_llm: boolean;
+    };
+    /** TemplateExtractionVariableCandidate */
+    TemplateExtractionVariableCandidate: {
+      /** Confidence */
+      confidence: number;
+      /** Data Type */
+      data_type: string;
+      /** Exact Text */
+      exact_text: string;
+      /** Id */
+      id: string;
+      /** Label */
+      label: string;
+      /** Rationale */
+      rationale: string;
+      /** Selected */
+      selected: boolean;
+      /** Source Block Ids */
+      source_block_ids: string[];
+      /** Variable Key */
+      variable_key: string;
     };
     /** TemplateVersionCreate */
     TemplateVersionCreate: {
@@ -8633,6 +8873,573 @@ export interface operations {
       };
     };
   };
+  list_template_extractions_api_v1_template_extractions_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateExtractionJobView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  create_template_extraction_api_v1_template_extractions_post: {
+    parameters: {
+      query: {
+        stage: string;
+        authorized_external_processing: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_create_template_extraction_api_v1_template_extractions_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateExtractionJobView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  get_template_extraction_api_v1_template_extractions__extraction_job_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        extraction_job_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateExtractionJobView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  confirm_template_extraction_api_v1_template_extractions__extraction_job_id__confirm_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        extraction_job_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TemplateExtractionConfirmRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  retry_template_extraction_api_v1_template_extractions__extraction_job_id__retry_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        extraction_job_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateExtractionJobView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
   list_templates_api_v1_templates_get: {
     parameters: {
       query?: {
@@ -9451,6 +10258,119 @@ export interface operations {
           "application/json": {
             [key: string]: unknown;
           }[];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  download_template_source_api_v1_templates__template_id__versions__version_number__source_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+        version_number: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
         };
       };
       /** @description 请求不符合业务规则 */

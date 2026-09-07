@@ -18,6 +18,7 @@ os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB.as_posix()}"
 os.environ["STORAGE_BACKEND"] = "local"
 os.environ["LOCAL_STORAGE_PATH"] = str(TEST_STORAGE)
 os.environ["CELERY_TASK_ALWAYS_EAGER"] = "true"
+os.environ["LLM_PROVIDER"] = "demo"
 os.environ["DEMO_ADMIN_ACCOUNT"] = "admin"
 os.environ["DEMO_ADMIN_PASSWORD"] = "admin123"  # noqa: S105
 

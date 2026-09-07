@@ -333,6 +333,24 @@ class TemplateVariable(TenantRecordMixin, Base):
     default_value: Mapped[object | None] = mapped_column(JSON)
 
 
+class TemplateExtractionJob(TenantRecordMixin, Base):
+    __tablename__ = "template_extraction_jobs"
+    file_version_id: Mapped[str] = mapped_column(ForeignKey("file_versions.id"), index=True)
+    stage: Mapped[str] = mapped_column(String(40), index=True)
+    status: Mapped[str] = mapped_column(String(30), default="queued")
+    task_id: Mapped[str | None] = mapped_column(String(80))
+    attempt: Mapped[int] = mapped_column(Integer, default=0)
+    max_attempts: Mapped[int] = mapped_column(Integer, default=3)
+    provider_name: Mapped[str | None] = mapped_column(String(80))
+    model_name: Mapped[str | None] = mapped_column(String(120))
+    prompt_version: Mapped[str] = mapped_column(String(80))
+    result_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    error: Mapped[str | None] = mapped_column(Text)
+    confirmed_template_id: Mapped[str | None] = mapped_column(ForeignKey("templates.id"))
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class GenerationJob(TenantRecordMixin, Base):
     __tablename__ = "generation_jobs"
     project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"))

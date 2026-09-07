@@ -8,6 +8,7 @@ export type StageSourceOption = ApiSchemas["StageSourceOption"];
 export type FieldValue = ApiSchemas["FieldValueView"];
 export type FieldDefinition = ApiSchemas["FieldDefinitionView"];
 export type Template = ApiSchemas["TemplateView"];
+export type TemplateExtractionJob = ApiSchemas["TemplateExtractionJobView"];
 export type FileRecord = ApiSchemas["FileView"];
 export type User = ApiSchemas["UserView"];
 
