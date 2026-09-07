@@ -1717,8 +1717,12 @@ export interface components {
     };
     /** TemplateCreate */
     TemplateCreate: {
+      /** Applicability */
+      applicability?: string | null;
       /** Contract Type */
       contract_type?: string | null;
+      /** Document Number */
+      document_number?: string | null;
       /**
        * Format Profile
        * @default {}
@@ -1726,16 +1730,26 @@ export interface components {
       format_profile: {
         [key: string]: unknown;
       };
+      /** Issuing Authority */
+      issuing_authority?: string | null;
       /** Name */
       name: string;
       /** Procurement Type */
       procurement_type?: string | null;
+      /** Publish Year */
+      publish_year?: number | null;
       /**
        * Source Kind
-       * @default customer_template
+       * @default other_official_template
        * @enum {string}
        */
-      source_kind: "customer_template" | "demo_general";
+      source_kind:
+        | "national_official_text"
+        | "adapted_from_official_outline"
+        | "platform_reference_template"
+        | "other_official_template";
+      /** Source Url */
+      source_url?: string | null;
       /** Specialty */
       specialty?: string | null;
       /**
@@ -1787,20 +1801,34 @@ export interface components {
     };
     /** TemplateView */
     TemplateView: {
+      /** Applicability */
+      applicability: string | null;
       /** Contract Type */
       contract_type: string | null;
       /** Current Version */
       current_version: number;
+      /** Document Number */
+      document_number: string | null;
+      /** Generation Enabled */
+      generation_enabled: boolean;
       /** Id */
       id: string;
+      /** Is Builtin */
+      is_builtin: boolean;
+      /** Issuing Authority */
+      issuing_authority: string | null;
       /** Name */
       name: string;
       /** Procurement Type */
       procurement_type: string | null;
+      /** Publish Year */
+      publish_year: number | null;
       /** Revision */
       revision: number;
       /** Source Kind */
       source_kind: string;
+      /** Source Url */
+      source_url: string | null;
       /** Specialty */
       specialty: string | null;
       /** Stage */
@@ -8610,6 +8638,7 @@ export interface operations {
       query?: {
         stage?: string | null;
         current_only?: boolean;
+        generation_only?: boolean;
       };
       header?: never;
       path?: never;

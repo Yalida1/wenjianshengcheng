@@ -105,7 +105,7 @@ export function LoginPage() {
             字段来源、人工确认、模板版本、生成记录和定稿门禁在同一项目空间内留痕。
           </p>
           <div className="mt-12 border-t border-blue-300/30 pt-6 text-sm text-blue-100">
-            当前仓库默认启用明确标记的 Demo Provider 和 Demo 通用模板。
+            当前仓库默认启用明确标记的 Demo Provider；模板按正式来源和适配性质分级展示。
           </div>
         </section>
         <section className="p-8 sm:p-12">

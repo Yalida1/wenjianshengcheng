@@ -624,9 +624,16 @@ export function PaymentPlanEditor({
   );
 }
 
+const TEMPLATE_SOURCE_GROUPS = [
+  ["national_official_text", "国家正式文本"],
+  ["adapted_from_official_outline", "依据正式大纲适配"],
+  ["platform_reference_template", "平台参考模板"],
+  ["other_official_template", "其他正式模板"],
+] as const;
+
 function TemplatesPanel({ stage }: { stage: string }) {
   const templates = useQuery({
-    queryKey: ["templates", stage],
+    queryKey: ["templates", stage, "catalog"],
     queryFn: async () => {
       const result = await api.GET("/api/v1/templates", {
         params: { query: { stage, current_only: true } },
@@ -639,28 +646,69 @@ function TemplatesPanel({ stage }: { stage: string }) {
     <Card>
       <h3 className="section-title">可用模板</h3>
       <p className="section-description">
-        客户正式模板优先。Demo 模板仅用于平台功能验证，不代表客户内部格式标准。
+        国家正式文本用于查阅核对；大纲适配版、平台参考版和已确认的其他正式模板可按标识用于生成。
       </p>
       {templates.error && (
         <div className="mt-4">
           <ErrorNotice error={templates.error} />
         </div>
       )}
-      <div className="mt-5 grid gap-4 lg:grid-cols-2">
-        {templates.data?.map((template: Template) => (
-          <div key={template.id} className="rounded-lg border border-slate-200 p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="font-medium text-slate-900">{template.name}</div>
-                <div className="mt-1 text-xs text-slate-500">
-                  版本 {template.current_version} · {template.source_kind}
-                </div>
+      <div className="mt-5 space-y-5">
+        {TEMPLATE_SOURCE_GROUPS.map(([sourceKind, label]) => {
+          const items = templates.data?.filter(
+            (template: Template) => template.source_kind === sourceKind,
+          );
+          if (!items?.length) return null;
+          return (
+            <section key={sourceKind}>
+              <div className="mb-3 flex items-center gap-2">
+                <h4 className="font-medium text-slate-900">{label}</h4>
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
+                  {items.length} 份
+                </span>
               </div>
-              <StatusBadge status={template.status} />
-            </div>
-            <div className="mt-4 text-xs text-slate-400">模板 ID {template.id}</div>
-          </div>
-        ))}
+              <div className="grid gap-4 lg:grid-cols-2">
+                {items.map((template: Template) => (
+                  <div key={template.id} className="rounded-lg border border-slate-200 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="font-medium text-slate-900">{template.name}</div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          版本 {template.current_version} · {label}
+                        </div>
+                      </div>
+                      <StatusBadge status={template.status} />
+                    </div>
+                    {template.applicability && (
+                      <p className="mt-3 text-xs leading-5 text-slate-500">
+                        {template.applicability}
+                      </p>
+                    )}
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+                      <span
+                        className={
+                          template.generation_enabled ? "text-emerald-700" : "text-slate-500"
+                        }
+                      >
+                        {template.generation_enabled ? "可用于生成" : "仅供查阅核对"}
+                      </span>
+                      {template.source_url && (
+                        <a
+                          className="text-button"
+                          href={template.source_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          查阅来源
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
     </Card>
   );
@@ -671,10 +719,10 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
   const [templateVersion, setTemplateVersion] = useState(1);
   const [jobId, setJobId] = useState<string | null>(null);
   const templates = useQuery({
-    queryKey: ["templates", stage],
+    queryKey: ["templates", stage, "generation"],
     queryFn: async () => {
       const result = await api.GET("/api/v1/templates", {
-        params: { query: { stage, current_only: true } },
+        params: { query: { stage, current_only: true, generation_only: true } },
       });
       if (result.error) throw apiError(result.error, result.response);
       return result.data;
@@ -725,7 +773,7 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
     <Card>
       <h3 className="section-title">开始文档生成</h3>
       <p className="section-description">
-        任务按章节执行，支持状态查询、重试、取消和幂等。默认 Demo Provider 不调用付费模型。
+        任务按所选模板章节执行，支持状态查询、重试、取消和幂等。国家正式文本不会出现在生成列表中。
       </p>
       <label className="form-label mt-5 block">
         已发布模板
@@ -747,9 +795,24 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
           ))}
         </select>
       </label>
-      {selected?.source_kind === "demo_general" && (
+      {selected?.source_kind === "platform_reference_template" && (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-          这是 Demo 通用模板，仅用于验证平台能力。
+          这是平台参考模板，不属于国家正式文本；正式使用前请按项目要求复核。
+        </div>
+      )}
+      {selected?.source_kind === "adapted_from_official_outline" && (
+        <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+          这是依据正式大纲适配的生成模板，不是主管部门发布的原始文件。
+          {selected.source_url && (
+            <a
+              className="ml-2 underline"
+              href={selected.source_url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              查阅依据
+            </a>
+          )}
         </div>
       )}
       <div className="mt-5 flex items-center gap-3">

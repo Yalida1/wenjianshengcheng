@@ -121,6 +121,7 @@ from .services.storage import (
 from .services.templates import preflight_docx_template
 from .services.validation import validate_contract_payments, validate_document_version
 from .tasks import export_document_task, generate_document_task, parse_file_task
+from .template_catalog import NATIONAL_OFFICIAL_TEXT
 
 router = APIRouter(prefix="/api/v1")
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
@@ -1083,6 +1084,7 @@ def list_templates(
     user: CurrentUser,
     stage: str | None = None,
     current_only: bool = True,
+    generation_only: bool = False,
 ) -> list[Template]:
     stmt = select(Template).where(Template.organization_id == user.organization_id)
     if stage:
@@ -1090,6 +1092,8 @@ def list_templates(
         stmt = stmt.where(Template.stage == stage)
     if current_only:
         stmt = stmt.where(Template.status == "published")
+    if generation_only:
+        stmt = stmt.where(Template.generation_enabled.is_(True))
     return list(db.scalars(stmt.order_by(Template.name)))
 
 
@@ -1155,6 +1159,8 @@ async def upload_template_source(
         or version.organization_id != user.organization_id
     ):
         raise APIError(404, "template_version_not_found", "模板版本不存在")
+    if template.is_builtin:
+        raise APIError(409, "builtin_template_immutable", "内置模板不能直接覆盖，请创建新模板")
     if version.status == "published":
         raise APIError(409, "template_version_immutable", "已发布模板版本不可覆盖")
     content = await upload.read(get_settings().max_upload_bytes + 1)
@@ -1299,6 +1305,26 @@ def create_template(
     db: DbSession,
     user: Annotated[User, Depends(require_permission("template.manage"))],
 ) -> Template:
+    if payload.source_kind == "adapted_from_official_outline" and (
+        not payload.issuing_authority or not payload.source_url
+    ):
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "依据正式大纲适配的模板必须填写发布机关和官方来源链接",
+        )
+    if payload.source_kind == "other_official_template" and not payload.issuing_authority:
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "其他正式模板必须填写发布机关或确认单位",
+        )
+    if payload.source_kind == NATIONAL_OFFICIAL_TEXT:
+        raise APIError(
+            422,
+            "official_text_managed_by_platform",
+            "国家正式文本由平台内置目录维护，不能作为普通生成模板新建",
+        )
     template = Template(
         organization_id=user.organization_id,
         name=payload.name,
@@ -1307,6 +1333,13 @@ def create_template(
         procurement_type=payload.procurement_type,
         contract_type=payload.contract_type,
         source_kind=payload.source_kind,
+        issuing_authority=payload.issuing_authority,
+        document_number=payload.document_number,
+        publish_year=payload.publish_year,
+        source_url=payload.source_url,
+        applicability=payload.applicability,
+        is_builtin=False,
+        generation_enabled=True,
         status="draft",
         created_by=user.id,
         updated_by=user.id,
@@ -1340,6 +1373,8 @@ def create_template_version(
     template = db.get(Template, template_id)
     if template is None or template.organization_id != user.organization_id:
         raise APIError(404, "template_not_found", "模板不存在")
+    if template.is_builtin:
+        raise APIError(409, "builtin_template_immutable", "内置模板不能直接修订，请创建新模板")
     template.current_version += 1
     template.status = "draft"
     template.revision += 1
@@ -1371,6 +1406,22 @@ def publish_template(
     template = db.get(Template, template_id)
     if template is None or template.organization_id != user.organization_id:
         raise APIError(404, "template_not_found", "模板不存在")
+    if template.is_builtin:
+        raise APIError(409, "builtin_template_immutable", "内置模板由平台版本维护，不能手工发布")
+    if template.source_kind == "adapted_from_official_outline" and (
+        not template.issuing_authority or not template.source_url
+    ):
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "依据正式大纲适配的模板必须填写发布机关和官方来源链接",
+        )
+    if template.source_kind == "other_official_template" and not template.issuing_authority:
+        raise APIError(
+            422,
+            "official_source_metadata_missing",
+            "其他正式模板必须填写发布机关或确认单位",
+        )
     version = db.scalar(
         select(TemplateVersion).where(
             TemplateVersion.template_id == template.id,
@@ -1466,8 +1517,13 @@ def start_generation(
         or template.stage != stage
         or template.status != "published"
         or template.current_version != payload.template_version
+        or not template.generation_enabled
     ):
-        raise APIError(422, "template_not_applicable", "模板未发布、版本不符或不适用当前阶段")
+        raise APIError(
+            422,
+            "template_not_applicable",
+            "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+        )
     job = build_generation_job(
         db,
         project=project,

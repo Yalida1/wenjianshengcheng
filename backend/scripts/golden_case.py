@@ -481,10 +481,12 @@ def generate() -> None:
                     Template.organization_id == organization.id,
                     Template.stage == stage,
                     Template.status == "published",
+                    Template.generation_enabled.is_(True),
+                    Template.source_kind == "platform_reference_template",
                 )
             )
             if template is None:
-                raise RuntimeError(f"Published template missing: {stage}")
+                raise RuntimeError(f"Published generation template missing: {stage}")
             db.flush()
             job = build_generation_job(
                 db,

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import io
+import zipfile
 from datetime import UTC, datetime
 
+from docx import Document as WordDocument
 from sqlalchemy import func, select
 
 from backend.app.config import get_settings
@@ -23,7 +26,17 @@ from backend.app.models import (
 from backend.app.security import hash_password, verify_password
 from backend.app.services.providers import SECTION_PLANS
 from backend.app.services.storage import get_storage, sha256_bytes
-from backend.app.services.templates import DEMO_TEMPLATE_CONTENT_TYPE, build_demo_template
+from backend.app.services.templates import (
+    DEMO_TEMPLATE_CONTENT_TYPE,
+    build_demo_template,
+    build_template_document,
+)
+from backend.app.template_catalog import (
+    BUILTIN_TEMPLATE_CATALOG,
+    PLATFORM_REFERENCE_TEMPLATE,
+    TEMPLATE_SOURCE_LABELS,
+    section_plan_for,
+)
 
 PERMISSIONS = {
     "system.admin": "系统管理",
@@ -59,10 +72,10 @@ ROLE_NAMES = {
     "viewer": "只读人员",
 }
 DEMO_TEMPLATES = {
-    "requirement": "Demo 项目建议书通用模板",
-    "feasibility": "Demo 可行性研究报告通用模板",
-    "tender": "Demo 招标文件通用模板",
-    "contract": "Demo 合同通用模板",
+    "requirement": "政府投资项目建议书通用参考模板",
+    "feasibility": "一般投资项目可行性研究报告参考模板",
+    "tender": "通用采购招标文件参考模板",
+    "contract": "通用采购合同参考模板",
 }
 FIELD_DEFINITIONS = {
     "requirement": [
@@ -100,6 +113,23 @@ FIELD_DEFINITIONS = {
         ("effective_conditions", "生效条件", "text", None, "P0", True),
     ],
 }
+
+
+def _is_legacy_demo_source(storage_key: str | None) -> bool:
+    if not storage_key:
+        return False
+    storage = get_storage()
+    if not storage.exists(storage_key):
+        return False
+    try:
+        document = WordDocument(io.BytesIO(storage.get(storage_key)))
+        text = [paragraph.text for paragraph in document.paragraphs]
+        for section in document.sections:
+            text.extend(paragraph.text for paragraph in section.header.paragraphs)
+            text.extend(paragraph.text for paragraph in section.footer.paragraphs)
+    except (OSError, ValueError, zipfile.BadZipFile):
+        return False
+    return any("DEMO 通用模板" in paragraph for paragraph in text)
 
 
 def seed() -> None:
@@ -188,37 +218,72 @@ def seed() -> None:
                 )
             )
 
-        for stage, name in DEMO_TEMPLATES.items():
+        for spec in BUILTIN_TEMPLATE_CATALOG:
             template = db.scalar(
                 select(Template).where(
                     Template.organization_id == organization.id,
-                    Template.stage == stage,
-                    Template.source_kind == "demo_general",
+                    Template.name == spec.name,
                 )
             )
+            if template is None and spec.legacy_name:
+                template = db.scalar(
+                    select(Template).where(
+                        Template.organization_id == organization.id,
+                        Template.name == spec.legacy_name,
+                    )
+                )
             if template is None:
                 template = Template(
                     organization_id=organization.id,
-                    name=name,
-                    stage=stage,
-                    source_kind="demo_general",
+                    name=spec.name,
+                    stage=spec.stage,
+                    source_kind=spec.source_kind,
                     scope="organization",
                     status="published",
                     current_version=1,
                 )
                 db.add(template)
                 db.flush()
+            template.name = spec.name
+            template.stage = spec.stage
+            template.source_kind = spec.source_kind
+            template.issuing_authority = spec.issuing_authority
+            template.document_number = spec.document_number
+            template.publish_year = spec.publish_year
+            template.source_url = spec.source_url
+            template.applicability = spec.applicability
+            template.procurement_type = spec.procurement_type
+            template.contract_type = spec.contract_type
+            template.is_builtin = True
+            template.generation_enabled = spec.generation_enabled
+            template.status = "published"
+            target_version = template.current_version
+            current_template_version = db.scalar(
+                select(TemplateVersion).where(
+                    TemplateVersion.template_id == template.id,
+                    TemplateVersion.version == target_version,
+                )
+            )
+            if (
+                spec.source_kind == PLATFORM_REFERENCE_TEMPLATE
+                and target_version == 1
+                and current_template_version is not None
+                and _is_legacy_demo_source(current_template_version.storage_key)
+            ):
+                current_template_version.status = "superseded"
+                target_version = 2
+            template.current_version = target_version
             template_version = db.scalar(
                 select(TemplateVersion).where(
                     TemplateVersion.template_id == template.id,
-                    TemplateVersion.version == 1,
+                    TemplateVersion.version == target_version,
                 )
             )
             if template_version is None:
                 template_version = TemplateVersion(
                     organization_id=organization.id,
                     template_id=template.id,
-                    version=1,
+                    version=target_version,
                     status="published",
                     published_at=datetime.now(UTC),
                     format_profile={
@@ -230,15 +295,31 @@ def seed() -> None:
                 )
                 db.add(template_version)
                 db.flush()
-            template_content = build_demo_template(stage, name)
-            template_key = f"{organization.id}/templates/{template.id}/v1/template.docx"
-            storage = get_storage()
-            if not storage.exists(template_key):
-                storage.put(template_key, template_content, DEMO_TEMPLATE_CONTENT_TYPE)
-            stored_template_content = storage.get(template_key)
-            template_version.storage_key = template_key
-            template_version.sha256 = sha256_bytes(stored_template_content)
-            for sequence, (key, title) in enumerate(SECTION_PLANS[stage], 1):
+            template_version.status = "published"
+            if template_version.published_at is None:
+                template_version.published_at = datetime.now(UTC)
+            if spec.generation_enabled:
+                if spec.source_kind == PLATFORM_REFERENCE_TEMPLATE:
+                    template_content = build_demo_template(spec.stage, spec.name)
+                else:
+                    template_content = build_template_document(
+                        spec.stage,
+                        spec.name,
+                        source_label=TEMPLATE_SOURCE_LABELS[spec.source_kind],
+                        disclaimer=spec.applicability,
+                    )
+                template_key = (
+                    f"{organization.id}/templates/{template.id}/"
+                    f"v{target_version}/template.docx"
+                )
+                storage = get_storage()
+                if not storage.exists(template_key):
+                    storage.put(template_key, template_content, DEMO_TEMPLATE_CONTENT_TYPE)
+                stored_template_content = storage.get(template_key)
+                template_version.storage_key = template_key
+                template_version.sha256 = sha256_bytes(stored_template_content)
+            section_plan = section_plan_for(spec, SECTION_PLANS[spec.stage])
+            for sequence, (key, title) in enumerate(section_plan, 1):
                 section = db.scalar(
                     select(TemplateSection).where(
                         TemplateSection.template_version_id == template_version.id,
@@ -258,7 +339,9 @@ def seed() -> None:
                             content=None,
                         )
                     )
-            for key, _label, _data_type, _unit, _criticality, required in FIELD_DEFINITIONS[stage]:
+            for key, _label, _data_type, _unit, _criticality, required in FIELD_DEFINITIONS[
+                spec.stage
+            ]:
                 variable = db.scalar(
                     select(TemplateVariable).where(
                         TemplateVariable.template_version_id == template_version.id,
@@ -325,7 +408,7 @@ def seed() -> None:
                         )
                     )
         db.commit()
-        print(f"Seed complete: {admin_account} and Demo templates are ready")
+        print(f"Seed complete: {admin_account} and builtin template catalog are ready")
 
 
 if __name__ == "__main__":

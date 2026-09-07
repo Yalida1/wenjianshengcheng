@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from typing import Any, Literal
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -256,8 +257,31 @@ class TemplateCreate(BaseModel):
     specialty: str | None = Field(default=None, max_length=120)
     procurement_type: str | None = Field(default=None, max_length=120)
     contract_type: str | None = Field(default=None, max_length=120)
-    source_kind: Literal["customer_template", "demo_general"] = "customer_template"
+    source_kind: Literal[
+        "national_official_text",
+        "adapted_from_official_outline",
+        "platform_reference_template",
+        "other_official_template",
+    ] = "other_official_template"
+    issuing_authority: str | None = Field(default=None, max_length=300)
+    document_number: str | None = Field(default=None, max_length=120)
+    publish_year: int | None = Field(default=None, ge=1949, le=2100)
+    source_url: str | None = Field(default=None, max_length=1000)
+    applicability: str | None = Field(default=None, max_length=2000)
     format_profile: dict[str, Any] = {}
+
+    @field_validator("source_url")
+    @classmethod
+    def validate_source_url(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip()
+        if not normalized:
+            return None
+        parsed = urlsplit(normalized)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError("source_url must be an HTTP or HTTPS URL")
+        return normalized
 
 
 class TemplateView(ORMModel):
@@ -268,6 +292,13 @@ class TemplateView(ORMModel):
     procurement_type: str | None
     contract_type: str | None
     source_kind: str
+    issuing_authority: str | None
+    document_number: str | None
+    publish_year: int | None
+    source_url: str | None
+    applicability: str | None
+    is_builtin: bool
+    generation_enabled: bool
     status: str
     current_version: int
     revision: int

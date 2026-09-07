@@ -60,7 +60,12 @@ def test_file_versions_parse_results_and_stage_source_options(
 def test_demo_template_has_docx_source_sections_variables_and_profile(
     authenticated_client: TestClient,
 ) -> None:
-    template = authenticated_client.get("/api/v1/templates?stage=tender").json()[0]
+    templates = authenticated_client.get(
+        "/api/v1/templates?stage=tender&generation_only=true"
+    ).json()
+    template = next(
+        item for item in templates if item["source_kind"] == "platform_reference_template"
+    )
     detail = authenticated_client.get(f"/api/v1/templates/{template['id']}")
     assert detail.status_code == 200
     version = detail.json()["versions"][0]
@@ -83,6 +88,67 @@ def test_demo_template_has_docx_source_sections_variables_and_profile(
     profiles = authenticated_client.get("/api/v1/format-profiles")
     assert profiles.status_code == 200
     assert profiles.json()[0]["strict_compliance"] is False
+
+
+def test_builtin_template_categories_and_generation_boundary(
+    authenticated_client: TestClient,
+) -> None:
+    templates = authenticated_client.get("/api/v1/templates?current_only=true")
+    assert templates.status_code == 200
+    items = templates.json()
+    assert {item["source_kind"] for item in items} >= {
+        "national_official_text",
+        "adapted_from_official_outline",
+        "platform_reference_template",
+    }
+    official = next(item for item in items if item["source_kind"] == "national_official_text")
+    assert official["generation_enabled"] is False
+    assert official["issuing_authority"]
+    assert official["source_url"].startswith("https://")
+    adapted_feasibility = next(
+        item
+        for item in items
+        if item["name"] == "政府投资项目可研报告适配模板（2023年大纲）"
+    )
+    adapted_sections = authenticated_client.get(
+        f"/api/v1/templates/{adapted_feasibility['id']}/versions/1/sections"
+    )
+    assert adapted_sections.status_code == 200
+    assert len(adapted_sections.json()) == 10
+    generation_templates = authenticated_client.get(
+        "/api/v1/templates?current_only=true&generation_only=true"
+    ).json()
+    assert all(item["generation_enabled"] for item in generation_templates)
+    assert all(item["source_kind"] != "national_official_text" for item in generation_templates)
+
+    project_id = _create_project(authenticated_client)
+    official_feasibility = next(
+        item
+        for item in items
+        if item["source_kind"] == "national_official_text" and item["stage"] == "feasibility"
+    )
+    blocked = authenticated_client.post(
+        f"/api/v1/generation-jobs?project_id={project_id}&stage=feasibility",
+        json={
+            "template_id": official_feasibility["id"],
+            "template_version": official_feasibility["current_version"],
+            "idempotency_key": "official-text-must-not-generate",
+        },
+    )
+    assert blocked.status_code == 422
+    assert blocked.json()["error"]["code"] == "template_not_applicable"
+
+    missing_source = authenticated_client.post(
+        "/api/v1/templates",
+        json={
+            "name": "待补来源的正式模板",
+            "stage": "contract",
+            "source_kind": "other_official_template",
+            "format_profile": {},
+        },
+    )
+    assert missing_source.status_code == 422
+    assert missing_source.json()["error"]["code"] == "official_source_metadata_missing"
 
 
 def test_repeated_seed_keeps_hash_bound_to_stored_template(monkeypatch: MonkeyPatch) -> None:

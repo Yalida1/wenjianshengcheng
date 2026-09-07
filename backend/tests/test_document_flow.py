@@ -50,7 +50,7 @@ def _confirm_required_fields(client: TestClient, project_id: str) -> None:
 
 
 def _generate(client: TestClient, project_id: str) -> tuple[str, str]:
-    templates = client.get("/api/v1/templates?stage=requirement")
+    templates = client.get("/api/v1/templates?stage=requirement&generation_only=true")
     assert templates.status_code == 200
     template = templates.json()[0]
     generated = client.post(

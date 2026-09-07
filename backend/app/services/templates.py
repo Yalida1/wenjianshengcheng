@@ -38,7 +38,13 @@ def _add_page_number(paragraph: object) -> None:
     run.font.size = Pt(9)
 
 
-def build_demo_template(stage: str, name: str) -> bytes:
+def build_template_document(
+    stage: str,
+    name: str,
+    *,
+    source_label: str,
+    disclaimer: str,
+) -> bytes:
     doc = WordDocument()
     section = doc.sections[0]
     section.page_width = Cm(21)
@@ -62,7 +68,7 @@ def build_demo_template(stage: str, name: str) -> bytes:
 
     header = section.header.paragraphs[0]
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    header.add_run(f"{name} · DEMO 通用模板（非客户正式模板）")
+    header.add_run(f"{name} · {source_label}")
     footer = section.footer.paragraphs[0]
     footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
     footer.add_run("项目文件链式生成平台 · ")
@@ -76,15 +82,25 @@ def build_demo_template(stage: str, name: str) -> bytes:
     meta.add_run("版本 {{DOCUMENT_VERSION}}")
     warning = doc.add_paragraph()
     warning.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    warning.add_run("DEMO 通用模板，仅用于平台闭环验证").italic = True
+    warning.add_run(disclaimer).italic = True
     doc.add_page_break()  # type: ignore[no-untyped-call]
     doc.add_paragraph("{{DOCUMENT_BODY}}")
 
     doc.core_properties.title = name
-    doc.core_properties.subject = f"{stage} Demo template"
+    doc.core_properties.subject = f"{stage} {source_label}"
     output = io.BytesIO()
     doc.save(output)
     return output.getvalue()
+
+
+def build_demo_template(stage: str, name: str) -> bytes:
+    """Backward-compatible platform reference template builder."""
+    return build_template_document(
+        stage,
+        name,
+        source_label="平台参考模板",
+        disclaimer="平台参考模板，仅用于生成和编制初稿，不属于国家正式文本",
+    )
 
 
 def preflight_docx_template(content: bytes) -> TemplatePreflight:

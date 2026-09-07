@@ -35,6 +35,21 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
     await expect(page.getByText("页面不存在", { exact: true })).toHaveCount(0);
   }
 
+  await page.goto("/templates");
+  for (const category of ["国家正式文本", "依据正式大纲适配", "平台参考模板", "其他正式模板"]) {
+    await expect(page.getByRole("heading", { name: category, exact: true })).toBeVisible();
+  }
+  await expect(
+    page.getByText("政府投资项目可行性研究报告编写通用大纲（2023年版）", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("政府投资项目可研报告适配模板（2023年大纲）", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("仅供查阅核对", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("可用于生成", { exact: true }).first()).toBeVisible();
+
   for (const width of [1440, 1280, 1024]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`/projects/${project.id}`);

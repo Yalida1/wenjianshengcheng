@@ -1585,6 +1585,18 @@
       },
       "TemplateCreate": {
         "properties": {
+          "applicability": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applicability"
+          },
           "contract_type": {
             "anyOf": [
               {
@@ -1597,11 +1609,35 @@
             ],
             "title": "Contract Type"
           },
+          "document_number": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Number"
+          },
           "format_profile": {
             "additionalProperties": true,
             "default": {},
             "title": "Format Profile",
             "type": "object"
+          },
+          "issuing_authority": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issuing Authority"
           },
           "name": {
             "maxLength": 300,
@@ -1621,14 +1657,41 @@
             ],
             "title": "Procurement Type"
           },
+          "publish_year": {
+            "anyOf": [
+              {
+                "maximum": 2100.0,
+                "minimum": 1949.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publish Year"
+          },
           "source_kind": {
-            "default": "customer_template",
+            "default": "other_official_template",
             "enum": [
-              "customer_template",
-              "demo_general"
+              "national_official_text",
+              "adapted_from_official_outline",
+              "platform_reference_template",
+              "other_official_template"
             ],
             "title": "Source Kind",
             "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
           },
           "specialty": {
             "anyOf": [
@@ -1800,6 +1863,17 @@
       },
       "TemplateView": {
         "properties": {
+          "applicability": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applicability"
+          },
           "contract_type": {
             "anyOf": [
               {
@@ -1815,9 +1889,39 @@
             "title": "Current Version",
             "type": "integer"
           },
+          "document_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Number"
+          },
+          "generation_enabled": {
+            "title": "Generation Enabled",
+            "type": "boolean"
+          },
           "id": {
             "title": "Id",
             "type": "string"
+          },
+          "is_builtin": {
+            "title": "Is Builtin",
+            "type": "boolean"
+          },
+          "issuing_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issuing Authority"
           },
           "name": {
             "title": "Name",
@@ -1834,6 +1938,17 @@
             ],
             "title": "Procurement Type"
           },
+          "publish_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publish Year"
+          },
           "revision": {
             "title": "Revision",
             "type": "integer"
@@ -1841,6 +1956,17 @@
           "source_kind": {
             "title": "Source Kind",
             "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
           },
           "specialty": {
             "anyOf": [
@@ -1870,6 +1996,13 @@
           "procurement_type",
           "contract_type",
           "source_kind",
+          "issuing_authority",
+          "document_number",
+          "publish_year",
+          "source_url",
+          "applicability",
+          "is_builtin",
+          "generation_enabled",
           "status",
           "current_version",
           "revision"
@@ -10167,6 +10300,16 @@
             "schema": {
               "default": true,
               "title": "Current Only",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "generation_only",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Generation Only",
               "type": "boolean"
             }
           }

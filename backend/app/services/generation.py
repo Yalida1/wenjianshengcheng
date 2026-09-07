@@ -21,12 +21,28 @@ from ..models import (
     Project,
     ProjectStage,
     Template,
+    TemplateSection,
     TemplateVersion,
 )
 from .providers import PROMPT_VERSION, SECTION_PLANS, ProviderContext, get_provider
 from .storage import get_storage
 
 FORMAL_FIELD_STATUSES = {"user_confirmed", "system_authoritative", "template_default"}
+
+
+def _template_section_plan(
+    db: Session, template_version_id: str, stage: str
+) -> list[tuple[str, str]]:
+    sections = list(
+        db.scalars(
+            select(TemplateSection)
+            .where(TemplateSection.template_version_id == template_version_id)
+            .order_by(TemplateSection.sequence)
+        )
+    )
+    if not sections:
+        return SECTION_PLANS[stage]
+    return [(section.key, section.title) for section in sections]
 
 
 def field_snapshot(fields: list[FieldValue]) -> tuple[str, dict[str, object]]:
@@ -141,6 +157,7 @@ def build_generation_job(
     )
     if locked_template is None or not locked_template.storage_key:
         raise APIError(422, "template_source_missing", "模板没有可用的 DOCX 正式源")
+    section_plan = _template_section_plan(db, locked_template.id, stage)
     template_content = get_storage().get(locked_template.storage_key)
     template_sha256 = hashlib.sha256(template_content).hexdigest()
     if locked_template.sha256 and locked_template.sha256 != template_sha256:
@@ -179,7 +196,7 @@ def build_generation_job(
             updated_by=user_id,
         )
     )
-    for sequence, (key, _title) in enumerate(SECTION_PLANS[stage], 1):
+    for sequence, (key, _title) in enumerate(section_plan, 1):
         db.add(
             GenerationJobStep(
                 organization_id=project.organization_id,
@@ -258,6 +275,7 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
     if locked_template is None or not locked_template.storage_key:
         job.status = "failed"
         raise RuntimeError("Locked template source is missing")
+    section_plan = _template_section_plan(db, locked_template.id, job.stage)
     current_template_sha = hashlib.sha256(get_storage().get(locked_template.storage_key)).hexdigest()
     if current_template_sha != job.template_sha256:
         job.status = "stale"
@@ -282,7 +300,7 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             stage=job.stage,
             project_name=project.name,
             fields=values,
-            section_plan=SECTION_PLANS[job.stage],
+            section_plan=section_plan,
         )
     )
     document = db.scalar(
