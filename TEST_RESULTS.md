@@ -8,8 +8,8 @@
 
 | 检查 | 实际结果 |
 |---|---|
-| 后端 pytest | 20/20 通过，语句覆盖率 80.49%，覆盖率门槛 70% |
-| 前端 Vitest | 6/6 通过 |
+| 后端 pytest | 23/23 通过，语句覆盖率 80.85%，覆盖率门槛 70% |
+| 前端 Vitest | 8/8 通过 |
 | 后端 Ruff | 通过 |
 | 后端 mypy | 通过 |
 | 前端格式与静态检查 | 通过 |
@@ -44,4 +44,5 @@
 - 模板分类上线后，Golden Case 首轮误选“国家正式文本”并触发无 DOCX 源阻断；随后又因选中“依据正式大纲适配”而与平台基准章节不一致。已将 Golden Case 明确限定为已发布、可生成的“平台参考模板”，完整重跑 149 项通过。
 - 安全扫描发现基础 Playwright 镜像自带 `pip 24.0` 的已知漏洞；验证镜像已固定升级为官方 `pip 26.2.1`，重跑后 Python 与 Node 依赖均未发现已知漏洞。
 - 模板反向提取专项使用确定性 Provider 验证全流程，并使用不含项目数据的探针验证 DeepSeek 模型列表、JSON Object 响应以及平台 Provider 的 Pydantic 校验；未向模型发送客户文件。
-- 最终执行 `docker compose --profile verify run --rm verify make verify`，容器内完整运行字面量 `make verify`，退出码为 0；最后一项输出为 `Delivery gate passed`。
+- 项目状态中文化后，首轮 E2E 仍按旧英文 `parsed`、`succeeded`、`finalized` 查找页面文本；删除用例又因历史巡检项目同名而使用了非唯一定位。已改为中文显示值和唯一项目编号，定向复测通过。
+- 最终执行 `docker compose --profile verify run --rm verify`，验证容器完整运行字面量 `make verify`，退出码为 0；最后一项输出为 `Delivery gate passed`。

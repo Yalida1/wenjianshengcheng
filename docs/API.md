@@ -2,6 +2,8 @@
 
 统一前缀为 `/api/v1`，OpenAPI 文件是 `docs/openapi.json`。主要资源覆盖 auth、users、roles、permissions、organizations、projects/members/stages、files/versions/parse-jobs、field-definitions/values/evidence/confirmations/snapshots/conflicts、templates/versions/sections/variables、format-profiles、generation-jobs/steps/events、documents/versions/blocks/comments、validation-runs/issues、comparisons、exports/artifacts 和 audit-logs。
 
+`DELETE /api/v1/projects/{project_id}` 仅允许系统管理员调用，请求体必须包含当前 `revision` 和与项目记录完全一致的 `confirmation_code`。接口以单事务删除项目数据链，保留 `project.delete` 审计记录，并清理对应对象存储文件；存在运行中后台任务或修订冲突时返回 `409`。
+
 登录成功后使用 HttpOnly 会话 Cookie；修改请求同时校验权限、组织/项目对象访问权和 revision。错误统一返回错误码、中文消息、详情和 request id。列表支持分页。上传使用 multipart/form-data；下载端点返回对象内容。生成、解析和导出先返回作业，再查询状态/事件。
 
 模板反向提取接口位于 `/template-extractions`：

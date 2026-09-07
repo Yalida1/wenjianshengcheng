@@ -83,6 +83,9 @@ class ObjectStorage(ABC):
     @abstractmethod
     def exists(self, key: str) -> bool: ...
 
+    @abstractmethod
+    def delete(self, key: str) -> None: ...
+
 
 class LocalObjectStorage(ObjectStorage):
     def __init__(self, root: Path) -> None:
@@ -106,6 +109,17 @@ class LocalObjectStorage(ObjectStorage):
 
     def exists(self, key: str) -> bool:
         return self._path(key).is_file()
+
+    def delete(self, key: str) -> None:
+        target = self._path(key)
+        target.unlink(missing_ok=True)
+        parent = target.parent
+        while parent != self.root:
+            try:
+                parent.rmdir()
+            except OSError:
+                break
+            parent = parent.parent
 
 
 class S3ObjectStorage(ObjectStorage):
@@ -142,6 +156,10 @@ class S3ObjectStorage(ObjectStorage):
             return True
         except Exception:
             return False
+
+    def delete(self, key: str) -> None:
+        self.ensure_bucket()
+        self.client.delete_object(Bucket=self.bucket, Key=key)
 
 
 def get_storage() -> ObjectStorage:

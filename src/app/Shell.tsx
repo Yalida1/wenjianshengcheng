@@ -93,6 +93,53 @@ export function Card({ children, className = "" }: PropsWithChildren<{ className
   );
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  active: "进行中",
+  archived: "已归档",
+  not_started: "未开始",
+  source_ready: "来源已确认",
+  source_selected: "来源已选择",
+  uploaded: "已上传",
+  parsing: "解析中",
+  parsed: "解析完成",
+  parse_failed: "解析失败",
+  needs_ocr: "需要文字识别",
+  template_extract_queued: "模板提取排队中",
+  template_review: "待人工确认",
+  template_candidate_confirmed: "模板已确认",
+  template_extract_failed: "模板提取失败",
+  review_required: "待人工确认",
+  confirmed: "已确认",
+  fields_confirmed: "字段已确认",
+  template_selected: "模板已选择",
+  queued: "排队中",
+  pending: "待处理",
+  running: "处理中",
+  retrying: "重试中",
+  succeeded: "已完成",
+  failed: "失败",
+  cancelled: "已取消",
+  generated: "生成完成",
+  draft: "草稿",
+  reviewing: "审阅中",
+  ready_to_finalize: "可定稿",
+  finalized: "已定稿",
+  superseded: "已被新版本替代",
+  published: "已发布",
+  passed: "校验通过",
+  open: "待处理",
+  resolved: "已解决",
+  stale: "上游已变化",
+  loading: "加载中",
+  empty: "暂无数据",
+  forbidden: "无权限",
+  revision_conflict: "并发冲突",
+};
+
+export function statusLabel(status: string): string {
+  return STATUS_LABELS[status] ?? status;
+}
+
 export function StatusBadge({ status }: { status: string }) {
   const tone =
     status === "finalized" ||
@@ -105,7 +152,7 @@ export function StatusBadge({ status }: { status: string }) {
         : "bg-blue-50 text-blue-700";
   return (
     <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${tone}`}>
-      {status}
+      {statusLabel(status)}
     </span>
   );
 }

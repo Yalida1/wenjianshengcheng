@@ -802,7 +802,8 @@ export interface paths {
     get: operations["get_project_api_v1_projects__project_id__get"];
     put?: never;
     post?: never;
-    delete?: never;
+    /** Delete Project */
+    delete: operations["delete_project_api_v1_projects__project_id__delete"];
     options?: never;
     head?: never;
     /** Update Project */
@@ -1667,6 +1668,24 @@ export interface components {
        * @default government_investment
        */
       project_type: string;
+    };
+    /** ProjectDeleteRequest */
+    ProjectDeleteRequest: {
+      /** Confirmation Code */
+      confirmation_code: string;
+      /** Revision */
+      revision: number;
+    };
+    /** ProjectDeleteResult */
+    ProjectDeleteResult: {
+      /** Deleted */
+      deleted: boolean;
+      /** Project Id */
+      project_id: string;
+      /** Storage Cleanup Failed */
+      storage_cleanup_failed: number;
+      /** Storage Objects Deleted */
+      storage_objects_deleted: number;
     };
     /** ProjectMemberCreate */
     ProjectMemberCreate: {
@@ -7981,6 +8000,122 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ProjectView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  delete_project_api_v1_projects__project_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProjectDeleteRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectDeleteResult"];
         };
       };
       /** @description 请求不符合业务规则 */

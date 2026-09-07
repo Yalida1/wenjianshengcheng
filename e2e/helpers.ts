@@ -145,7 +145,7 @@ export async function generateReviewFinalize(
   await page.goto(`/projects/${projectId}/stages/${stage}/generation`);
   await page.getByLabel("已发布模板").selectOption({ index: 1 });
   await page.getByRole("button", { name: "创建生成任务" }).click();
-  await expect(page.getByText("succeeded", { exact: true })).toBeVisible({ timeout: 90_000 });
+  await expect(page.getByText("已完成", { exact: true })).toBeVisible({ timeout: 90_000 });
   await page.getByRole("link", { name: "打开文档工作台" }).click();
 
   const pendingReview = page.getByRole("button", { name: "确认内容并标记已审阅" });

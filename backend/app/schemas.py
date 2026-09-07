@@ -84,6 +84,18 @@ class ProjectPatch(BaseModel):
     revision: int = Field(ge=1)
 
 
+class ProjectDeleteRequest(BaseModel):
+    revision: int = Field(ge=1)
+    confirmation_code: str = Field(min_length=2, max_length=80)
+
+
+class ProjectDeleteResult(BaseModel):
+    project_id: str
+    deleted: bool
+    storage_objects_deleted: int
+    storage_cleanup_failed: int
+
+
 class ProjectView(ORMModel):
     id: str
     organization_id: str

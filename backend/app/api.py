@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import time
 from collections import defaultdict, deque
 from decimal import Decimal
@@ -85,6 +86,8 @@ from .schemas import (
     Page,
     ParseJobView,
     ProjectCreate,
+    ProjectDeleteRequest,
+    ProjectDeleteResult,
     ProjectMemberCreate,
     ProjectMemberView,
     ProjectPatch,
@@ -114,6 +117,7 @@ from .security import (
     verify_password,
 )
 from .services.generation import build_generation_job, document_version_sha256
+from .services.project_deletion import delete_project_graph
 from .services.providers import TEMPLATE_EXTRACTION_PROMPT_VERSION
 from .services.storage import (
     get_storage,
@@ -134,6 +138,7 @@ from .tasks import (
 from .template_catalog import NATIONAL_OFFICIAL_TEXT
 
 router = APIRouter(prefix="/api/v1")
+logger = logging.getLogger(__name__)
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 project_router = APIRouter(prefix="/projects", tags=["projects"])
 file_router = APIRouter(prefix="/files", tags=["files"])
@@ -347,6 +352,69 @@ def update_project(
     db.commit()
     db.refresh(project)
     return project
+
+
+@project_router.delete("/{project_id}", response_model=ProjectDeleteResult)
+def delete_project(
+    project_id: str,
+    payload: ProjectDeleteRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ProjectDeleteResult:
+    project = db.scalar(
+        select(Project)
+        .where(
+            Project.id == project_id,
+            Project.organization_id == user.organization_id,
+        )
+        .with_for_update()
+    )
+    if project is None:
+        raise APIError(404, "project_not_found", "项目不存在")
+    if project.revision != payload.revision:
+        raise APIError(
+            409,
+            "revision_conflict",
+            "项目已被其他用户修改，请刷新后重试",
+            details={"expected": payload.revision, "actual": project.revision},
+        )
+    if payload.confirmation_code != project.code:
+        raise APIError(422, "project_confirmation_mismatch", "输入的项目编号不正确")
+
+    before = {
+        "code": project.code,
+        "name": project.name,
+        "status": project.status,
+        "revision": project.revision,
+    }
+    storage_keys = delete_project_graph(db, project)
+    record_audit(
+        db,
+        request,
+        user,
+        "project.delete",
+        "project",
+        project_id,
+        before=before,
+        metadata={"storage_object_count": len(storage_keys)},
+    )
+    db.commit()
+
+    cleanup_failed = 0
+    storage = get_storage()
+    for key in storage_keys:
+        try:
+            storage.delete(key)
+        except Exception:  # noqa: BLE001 - database deletion must remain committed
+            cleanup_failed += 1
+            logger.exception("Failed to delete project storage object", extra={"project_id": project_id})
+    return ProjectDeleteResult(
+        project_id=project_id,
+        deleted=True,
+        storage_objects_deleted=len(storage_keys) - cleanup_failed,
+        storage_cleanup_failed=cleanup_failed,
+    )
 
 
 @project_router.get("/{project_id}/stages", response_model=list[StageView])

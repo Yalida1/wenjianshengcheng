@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { api, apiError, type Project, type Stage } from "../api/client";
 import { ErrorNotice, FullPageMessage } from "./Auth";
-import { Card, PageHeader, StatusBadge } from "./Shell";
+import { Card, PageHeader, StatusBadge, statusLabel } from "./Shell";
 
 const projectSchema = z.object({
   code: z
@@ -21,6 +21,8 @@ type ProjectForm = z.infer<typeof projectSchema>;
 
 export function ProjectsPage() {
   const [creating, setCreating] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [confirmationCode, setConfirmationCode] = useState("");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const projects = useQuery({
@@ -53,6 +55,30 @@ export function ProjectsPage() {
       navigate(`/projects/${project.id}`);
     },
   });
+  const deleteProject = useMutation({
+    mutationFn: async ({ project, code }: { project: Project; code: string }) => {
+      const result = await api.DELETE("/api/v1/projects/{project_id}", {
+        params: { path: { project_id: project.id } },
+        body: { revision: project.revision, confirmation_code: code },
+      });
+      if (result.error) throw apiError(result.error, result.response);
+      return result.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.removeQueries({ queryKey: ["project", variables.project.id] });
+      queryClient.removeQueries({ queryKey: ["stages", variables.project.id] });
+      void queryClient.invalidateQueries({ queryKey: ["projects"] });
+      setProjectToDelete(null);
+      setConfirmationCode("");
+    },
+  });
+
+  const closeDeleteDialog = () => {
+    if (deleteProject.isPending) return;
+    deleteProject.reset();
+    setProjectToDelete(null);
+    setConfirmationCode("");
+  };
 
   return (
     <>
@@ -121,25 +147,113 @@ export function ProjectsPage() {
       )}
       <div className="grid gap-4 xl:grid-cols-2">
         {projects.data?.map((project) => (
-          <Link key={project.id} to={`/projects/${project.id}`} className="block">
-            <Card className="h-full transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
-              <div className="flex items-start justify-between gap-4">
+          <Card key={project.id} className="flex h-full flex-col">
+            <div className="flex items-start justify-between gap-4">
+              <Link to={`/projects/${project.id}`} className="min-w-0 hover:text-blue-700">
                 <div>
                   <div className="text-xs font-medium text-blue-700">{project.code}</div>
                   <h3 className="mt-2 text-lg font-semibold text-slate-900">{project.name}</h3>
                 </div>
-                <StatusBadge status={project.status} />
-              </div>
-              <p className="mt-4 line-clamp-2 text-sm leading-6 text-slate-500">
-                {project.description || "尚未填写项目说明"}
-              </p>
-              <div className="mt-5 border-t border-slate-100 pt-4 text-xs text-slate-400">
+              </Link>
+              <StatusBadge status={project.status} />
+            </div>
+            <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-slate-500">
+              {project.description || "尚未填写项目说明"}
+            </p>
+            <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-xs text-slate-400">
                 最后更新 {new Date(project.updated_at).toLocaleString("zh-CN")}
+              </span>
+              <div className="flex gap-2">
+                <Link className="secondary-button" to={`/projects/${project.id}`}>
+                  进入项目
+                </Link>
+                <button
+                  className="inline-flex min-h-10 items-center justify-center rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 transition hover:border-red-300 hover:bg-red-50"
+                  type="button"
+                  onClick={() => {
+                    deleteProject.reset();
+                    setConfirmationCode("");
+                    setProjectToDelete(project);
+                  }}
+                >
+                  删除项目
+                </button>
               </div>
-            </Card>
-          </Link>
+            </div>
+          </Card>
         ))}
       </div>
+      {projectToDelete && (
+        <div
+          className="fixed inset-0 z-40 grid place-items-center bg-slate-950/30 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeDeleteDialog();
+          }}
+        >
+          <section
+            aria-describedby="delete-project-description"
+            aria-labelledby="delete-project-title"
+            aria-modal="true"
+            className="w-full max-w-lg rounded-xl border border-slate-200 bg-white shadow-2xl"
+            role="dialog"
+          >
+            <div className="border-b border-slate-200 px-6 py-5">
+              <h2 className="text-xl font-semibold text-slate-900" id="delete-project-title">
+                确认删除项目
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500" id="delete-project-description">
+                此操作将永久删除项目、上传文件、解析结果、字段证据、生成记录和定稿文件，删除后无法恢复。
+              </p>
+            </div>
+            <form
+              className="p-6"
+              onSubmit={(event) => {
+                event.preventDefault();
+                deleteProject.mutate({ project: projectToDelete, code: confirmationCode });
+              }}
+            >
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                <div className="font-semibold">{projectToDelete.name}</div>
+                <div className="mt-1">项目编号：{projectToDelete.code}</div>
+              </div>
+              <label className="form-label mt-5 block" htmlFor="delete-project-code">
+                请输入项目编号“{projectToDelete.code}”确认删除
+                <input
+                  autoComplete="off"
+                  className="form-input mt-2"
+                  id="delete-project-code"
+                  value={confirmationCode}
+                  onChange={(event) => setConfirmationCode(event.target.value)}
+                />
+              </label>
+              {deleteProject.error && (
+                <div className="mt-4">
+                  <ErrorNotice error={deleteProject.error} />
+                </div>
+              )}
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  className="secondary-button"
+                  disabled={deleteProject.isPending}
+                  type="button"
+                  onClick={closeDeleteDialog}
+                >
+                  取消
+                </button>
+                <button
+                  className="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={deleteProject.isPending || confirmationCode !== projectToDelete.code}
+                  type="submit"
+                >
+                  {deleteProject.isPending ? "正在删除…" : "永久删除"}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
     </>
   );
 }
@@ -191,7 +305,7 @@ export function ProjectOverviewPage() {
         }
       />
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        <Metric label="项目状态" value={project.data?.status ?? "-"} />
+        <Metric label="项目状态" value={statusLabel(project.data?.status ?? "-")} />
         <Metric
           label="项目类型"
           value={project.data?.project_type === "enterprise_investment" ? "企业投资" : "政府投资"}

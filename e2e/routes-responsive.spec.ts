@@ -5,7 +5,7 @@ import { api, login } from "./helpers";
 test("核心路由刷新、三种桌面宽度与基础可访问性通过", async ({ page }) => {
   await login(page);
   const projectName = "路由与响应式巡检项目";
-  const project = await api<{ id: string }>(page, "POST", "/api/v1/projects", {
+  const project = await api<{ id: string; code: string }>(page, "POST", "/api/v1/projects", {
     code: `ROUTE-${Date.now()}`,
     name: projectName,
     project_type: "government_investment",
@@ -71,6 +71,8 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`/projects/${project.id}`);
     await expect(page.getByRole("heading", { name: projectName })).toBeVisible();
+    await expect(page.getByText("进行中", { exact: true })).toBeVisible();
+    await expect(page.getByText("未开始", { exact: true })).toHaveCount(4);
     const horizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > window.innerWidth + 1,
     );
@@ -94,4 +96,14 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
         .map((button) => button.outerHTML),
     );
   expect(unnamedButtons).toEqual([]);
+
+  await page.goto("/projects");
+  const projectCard = page.locator("main section").filter({ hasText: project.code }).first();
+  await projectCard.getByRole("button", { name: "删除项目" }).click();
+  const deleteDialog = page.getByRole("dialog", { name: "确认删除项目" });
+  await expect(deleteDialog).toBeVisible();
+  await deleteDialog.getByLabel(/请输入项目编号/).fill(project.code);
+  await deleteDialog.getByRole("button", { name: "永久删除" }).click();
+  await expect(deleteDialog).toBeHidden();
+  await expect(page.getByText(project.code, { exact: true })).toHaveCount(0);
 });

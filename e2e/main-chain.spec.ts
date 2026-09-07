@@ -40,7 +40,7 @@ test("四阶段文件链可登录、生成、校验、定稿并导出", async ({
     )
     .toBe("parsed");
   await page.reload();
-  await expect(page.getByText("parsed", { exact: true })).toBeVisible();
+  await expect(page.getByText("解析完成", { exact: true })).toBeVisible();
 
   const stages: StageKey[] = ["requirement", "feasibility", "tender", "contract"];
   for (const stage of stages) {
@@ -55,5 +55,5 @@ test("四阶段文件链可登录、生成、校验、定稿并导出", async ({
   }
 
   await page.goto(`/projects/${projectId}`);
-  await expect(page.getByText("finalized", { exact: true })).toHaveCount(4);
+  await expect(page.getByText("已定稿", { exact: true })).toHaveCount(4);
 });
