@@ -19,6 +19,8 @@ const STAGE_NAMES: Record<string, string> = {
   contract: "合同",
 };
 
+const TEMPLATE_STAGE_ORDER = ["requirement", "feasibility", "tender", "contract"] as const;
+
 const EXTRACTION_STATUS_NAMES: Record<string, string> = {
   queued: "等待处理",
   running: "正在解析",
@@ -271,14 +273,6 @@ export function TemplateAdminPage() {
         title="模板中心"
         description="按权威来源分级管理模板。官方原文用于核对，只有明确标记“可用于生成”的模板才能进入生成流程。"
       />
-      <div className="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {TEMPLATE_CATEGORIES.map((category) => (
-          <div key={category.key} className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="font-medium text-slate-900">{category.label}</div>
-            <div className="mt-2 text-xs leading-5 text-slate-500">{category.description}</div>
-          </div>
-        ))}
-      </div>
       <Card className="mb-5 border-blue-200">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -645,9 +639,15 @@ export function TemplateAdminPage() {
       </Card>
       <div className="space-y-5">
         {TEMPLATE_CATEGORIES.map((category) => {
-          const items = templates.data?.filter(
+          const items = (templates.data ?? []).filter(
             (template: Template) => template.source_kind === category.key,
           );
+          const stageGroups = TEMPLATE_STAGE_ORDER.map((stage) => ({
+            stage,
+            items: items
+              .filter((template) => template.stage === stage)
+              .sort((left, right) => left.name.localeCompare(right.name, "zh-CN")),
+          })).filter((group) => group.items.length > 0);
           return (
             <Card key={category.key}>
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -656,7 +656,7 @@ export function TemplateAdminPage() {
                   <p className="section-description">{category.description}</p>
                 </div>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
-                  {items?.length ?? 0} 份
+                  {items.length} 份
                 </span>
               </div>
               <div className="mt-4 overflow-x-auto">
@@ -664,108 +664,120 @@ export function TemplateAdminPage() {
                   <thead>
                     <tr>
                       <th>模板名称</th>
-                      <th>阶段</th>
                       <th>来源依据</th>
-                      <th>版本</th>
                       <th>状态</th>
                       <th>操作</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {items?.map((template: Template) => (
-                      <tr key={template.id}>
-                        <td>
-                          <div className="font-medium text-slate-900">{template.name}</div>
-                          {template.applicability && (
-                            <div className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
-                              {template.applicability}
-                            </div>
-                          )}
-                        </td>
-                        <td>{STAGE_NAMES[template.stage] ?? template.stage}</td>
-                        <td>
-                          <div>
-                            {template.issuing_authority ||
-                              (template.source_kind === "platform_reference_template"
-                                ? "平台编制"
-                                : "来源待登记")}
+                  {stageGroups.map((group) => (
+                    <tbody key={group.stage}>
+                      <tr className="bg-slate-50/80">
+                        <td colSpan={4} className="!py-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-slate-700">
+                              {STAGE_NAMES[group.stage]}
+                            </span>
+                            <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-500 ring-1 ring-slate-200">
+                              {group.items.length} 份
+                            </span>
                           </div>
-                          {(template.document_number || template.publish_year) && (
-                            <div className="mt-1 text-xs text-slate-500">
-                              {[template.document_number, template.publish_year]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </div>
-                          )}
-                        </td>
-                        <td>V{template.current_version}</td>
-                        <td>
-                          <StatusBadge status={template.status} />
-                          <div className="mt-1 text-xs text-slate-500">
-                            {template.generation_enabled ? "可用于生成" : "仅供查阅核对"}
-                          </div>
-                        </td>
-                        <td>
-                          {template.status !== "published" ? (
-                            <div className="flex min-w-80 items-center gap-2">
-                              <input
-                                aria-label={`${template.name} DOCX 源`}
-                                className="block w-44 text-xs"
-                                type="file"
-                                accept=".docx"
-                                onChange={(event) =>
-                                  setSourceFiles((current) => ({
-                                    ...current,
-                                    [template.id]: event.target.files?.[0],
-                                  }))
-                                }
-                              />
-                              <button
-                                className="text-button"
-                                disabled={!sourceFiles[template.id] || uploadSource.isPending}
-                                onClick={() => {
-                                  const file = sourceFiles[template.id];
-                                  if (file) uploadSource.mutate({ template, file });
-                                }}
-                              >
-                                上传并预检
-                              </button>
-                              <button
-                                className="text-button"
-                                disabled={publish.isPending}
-                                onClick={() => publish.mutate(template.id)}
-                              >
-                                发布
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="flex min-w-28 flex-col items-start gap-1">
-                              {template.source_url && (
-                                <a
-                                  className="text-button"
-                                  href={template.source_url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  查阅来源
-                                </a>
-                              )}
-                              <span className="text-xs text-slate-400">
-                                {template.is_builtin ? "内置目录" : "当前有效"}
-                              </span>
-                            </div>
-                          )}
                         </td>
                       </tr>
-                    ))}
-                    {!items?.length && (
+                      {group.items.map((template) => (
+                        <tr key={template.id}>
+                          <td>
+                            <div className="font-medium text-slate-900">{template.name}</div>
+                            {template.applicability && (
+                              <div className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
+                                {template.applicability}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <div>
+                              {template.issuing_authority ||
+                                (template.source_kind === "platform_reference_template"
+                                  ? "平台编制"
+                                  : "来源待登记")}
+                            </div>
+                            {(template.document_number || template.publish_year) && (
+                              <div className="mt-1 text-xs text-slate-500">
+                                {[template.document_number, template.publish_year]
+                                  .filter(Boolean)
+                                  .join(" · ")}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <StatusBadge status={template.status} />
+                            <div className="mt-1 text-xs text-slate-500">
+                              {template.generation_enabled ? "可用于生成" : "仅供查阅核对"}
+                            </div>
+                          </td>
+                          <td>
+                            {template.status !== "published" ? (
+                              <div className="flex min-w-80 items-center gap-2">
+                                <input
+                                  aria-label={`${template.name} DOCX 源`}
+                                  className="block w-44 text-xs"
+                                  type="file"
+                                  accept=".docx"
+                                  onChange={(event) =>
+                                    setSourceFiles((current) => ({
+                                      ...current,
+                                      [template.id]: event.target.files?.[0],
+                                    }))
+                                  }
+                                />
+                                <button
+                                  className="text-button"
+                                  disabled={!sourceFiles[template.id] || uploadSource.isPending}
+                                  onClick={() => {
+                                    const file = sourceFiles[template.id];
+                                    if (file) uploadSource.mutate({ template, file });
+                                  }}
+                                >
+                                  上传并预检
+                                </button>
+                                <button
+                                  className="text-button"
+                                  disabled={publish.isPending}
+                                  onClick={() => publish.mutate(template.id)}
+                                >
+                                  发布
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex min-w-28 flex-col items-start gap-1">
+                                {template.source_url && (
+                                  <a
+                                    className="text-button"
+                                    href={template.source_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    查阅来源
+                                  </a>
+                                )}
+                                <span className="text-xs text-slate-400">
+                                  {template.is_builtin ? "内置目录" : "当前有效"}
+                                </span>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ))}
+                  {!items.length && (
+                    <tbody>
                       <tr>
-                        <td colSpan={6} className="py-8 text-center text-sm text-slate-400">
+                        <td colSpan={4} className="py-8 text-center text-sm text-slate-400">
                           暂无此类模板
                         </td>
                       </tr>
-                    )}
-                  </tbody>
+                    </tbody>
+                  )}
                 </table>
               </div>
             </Card>

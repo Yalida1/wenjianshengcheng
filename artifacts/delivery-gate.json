@@ -1,18 +1,18 @@
 {
   "delivery_file_count": 20,
   "sha256": {
-    "field-traceability.xlsx": "17957b67a7ff6bef1146e2b0a201413a5c79bdda4c8ec2e511bb94fa69e67926",
-    "format-compliance-report.json": "2fc4542d46e92e96094593b2c185f24f54a57e9204cc7162e1b9a1f0487eaa58",
-    "validation-report.json": "15d062d2f1981ba87161a77f11f9ed48e7caac57244663ab76d5b8164814ae52",
-    "可行性研究报告_V1.0.docx": "b6926bc54172e74364e2766b4ae15fa247f3c957d3e0969c4d16e9c52c0d92a8",
-    "可行性研究报告_V1.0.pdf": "0e3b1de54dd4a7621fd8a1c816562f8fda4270cc92522e497be10b80717a7b56",
-    "合同签约准备版_V1.0.docx": "32f6f0e952e180763b6af504c90b43e7e8ffc8b9d968c3fec8a89c009dfda455",
-    "合同签约准备版_V1.0.pdf": "5d777ed5afb8efdee179a66725e9f83b1beaa555251f4b6f504ab1b3f160678d",
-    "合同预草案_V0.1.docx": "a63f7d7cfb5bc7f6db45eb20895955c18d6bb27b2befe31cca4bb9e51ed41de6",
-    "招标文件_V1.0.docx": "1f1dee6be2b5d83a33be994c48e59fd17d5c8ac7f107753bd108e52a9f60132c",
-    "招标文件_V1.0.pdf": "eb166d467cdc474f52063b00bcdca2f8b5a4f1abe36ff9f1df64355cd201e6ed",
-    "项目建议书_V1.0.docx": "689d03e3c80748f93948de64b71ab7cc9eeed4dc4f5fe29d31ef937ad841ba43",
-    "项目建议书_V1.0.pdf": "22d1cf8e4c596a4d85ffa9cccd4137491d4f39c242cdf3fb08481aceb3f9c760"
+    "field-traceability.xlsx": "e121579742cd46875692656510146b014961c5ede1df874ac45215aca406b3f8",
+    "format-compliance-report.json": "39704271661c6b98da8873a3b684a446a7fb534070b2ae5f5edc78277b736d28",
+    "validation-report.json": "3cf6366127eb9e1ccdfb111be9d428dba854767aafaf5c81d638308be6e6fb0f",
+    "可行性研究报告_V1.0.docx": "413b9365adad392f60478f7f88aacfd997d78a8e5c1aa9715a4efffa54f22dbf",
+    "可行性研究报告_V1.0.pdf": "b4a796c42f909ea7233acae929311fbf5152a04dd2f0998c19cf373966f79154",
+    "合同签约准备版_V1.0.docx": "67ea4ea5fe82c22a341673e4d32b14aa6301ffdbecd7b1e35f99074c0cbe16cb",
+    "合同签约准备版_V1.0.pdf": "3596dcbe70abf98e01b629c3a7f206d98666eaed8338a034ab78f4478c2e1678",
+    "合同预草案_V0.1.docx": "cf018e37b4a3fe016cd68d12ae1a7d305f45af889d4a814e89beffd13f20b18d",
+    "招标文件_V1.0.docx": "3f96f5cebfafb30be03ca29278c634742ba13b1befc813af889f031aca6c7eb2",
+    "招标文件_V1.0.pdf": "4950996f80dcd21b35e579c0957d762a4af1800131c8f6499a3d6f8c8c6e7a9c",
+    "项目建议书_V1.0.docx": "1cc1e72f9276ccdd47717ca45aa985c5470d1c1437e991d5317bd4ac750cbd58",
+    "项目建议书_V1.0.pdf": "cc257cfb7b7faa3489404436289af69b37cf12a38cd56037b6199b1a10fc28f3"
   },
   "status": "passed"
 }

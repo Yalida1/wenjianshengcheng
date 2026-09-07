@@ -1,7 +1,7 @@
 {
   "artifacts": {
     "field-traceability.xlsx": {
-      "sha256": "17957b67a7ff6bef1146e2b0a201413a5c79bdda4c8ec2e511bb94fa69e67926",
+      "sha256": "e121579742cd46875692656510146b014961c5ede1df874ac45215aca406b3f8",
       "sheets": [
         "字段来源追溯",
         "合同付款校验"
@@ -9,38 +9,38 @@
     },
     "可行性研究报告_V1.0.docx": {
       "paragraphs": 21,
-      "sha256": "b6926bc54172e74364e2766b4ae15fa247f3c957d3e0969c4d16e9c52c0d92a8"
+      "sha256": "413b9365adad392f60478f7f88aacfd997d78a8e5c1aa9715a4efffa54f22dbf"
     },
     "可行性研究报告_V1.0.pdf": {
       "pages": 4,
-      "sha256": "0e3b1de54dd4a7621fd8a1c816562f8fda4270cc92522e497be10b80717a7b56"
+      "sha256": "b4a796c42f909ea7233acae929311fbf5152a04dd2f0998c19cf373966f79154"
     },
     "合同签约准备版_V1.0.docx": {
       "paragraphs": 23,
-      "sha256": "32f6f0e952e180763b6af504c90b43e7e8ffc8b9d968c3fec8a89c009dfda455"
+      "sha256": "67ea4ea5fe82c22a341673e4d32b14aa6301ffdbecd7b1e35f99074c0cbe16cb"
     },
     "合同签约准备版_V1.0.pdf": {
       "pages": 8,
-      "sha256": "5d777ed5afb8efdee179a66725e9f83b1beaa555251f4b6f504ab1b3f160678d"
+      "sha256": "3596dcbe70abf98e01b629c3a7f206d98666eaed8338a034ab78f4478c2e1678"
     },
     "合同预草案_V0.1.docx": {
-      "sha256": "a63f7d7cfb5bc7f6db45eb20895955c18d6bb27b2befe31cca4bb9e51ed41de6"
+      "sha256": "cf018e37b4a3fe016cd68d12ae1a7d305f45af889d4a814e89beffd13f20b18d"
     },
     "招标文件_V1.0.docx": {
       "paragraphs": 17,
-      "sha256": "1f1dee6be2b5d83a33be994c48e59fd17d5c8ac7f107753bd108e52a9f60132c"
+      "sha256": "3f96f5cebfafb30be03ca29278c634742ba13b1befc813af889f031aca6c7eb2"
     },
     "招标文件_V1.0.pdf": {
       "pages": 3,
-      "sha256": "eb166d467cdc474f52063b00bcdca2f8b5a4f1abe36ff9f1df64355cd201e6ed"
+      "sha256": "4950996f80dcd21b35e579c0957d762a4af1800131c8f6499a3d6f8c8c6e7a9c"
     },
     "项目建议书_V1.0.docx": {
       "paragraphs": 17,
-      "sha256": "689d03e3c80748f93948de64b71ab7cc9eeed4dc4f5fe29d31ef937ad841ba43"
+      "sha256": "1cc1e72f9276ccdd47717ca45aa985c5470d1c1437e991d5317bd4ac750cbd58"
     },
     "项目建议书_V1.0.pdf": {
       "pages": 3,
-      "sha256": "22d1cf8e4c596a4d85ffa9cccd4137491d4f39c242cdf3fb08481aceb3f9c760"
+      "sha256": "cc257cfb7b7faa3489404436289af69b37cf12a38cd56037b6199b1a10fc28f3"
     }
   },
   "case": "demo_001",

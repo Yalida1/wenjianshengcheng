@@ -34,6 +34,7 @@
     "projects": 1,
     "role_permissions": 25,
     "roles": 5,
+    "template_extraction_jobs": 0,
     "template_sections": 138,
     "template_variables": 138,
     "template_versions": 22,
@@ -46,7 +47,7 @@
     "validation_runs": 4
   },
   "method": "SQLite online backup plus ZIP object archive smoke test",
-  "object_count": 113,
+  "object_count": 126,
   "production_note": "PostgreSQL and MinIO use scripts/backup.sh and scripts/restore.sh.",
   "status": "passed"
 }

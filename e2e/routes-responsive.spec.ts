@@ -52,6 +52,15 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
   ).toBeVisible();
   await expect(page.getByText("仅供查阅核对", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("可用于生成", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "版本", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("columnheader", { name: "阶段", exact: true })).toHaveCount(0);
+  const adaptedCategory = page
+    .getByRole("heading", { name: "依据正式大纲适配", exact: true })
+    .locator("xpath=ancestor::section[1]");
+  const adaptedStageLabels = await adaptedCategory
+    .locator("tbody > tr.bg-slate-50\\/80 td span.font-semibold")
+    .allTextContents();
+  expect(adaptedStageLabels).toEqual(["可研报告", "招标文件", "合同"]);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.screenshot({
     path: path.resolve("artifacts/qa/ui/templates-1440.png"),
