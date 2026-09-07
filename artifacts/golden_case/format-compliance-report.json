@@ -1,0 +1,649 @@
+{
+  "artifacts": {
+    "field-traceability.xlsx": {
+      "sha256": "9ee10c233e9ecc90828da0baf5b2820e10820234e5d4f0374b53ed7b7f651315",
+      "sheets": [
+        "字段来源追溯",
+        "合同付款校验"
+      ]
+    },
+    "可行性研究报告_V1.0.docx": {
+      "paragraphs": 21,
+      "sha256": "7b9ecc71c63f85c16d10fd1dadaa037ce5e716fae631e7a3bb435ae6f2db65d3"
+    },
+    "可行性研究报告_V1.0.pdf": {
+      "pages": 4,
+      "sha256": "d615e31bbe17f84d5e3b2d4ad8eb5e1f071dbc1296da9a81f626230743dd7c98"
+    },
+    "合同签约准备版_V1.0.docx": {
+      "paragraphs": 23,
+      "sha256": "178f01f96c273d7a42b3d8330f2901f7cb31045e153f622d4dfcb026ebf35b00"
+    },
+    "合同签约准备版_V1.0.pdf": {
+      "pages": 8,
+      "sha256": "23f538f8ad0840a4937888fbe29e6ab72c9843395850e0a623c9892bd5f76b0a"
+    },
+    "合同预草案_V0.1.docx": {
+      "sha256": "c5c8d1003c0829f0129fbea93ba5b13d975545de7d1eed89def3200c728770bd"
+    },
+    "招标文件_V1.0.docx": {
+      "paragraphs": 17,
+      "sha256": "21a2bc382ac333d04376b6fe1325354653396658d43749e32140c83f5ad177f9"
+    },
+    "招标文件_V1.0.pdf": {
+      "pages": 3,
+      "sha256": "bd40bf5212115e69cde03b42894859295c93b229ab8efa72557de6778800a622"
+    },
+    "项目建议书_V1.0.docx": {
+      "paragraphs": 17,
+      "sha256": "e3b4f0656d1a190ade112527e951de723c6ed1133ba273e602dfb65c417dda0c"
+    },
+    "项目建议书_V1.0.pdf": {
+      "pages": 3,
+      "sha256": "efd7e72b2f02a719658119941c9c2e79eb8c97195ed0e83b78265d533eb45a60"
+    }
+  },
+  "case": "demo_001",
+  "checks": [
+    {
+      "message": "LibreOffice 可执行文件可用",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx OOXML ZIP 完整",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 包含 document.xml",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含文档标题",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含章节 项目概况",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含章节 建设背景",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含章节 建设目标",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含章节 建设范围",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 含章节 实施计划",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 页数大于 0",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 可提取关键标题",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.pdf SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书 文档校验通过",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx OOXML ZIP 完整",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 包含 document.xml",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含文档标题",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 总论",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 建设背景和必要性",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 需求分析",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 建设方案",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 投资估算与资金筹措",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 效益和风险",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 含章节 结论",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 页数大于 0",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 可提取关键标题",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.pdf SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告 文档校验通过",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx OOXML ZIP 完整",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 包含 document.xml",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含文档标题",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含章节 招标公告",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含章节 投标人须知",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含章节 采购需求",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含章节 合同条款",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 含章节 评标办法",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 页数大于 0",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 可提取关键标题",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.pdf SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件 文档校验通过",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx OOXML ZIP 完整",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 包含 document.xml",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含文档标题",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 合同主体",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 合同标的和范围",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 价款和税费",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 履行和交付",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 验收和质保",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 付款安排",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 违约和争议解决",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 含章节 生效条件",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 页面宽度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 页面高度为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页数大于 0",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 可提取关键标题",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 未替换变量为 0",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf 页面为 A4",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.pdf SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "合同 文档校验通过",
+      "status": "passed"
+    },
+    {
+      "message": "项目建议书_V1.0.docx 可由 LibreOffice 打开并转换",
+      "status": "passed"
+    },
+    {
+      "message": "可行性研究报告_V1.0.docx 可由 LibreOffice 打开并转换",
+      "status": "passed"
+    },
+    {
+      "message": "招标文件_V1.0.docx 可由 LibreOffice 打开并转换",
+      "status": "passed"
+    },
+    {
+      "message": "合同签约准备版_V1.0.docx 可由 LibreOffice 打开并转换",
+      "status": "passed"
+    },
+    {
+      "message": "合同预草案存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "合同预草案 OOXML ZIP 完整",
+      "status": "passed"
+    },
+    {
+      "message": "合同预草案 SHA-256 匹配",
+      "status": "passed"
+    },
+    {
+      "message": "field-traceability.xlsx 存在且非空",
+      "status": "passed"
+    },
+    {
+      "message": "追溯工作簿工作表完整",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.acceptance 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.breach 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.contract_duration 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.contract_scope 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.contract_subject 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.delivery_location 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.effective_conditions 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.final_contract_amount 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.party_a 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.party_b 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.payment_plan 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.tax_inclusion 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.tax_rate 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 contract.warranty 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 feasibility.construction_scope 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 feasibility.project_name 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 feasibility.project_period 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 feasibility.total_investment 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 requirement.construction_scope 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 requirement.project_name 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 requirement.project_owner 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 requirement.project_period 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 tender.maximum_price 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 tender.procurement_budget 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 tender.procurement_scope 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "追溯字段 tender.project_name 与 expected_fields 一致",
+      "status": "passed"
+    },
+    {
+      "message": "合同付款比例合计 100%",
+      "status": "passed"
+    },
+    {
+      "message": "合同付款金额合计等于最终合同金额",
+      "status": "passed"
+    },
+    {
+      "message": "可研总投资未映射为招标预算",
+      "status": "passed"
+    },
+    {
+      "message": "最高限价未映射为最终合同金额",
+      "status": "passed"
+    },
+    {
+      "message": "项目总周期未映射为合同履行期限",
+      "status": "passed"
+    },
+    {
+      "message": "追溯 XLSX SHA-256 匹配",
+      "status": "passed"
+    }
+  ],
+  "external_boundary": "Demo 通用模板已验证；客户正式模板和授权字体尚未提供，不能声明客户模板严格合规。",
+  "profile": "demo_enterprise_report_cn",
+  "status": "passed",
+  "strict_customer_template_compliance": false
+}

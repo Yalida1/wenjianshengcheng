@@ -1,13 +1,424 @@
 import { useState } from "react";
 import { Badge, Button, Dialog, Drawer, Icon, PageHeader, Search } from "../components/UI";
 import type { Page } from "../types";
-const templateRows=[["机房建设项目可行性研究报告模板","可研报告","机房建设","V2.1","启用","2026-09-04","陈昊"],["货物类公开招标文件模板","招标文件","货物类","V3.0","启用","2026-09-03","李梓涵"],["设备采购及安装合同范本","合同","设备采购","V1.5","启用","2026-08-28","王明远"]];
-const state: "default"|"empty"|"loading"|"error"|"no-permission"="default";
-function TemplateFilter({children}:{children:React.ReactNode}){return <select className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-600">{children}</select>}
-export function TemplateCenterPage({navigate}:{navigate:(p:Page)=>void}){const [open,setOpen]=useState(false);const [rows,setRows]=useState(templateRows);return <><PageHeader title="模板中心" sub="统一管理可研报告、招标文件和合同使用的标准模板及版本。" action={<Button onClick={()=>setOpen(true)}><Icon name="plus" size={17}/>导入模板</Button>}/><div className="mt-8 flex flex-wrap gap-3"><Search placeholder="搜索模板名称"/><TemplateFilter><option>全部阶段</option><option>可研报告</option><option>招标文件</option><option>合同</option></TemplateFilter><TemplateFilter><option>全部状态</option><option>启用</option><option>草稿</option><option>已停用</option><option>已过期</option></TemplateFilter><TemplateFilter><option>专业或业务类型</option></TemplateFilter><TemplateFilter><option>最近更新时间</option></TemplateFilter></div><section className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white"><div className="grid grid-cols-[minmax(220px,1.5fr)_100px_110px_70px_70px_105px_80px_50px] gap-4 border-b border-slate-100 bg-slate-50/70 px-6 py-3 text-xs text-slate-500"><span>模板名称</span><span>适用阶段</span><span>专业 / 类型</span><span>版本</span><span>状态</span><span>最近更新</span><span>更新人</span><span>操作</span></div>{state==="default"&&rows.map(r=><div className="grid min-h-[68px] grid-cols-[minmax(220px,1.5fr)_100px_110px_70px_70px_105px_80px_50px] items-center gap-4 border-b border-slate-100 px-6 text-[13px] last:border-0" key={r[0]}><button onClick={()=>navigate("template-detail")} className="text-left font-medium text-slate-700 hover:text-[#24457C]">{r[0]}</button><span>{r[1]}</span><span>{r[2]}</span><span>{r[3]}</span><Badge tone="success">{r[4]}</Badge><span className="text-slate-500">{r[5]}</span><span>{r[6]}</span><button onClick={()=>navigate("template-detail")} className="text-[#2E5495]">查看</button></div>)}</section><div className="mt-5 flex items-center justify-between text-[13px] text-slate-500"><span>共 {rows.length} 条</span><div className="flex gap-2"><Button variant="secondary" className="h-8 px-3">上一页</Button><Button variant="secondary" className="h-8 px-3">下一页</Button></div></div>{open&&<Dialog title="导入模板" description="导入后将以草稿状态加入模板中心。" onClose={()=>setOpen(false)}><label className="text-sm font-medium">模板名称<input className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3" placeholder="输入模板名称"/></label><div className="mt-6 flex justify-end gap-3"><Button variant="secondary" onClick={()=>setOpen(false)}>取消</Button><Button onClick={()=>{setRows([...rows,["新导入项目文件模板","可研报告","综合","V1.0","草稿","刚刚","王明远"]]);setOpen(false)}}>保存模板</Button></div></Dialog>}</>}
-export function TemplateDetailPage({navigate}:{navigate:(p:Page)=>void}){const [tab,setTab]=useState("基本信息");const tabs=["基本信息","章节结构","模板变量","版本记录"];return <><PageHeader title="机房建设项目可行性研究报告模板" sub="可研报告 · 机房建设 · 当前版本 V2.1" action={<Button variant="secondary" onClick={()=>navigate("template-center")}>返回模板中心</Button>}/><div className="mt-8 border-b border-slate-200">{tabs.map(x=><button key={x} onClick={()=>setTab(x)} className={`mr-6 border-b-2 px-1 pb-3 text-sm ${tab===x?"border-[#2E5495] font-medium text-[#24457C]":"border-transparent text-slate-500"}`}>{x}</button>)}</div><section className="mt-6 rounded-xl border border-slate-200 bg-white p-6">{tab==="基本信息"&&<div className="grid max-w-3xl grid-cols-2 gap-x-16 gap-y-6 text-sm">{[["模板名称","机房建设项目可行性研究报告模板"],["文件阶段","可研报告"],["适用专业","机房建设"],["业务类型","工程建设"],["当前版本","V2.1"],["生效时间","2026-08-01"],["模板状态","启用"],["模板说明","适用于机房节能改造类项目。"]].map(([k,v])=><div key={k}><p className="text-slate-500">{k}</p><p className="mt-1 font-medium text-slate-800">{v}</p></div>)}</div>}{tab==="章节结构"&&<div className="grid grid-cols-[260px_1fr] gap-6"><div className="border-r border-slate-200 text-sm"><p className="rounded bg-[#F2F6FC] px-3 py-2 text-[#24457C]">一、项目概况</p><p className="px-3 py-2">二、建设必要性</p><p className="px-3 py-2">三、建设方案</p></div><div><h2 className="font-semibold">一、项目概况</h2><p className="mt-3 text-sm text-slate-500">说明项目背景、建设目标与实施范围。</p></div></div>}{tab==="模板变量"&&<SimpleTable headers={["变量名称","字段键","数据类型","必填级别","数据来源","人工确认"]} rows={[["项目名称","project.project_name","文本","P0","项目资料","是"],["项目总投资","investment.total_investment","金额","P1","可研数据","是"]]}/>} {tab==="版本记录"&&<SimpleTable headers={["版本号","发布时间","发布人","状态","版本说明"]} rows={[["V2.1","2026-08-01","陈昊","当前版本","完善投资估算章节"],["V2.0","2026-05-12","陈昊","已归档","新增节能评估内容"]]}/>}</section></>}
-function SimpleTable({headers,rows}:{headers:string[];rows:string[][]}){return <div className="overflow-hidden rounded-lg border border-slate-200"><div className="grid grid-cols-6 bg-slate-50 px-4 py-3 text-xs text-slate-500">{headers.map(x=><span key={x}>{x}</span>)}</div>{rows.map((r,i)=><div className="grid grid-cols-6 border-t border-slate-100 px-4 py-4 text-sm" key={i}>{r.map(x=><span key={x}>{x}</span>)}</div>)}</div>}
-const fieldRows=[["项目名称","project.project_name","文本","P0","全部阶段","资料 / 人工","启用"],["项目总投资","investment.total_investment","金额","P1","可研","可研资料","启用"],["最终合同金额","contract.contract_amount","金额","P0","合同","人工确认","启用"],["合同履行期限","contract.performance_period","期限","P0","合同","人工确认","启用"]];
-export function FieldDictionaryPage(){const [drawer,setDrawer]=useState<string|undefined>();const [newOpen,setNewOpen]=useState(false);const [rows,setRows]=useState(fieldRows);return <><PageHeader title="字段字典" sub="统一维护项目文件链路中的标准字段、来源政策和校验规则。" action={<Button onClick={()=>setNewOpen(true)}><Icon name="plus" size={17}/>新建字段</Button>}/><div className="mt-8 grid grid-cols-[208px_minmax(0,1fr)] gap-6"><aside className="rounded-xl border border-slate-200 bg-white p-3"><p className="px-3 pb-2 text-xs font-semibold text-slate-500">字段分组</p>{["项目基础信息","建设内容与范围","投资与预算","进度与期限","技术指标","招标要素","合同主体","合同金额与税务","合同付款","验收与质保"].map((x,i)=><button key={x} className={`w-full rounded-lg px-3 py-2 text-left text-sm ${i===0?"bg-[#F2F6FC] font-medium text-[#24457C]":"text-slate-600 hover:bg-slate-50"}`}>{x}</button>)}</aside><div><div className="flex flex-wrap gap-3"><Search placeholder="搜索字段"/><Filter><option>全部文件阶段</option></Filter><Filter><option>全部必填级别</option></Filter><Filter><option>全部状态</option></Filter></div><section className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white"><div className="grid grid-cols-[1.15fr_1.3fr_.6fr_.6fr_.8fr_.9fr_.5fr_.4fr] gap-3 bg-slate-50 px-5 py-3 text-xs text-slate-500"><span>中文名称</span><span>字段键</span><span>类型</span><span>级别</span><span>适用阶段</span><span>允许来源</span><span>状态</span><span>操作</span></div>{rows.map(r=><div className="grid min-h-16 grid-cols-[1.15fr_1.3fr_.6fr_.6fr_.8fr_.9fr_.5fr_.4fr] items-center gap-3 border-t border-slate-100 px-5 text-[13px]" key={r[1]}><button onClick={()=>setDrawer(r[0])} className="text-left font-medium hover:text-[#24457C]">{r[0]}</button><span className="font-mono text-xs text-slate-500">{r[1]}</span><span>{r[2]}</span><Badge tone={r[3]==="P0"?"danger":r[3]==="P1"?"warning":"info"}>{r[3]}</Badge><span>{r[4]}</span><span>{r[5]}</span><Badge tone="success">{r[6]}</Badge><button onClick={()=>setDrawer(r[0])} className="text-[#2E5495]">查看</button></div>)}</section></div></div>{drawer&&<Drawer title={drawer} onClose={()=>setDrawer(undefined)}><FieldInfo name={drawer}/></Drawer>}{newOpen&&<Dialog title="新建字段" description="字段保存后将以启用状态加入当前分组。" onClose={()=>setNewOpen(false)}><label className="text-sm font-medium">中文名称<input className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3" placeholder="输入字段名称"/></label><label className="mt-5 block text-sm font-medium">字段键<input className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3" placeholder="例如：project.project_code"/></label><div className="mt-6 flex justify-end gap-3"><Button variant="secondary" onClick={()=>setNewOpen(false)}>取消</Button><Button onClick={()=>{setRows([...rows,["项目编码","project.project_code","文本","P1","全部阶段","项目资料","启用"]]);setNewOpen(false)}}>保存字段</Button></div></Dialog>}</>}
-function FieldInfo({name}:{name:string}){return <div className="space-y-5 text-sm">{[["中文名称",name],["字段键",name==="最终合同金额"?"contract.contract_amount":"project.project_name"],["数据类型","金额"],["必填级别","P0 阻断级"],["适用文件阶段","合同"],["允许自动填充的来源","无"],["允许作为参考的来源","可研总投资、招标预算"],["必须人工确认的情况","合同金额、履行期限"],["禁止映射","可研总投资 ≠ 合同金额\n招标预算 ≠ 最终合同金额\n招标最高限价 ≠ 最终合同金额\n项目建设周期 ≠ 单份合同履行期限\n项目全部建设范围 ≠ 单份合同范围"],["校验规则","金额必须由人工确认"],["状态","启用"],["修改记录","王明远 · 2026-09-05"]].map(([k,v])=><div key={k}><p className="text-[13px] text-slate-500">{k}</p><p className="mt-1 whitespace-pre-line text-slate-800">{v}</p></div>)}</div>}
-function Filter({children}:{children:React.ReactNode}){return <select className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-600">{children}</select>}
+const templateRows = [
+  ["机房建设项目可行性研究报告模板", "可研报告", "机房建设", "V2.1", "启用", "2026-09-04", "陈昊"],
+  ["货物类公开招标文件模板", "招标文件", "货物类", "V3.0", "启用", "2026-09-03", "李梓涵"],
+  ["设备采购及安装合同范本", "合同", "设备采购", "V1.5", "启用", "2026-08-28", "王明远"],
+];
+const state: "default" | "empty" | "loading" | "error" | "no-permission" = "default";
+function TemplateFilter({ children }: { children: React.ReactNode }) {
+  return (
+    <select className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-600">
+      {children}
+    </select>
+  );
+}
+export function TemplateCenterPage({ navigate }: { navigate: (p: Page) => void }) {
+  const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState(templateRows);
+  return (
+    <>
+      <PageHeader
+        title="模板中心"
+        sub="统一管理可研报告、招标文件和合同使用的标准模板及版本。"
+        action={
+          <Button onClick={() => setOpen(true)}>
+            <Icon name="plus" size={17} />
+            导入模板
+          </Button>
+        }
+      />
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Search placeholder="搜索模板名称" />
+        <TemplateFilter>
+          <option>全部阶段</option>
+          <option>可研报告</option>
+          <option>招标文件</option>
+          <option>合同</option>
+        </TemplateFilter>
+        <TemplateFilter>
+          <option>全部状态</option>
+          <option>启用</option>
+          <option>草稿</option>
+          <option>已停用</option>
+          <option>已过期</option>
+        </TemplateFilter>
+        <TemplateFilter>
+          <option>专业或业务类型</option>
+        </TemplateFilter>
+        <TemplateFilter>
+          <option>最近更新时间</option>
+        </TemplateFilter>
+      </div>
+      <section className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="grid grid-cols-[minmax(220px,1.5fr)_100px_110px_70px_70px_105px_80px_50px] gap-4 border-b border-slate-100 bg-slate-50/70 px-6 py-3 text-xs text-slate-500">
+          <span>模板名称</span>
+          <span>适用阶段</span>
+          <span>专业 / 类型</span>
+          <span>版本</span>
+          <span>状态</span>
+          <span>最近更新</span>
+          <span>更新人</span>
+          <span>操作</span>
+        </div>
+        {state === "default" &&
+          rows.map((r) => (
+            <div
+              className="grid min-h-[68px] grid-cols-[minmax(220px,1.5fr)_100px_110px_70px_70px_105px_80px_50px] items-center gap-4 border-b border-slate-100 px-6 text-[13px] last:border-0"
+              key={r[0]}
+            >
+              <button
+                onClick={() => navigate("template-detail")}
+                className="text-left font-medium text-slate-700 hover:text-[#24457C]"
+              >
+                {r[0]}
+              </button>
+              <span>{r[1]}</span>
+              <span>{r[2]}</span>
+              <span>{r[3]}</span>
+              <Badge tone="success">{r[4]}</Badge>
+              <span className="text-slate-500">{r[5]}</span>
+              <span>{r[6]}</span>
+              <button onClick={() => navigate("template-detail")} className="text-[#2E5495]">
+                查看
+              </button>
+            </div>
+          ))}
+      </section>
+      <div className="mt-5 flex items-center justify-between text-[13px] text-slate-500">
+        <span>共 {rows.length} 条</span>
+        <div className="flex gap-2">
+          <Button variant="secondary" className="h-8 px-3">
+            上一页
+          </Button>
+          <Button variant="secondary" className="h-8 px-3">
+            下一页
+          </Button>
+        </div>
+      </div>
+      {open && (
+        <Dialog
+          title="导入模板"
+          description="导入后将以草稿状态加入模板中心。"
+          onClose={() => setOpen(false)}
+        >
+          <label className="text-sm font-medium">
+            模板名称
+            <input
+              className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3"
+              placeholder="输入模板名称"
+            />
+          </label>
+          <div className="mt-6 flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                setRows([
+                  ...rows,
+                  ["新导入项目文件模板", "可研报告", "综合", "V1.0", "草稿", "刚刚", "王明远"],
+                ]);
+                setOpen(false);
+              }}
+            >
+              保存模板
+            </Button>
+          </div>
+        </Dialog>
+      )}
+    </>
+  );
+}
+export function TemplateDetailPage({ navigate }: { navigate: (p: Page) => void }) {
+  const [tab, setTab] = useState("基本信息");
+  const tabs = ["基本信息", "章节结构", "模板变量", "版本记录"];
+  return (
+    <>
+      <PageHeader
+        title="机房建设项目可行性研究报告模板"
+        sub="可研报告 · 机房建设 · 当前版本 V2.1"
+        action={
+          <Button variant="secondary" onClick={() => navigate("template-center")}>
+            返回模板中心
+          </Button>
+        }
+      />
+      <div className="mt-8 border-b border-slate-200">
+        {tabs.map((x) => (
+          <button
+            key={x}
+            onClick={() => setTab(x)}
+            className={`mr-6 border-b-2 px-1 pb-3 text-sm ${
+              tab === x
+                ? "border-[#2E5495] font-medium text-[#24457C]"
+                : "border-transparent text-slate-500"
+            }`}
+          >
+            {x}
+          </button>
+        ))}
+      </div>
+      <section className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+        {tab === "基本信息" && (
+          <div className="grid max-w-3xl grid-cols-2 gap-x-16 gap-y-6 text-sm">
+            {[
+              ["模板名称", "机房建设项目可行性研究报告模板"],
+              ["文件阶段", "可研报告"],
+              ["适用专业", "机房建设"],
+              ["业务类型", "工程建设"],
+              ["当前版本", "V2.1"],
+              ["生效时间", "2026-08-01"],
+              ["模板状态", "启用"],
+              ["模板说明", "适用于机房节能改造类项目。"],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <p className="text-slate-500">{k}</p>
+                <p className="mt-1 font-medium text-slate-800">{v}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {tab === "章节结构" && (
+          <div className="grid grid-cols-[260px_1fr] gap-6">
+            <div className="border-r border-slate-200 text-sm">
+              <p className="rounded bg-[#F2F6FC] px-3 py-2 text-[#24457C]">一、项目概况</p>
+              <p className="px-3 py-2">二、建设必要性</p>
+              <p className="px-3 py-2">三、建设方案</p>
+            </div>
+            <div>
+              <h2 className="font-semibold">一、项目概况</h2>
+              <p className="mt-3 text-sm text-slate-500">说明项目背景、建设目标与实施范围。</p>
+            </div>
+          </div>
+        )}
+        {tab === "模板变量" && (
+          <SimpleTable
+            headers={["变量名称", "字段键", "数据类型", "必填级别", "数据来源", "人工确认"]}
+            rows={[
+              ["项目名称", "project.project_name", "文本", "P0", "项目资料", "是"],
+              ["项目总投资", "investment.total_investment", "金额", "P1", "可研数据", "是"],
+            ]}
+          />
+        )}{" "}
+        {tab === "版本记录" && (
+          <SimpleTable
+            headers={["版本号", "发布时间", "发布人", "状态", "版本说明"]}
+            rows={[
+              ["V2.1", "2026-08-01", "陈昊", "当前版本", "完善投资估算章节"],
+              ["V2.0", "2026-05-12", "陈昊", "已归档", "新增节能评估内容"],
+            ]}
+          />
+        )}
+      </section>
+    </>
+  );
+}
+function SimpleTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-slate-200">
+      <div className="grid grid-cols-6 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+        {headers.map((x) => (
+          <span key={x}>{x}</span>
+        ))}
+      </div>
+      {rows.map((r, i) => (
+        <div className="grid grid-cols-6 border-t border-slate-100 px-4 py-4 text-sm" key={i}>
+          {r.map((x) => (
+            <span key={x}>{x}</span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+const fieldRows = [
+  ["项目名称", "project.project_name", "文本", "P0", "全部阶段", "资料 / 人工", "启用"],
+  ["项目总投资", "investment.total_investment", "金额", "P1", "可研", "可研资料", "启用"],
+  ["最终合同金额", "contract.contract_amount", "金额", "P0", "合同", "人工确认", "启用"],
+  ["合同履行期限", "contract.performance_period", "期限", "P0", "合同", "人工确认", "启用"],
+];
+export function FieldDictionaryPage() {
+  const [drawer, setDrawer] = useState<string | undefined>();
+  const [newOpen, setNewOpen] = useState(false);
+  const [rows, setRows] = useState(fieldRows);
+  return (
+    <>
+      <PageHeader
+        title="字段字典"
+        sub="统一维护项目文件链路中的标准字段、来源政策和校验规则。"
+        action={
+          <Button onClick={() => setNewOpen(true)}>
+            <Icon name="plus" size={17} />
+            新建字段
+          </Button>
+        }
+      />
+      <div className="mt-8 grid grid-cols-[208px_minmax(0,1fr)] gap-6">
+        <aside className="rounded-xl border border-slate-200 bg-white p-3">
+          <p className="px-3 pb-2 text-xs font-semibold text-slate-500">字段分组</p>
+          {[
+            "项目基础信息",
+            "建设内容与范围",
+            "投资与预算",
+            "进度与期限",
+            "技术指标",
+            "招标要素",
+            "合同主体",
+            "合同金额与税务",
+            "合同付款",
+            "验收与质保",
+          ].map((x, i) => (
+            <button
+              key={x}
+              className={`w-full rounded-lg px-3 py-2 text-left text-sm ${
+                i === 0
+                  ? "bg-[#F2F6FC] font-medium text-[#24457C]"
+                  : "text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              {x}
+            </button>
+          ))}
+        </aside>
+        <div>
+          <div className="flex flex-wrap gap-3">
+            <Search placeholder="搜索字段" />
+            <Filter>
+              <option>全部文件阶段</option>
+            </Filter>
+            <Filter>
+              <option>全部必填级别</option>
+            </Filter>
+            <Filter>
+              <option>全部状态</option>
+            </Filter>
+          </div>
+          <section className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <div className="grid grid-cols-[1.15fr_1.3fr_.6fr_.6fr_.8fr_.9fr_.5fr_.4fr] gap-3 bg-slate-50 px-5 py-3 text-xs text-slate-500">
+              <span>中文名称</span>
+              <span>字段键</span>
+              <span>类型</span>
+              <span>级别</span>
+              <span>适用阶段</span>
+              <span>允许来源</span>
+              <span>状态</span>
+              <span>操作</span>
+            </div>
+            {rows.map((r) => (
+              <div
+                className="grid min-h-16 grid-cols-[1.15fr_1.3fr_.6fr_.6fr_.8fr_.9fr_.5fr_.4fr] items-center gap-3 border-t border-slate-100 px-5 text-[13px]"
+                key={r[1]}
+              >
+                <button
+                  onClick={() => setDrawer(r[0])}
+                  className="text-left font-medium hover:text-[#24457C]"
+                >
+                  {r[0]}
+                </button>
+                <span className="font-mono text-xs text-slate-500">{r[1]}</span>
+                <span>{r[2]}</span>
+                <Badge tone={r[3] === "P0" ? "danger" : r[3] === "P1" ? "warning" : "info"}>
+                  {r[3]}
+                </Badge>
+                <span>{r[4]}</span>
+                <span>{r[5]}</span>
+                <Badge tone="success">{r[6]}</Badge>
+                <button onClick={() => setDrawer(r[0])} className="text-[#2E5495]">
+                  查看
+                </button>
+              </div>
+            ))}
+          </section>
+        </div>
+      </div>
+      {drawer && (
+        <Drawer title={drawer} onClose={() => setDrawer(undefined)}>
+          <FieldInfo name={drawer} />
+        </Drawer>
+      )}
+      {newOpen && (
+        <Dialog
+          title="新建字段"
+          description="字段保存后将以启用状态加入当前分组。"
+          onClose={() => setNewOpen(false)}
+        >
+          <label className="text-sm font-medium">
+            中文名称
+            <input
+              className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3"
+              placeholder="输入字段名称"
+            />
+          </label>
+          <label className="mt-5 block text-sm font-medium">
+            字段键
+            <input
+              className="mt-2 h-10 w-full rounded-lg border border-slate-300 px-3"
+              placeholder="例如：project.project_code"
+            />
+          </label>
+          <div className="mt-6 flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setNewOpen(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                setRows([
+                  ...rows,
+                  [
+                    "项目编码",
+                    "project.project_code",
+                    "文本",
+                    "P1",
+                    "全部阶段",
+                    "项目资料",
+                    "启用",
+                  ],
+                ]);
+                setNewOpen(false);
+              }}
+            >
+              保存字段
+            </Button>
+          </div>
+        </Dialog>
+      )}
+    </>
+  );
+}
+function FieldInfo({ name }: { name: string }) {
+  return (
+    <div className="space-y-5 text-sm">
+      {[
+        ["中文名称", name],
+        ["字段键", name === "最终合同金额" ? "contract.contract_amount" : "project.project_name"],
+        ["数据类型", "金额"],
+        ["必填级别", "P0 阻断级"],
+        ["适用文件阶段", "合同"],
+        ["允许自动填充的来源", "无"],
+        ["允许作为参考的来源", "可研总投资、招标预算"],
+        ["必须人工确认的情况", "合同金额、履行期限"],
+        [
+          "禁止映射",
+          "可研总投资 ≠ 合同金额\n招标预算 ≠ 最终合同金额\n招标最高限价 ≠ 最终合同金额\n项目建设周期 ≠ 单份合同履行期限\n项目全部建设范围 ≠ 单份合同范围",
+        ],
+        ["校验规则", "金额必须由人工确认"],
+        ["状态", "启用"],
+        ["修改记录", "王明远 · 2026-09-05"],
+      ].map(([k, v]) => (
+        <div key={k}>
+          <p className="text-[13px] text-slate-500">{k}</p>
+          <p className="mt-1 whitespace-pre-line text-slate-800">{v}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+function Filter({ children }: { children: React.ReactNode }) {
+  return (
+    <select className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-600">
+      {children}
+    </select>
+  );
+}

@@ -1,0 +1,55 @@
+{
+  "contract": {
+    "acceptance": "按照合同范围、技术要求和双方确认的验收方案组织初验与终验",
+    "breach": "违约责任按照双方确认的合同条款承担",
+    "contract_duration": "合同生效后 12 个月",
+    "contract_scope": "交付事项管理、协同办理和数据治理软件，完成部署、培训及验收支持",
+    "contract_subject": "数字政务协同平台软件及实施服务",
+    "delivery_location": "宁夏回族自治区银川市甲方指定地点",
+    "effective_conditions": "双方法定代表人或授权代表签字并加盖公章后生效",
+    "final_contract_amount": 9260000,
+    "party_a": "宁夏示例政务服务中心",
+    "party_b": "示例数字科技有限公司",
+    "payment_plan": [
+      {
+        "amount": 2778000,
+        "label": "预付款",
+        "ratio": 30,
+        "trigger": "合同生效并收到合规发票"
+      },
+      {
+        "amount": 3704000,
+        "label": "初验款",
+        "ratio": 40,
+        "trigger": "系统完成初验"
+      },
+      {
+        "amount": 2778000,
+        "label": "终验款",
+        "ratio": 30,
+        "trigger": "系统完成终验"
+      }
+    ],
+    "tax_inclusion": "含税总价",
+    "tax_rate": 6,
+    "warranty": "终验合格之日起提供十二个月免费质保服务"
+  },
+  "feasibility": {
+    "construction_scope": "建设基础支撑、事项管理、协同办理、数据治理和安全运维体系",
+    "project_name": "宁夏数字政务协同平台建设项目",
+    "project_period": 18,
+    "total_investment": 12800000
+  },
+  "requirement": {
+    "construction_scope": "建设统一事项管理、协同办理和运行分析能力",
+    "project_name": "宁夏数字政务协同平台建设项目",
+    "project_owner": "宁夏示例政务服务中心",
+    "project_period": 18
+  },
+  "tender": {
+    "maximum_price": 9500000,
+    "procurement_budget": 9800000,
+    "procurement_scope": "采购事项管理、协同办理、数据治理软件及实施服务",
+    "project_name": "宁夏数字政务协同平台建设项目"
+  }
+}

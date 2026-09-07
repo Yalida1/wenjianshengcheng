@@ -1,0 +1,14 @@
+{
+  "body_font_role": "宋体 or Noto Sans CJK compatible",
+  "customer_template_required_for_production": true,
+  "heading_font_role": "黑体 or Noto Sans CJK compatible",
+  "margins_cm": {
+    "bottom": 2.4,
+    "left": 2.8,
+    "right": 2.6,
+    "top": 2.6
+  },
+  "page_size": "A4",
+  "standard": "demo_enterprise_report_cn",
+  "strict_compliance": false
+}

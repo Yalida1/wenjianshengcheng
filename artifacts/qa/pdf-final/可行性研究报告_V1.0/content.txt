@@ -1,0 +1,125 @@
+    Demo 可行性研究报告通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+宁夏数字政务协同平台建设项目 可行性研究
+         报告
+               版本 1
+
+      DEMO 通用模板，仅用于平台闭环验证
+
+
+
+
+        项目文件链式生成平台 · 第 1 页
+                 Demo 可行性研究报告通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+总论
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+建设背景和必要性
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+需求分析
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+建设方案
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+投资估算与资金筹措
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+
+                        项目文件链式生成平台 · 第 2 页
+                 Demo 可行性研究报告通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+效益和风险
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+结论
+   本节依据已确认字段编制。construction_scope：建设基础支撑、事项管理、协同办
+
+理、数据治理和安全运维体系；project_name：宁夏数字政务协同平台建设项目；
+
+project_period：18；total_investment：12800000。
+
+
+
+
+                        项目文件链式生成平台 · 第 3 页
+                      Demo 可行性研究报告通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+字段来源清单
+
+字段键               字段名称       级别         状态               值
+
+
+                                                         建设基础支撑、
+
+construction_sc   项目全部建设范                                事项管理、协同
+                                  P0    user_confirmed
+ope               围                                      办理、数据治理
+
+                                                         和安全运维体系
+
+
+                                                         宁夏数字政务协
+project_name      项目名称            P0    user_confirmed
+                                                         同平台建设项目
+
+
+project_period    项目总建设周期         P0    user_confirmed   18
+
+
+total_investmen
+                  可研总投资           P0    user_confirmed   12800000
+t
+
+
+
+
+                          项目文件链式生成平台 · 第 4 页
+

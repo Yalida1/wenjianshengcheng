@@ -1,0 +1,99 @@
+     Demo 项目建议书通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+宁夏数字政务协同平台建设项目 项目建议书
+             版本 1
+
+     DEMO 通用模板，仅用于平台闭环验证
+
+
+
+
+      项目文件链式生成平台 · 第 1 页
+                  Demo 项目建议书通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+项目概况
+   本节依据已确认字段编制。construction_scope：建设统一事项管理、协同办理和运行
+
+分析能力；project_name：宁夏数字政务协同平台建设项目；project_owner：宁夏示例政务
+
+服务中心；project_period：18。
+
+
+
+建设背景
+   本节依据已确认字段编制。construction_scope：建设统一事项管理、协同办理和运行
+
+分析能力；project_name：宁夏数字政务协同平台建设项目；project_owner：宁夏示例政务
+
+服务中心；project_period：18。
+
+
+
+建设目标
+   本节依据已确认字段编制。construction_scope：建设统一事项管理、协同办理和运行
+
+分析能力；project_name：宁夏数字政务协同平台建设项目；project_owner：宁夏示例政务
+
+服务中心；project_period：18。
+
+
+
+建设范围
+   本节依据已确认字段编制。construction_scope：建设统一事项管理、协同办理和运行
+
+分析能力；project_name：宁夏数字政务协同平台建设项目；project_owner：宁夏示例政务
+
+服务中心；project_period：18。
+
+
+
+实施计划
+   本节依据已确认字段编制。construction_scope：建设统一事项管理、协同办理和运行
+
+分析能力；project_name：宁夏数字政务协同平台建设项目；project_owner：宁夏示例政务
+
+服务中心；project_period：18。
+
+
+
+
+                    项目文件链式生成平台 · 第 2 页
+                     Demo 项目建议书通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+字段来源清单
+
+字段键               字段名称      级别         状态               值
+
+
+                                                        建设统一事项管
+construction_sc
+                  建设范围           P0    user_confirmed   理、协同办理和
+ope
+                                                        运行分析能力
+
+
+                                                        宁夏数字政务协
+project_name      项目名称           P0    user_confirmed
+                                                        同平台建设项目
+
+
+                                                        宁夏示例政务服
+project_owner     项目单位           P0    user_confirmed
+                                                        务中心
+
+
+project_period    项目总建设周期        P0    user_confirmed   18
+
+
+
+
+                         项目文件链式生成平台 · 第 3 页
+

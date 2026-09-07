@@ -1,0 +1,101 @@
+      Demo 招标文件通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+宁夏数字政务协同平台建设项目 招标文件
+             版本 1
+
+     DEMO 通用模板，仅用于平台闭环验证
+
+
+
+
+      项目文件链式生成平台 · 第 1 页
+                  Demo 招标文件通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+招标公告
+  本节依据已确认字段编制。maximum_price：9500000；procurement_budget：
+
+9800000；procurement_scope：采购事项管理、协同办理、数据治理软件及实施服务；
+
+project_name：宁夏数字政务协同平台建设项目。
+
+
+
+投标人须知
+  本节依据已确认字段编制。maximum_price：9500000；procurement_budget：
+
+9800000；procurement_scope：采购事项管理、协同办理、数据治理软件及实施服务；
+
+project_name：宁夏数字政务协同平台建设项目。
+
+
+
+采购需求
+  本节依据已确认字段编制。maximum_price：9500000；procurement_budget：
+
+9800000；procurement_scope：采购事项管理、协同办理、数据治理软件及实施服务；
+
+project_name：宁夏数字政务协同平台建设项目。
+
+
+
+合同条款
+  本节依据已确认字段编制。maximum_price：9500000；procurement_budget：
+
+9800000；procurement_scope：采购事项管理、协同办理、数据治理软件及实施服务；
+
+project_name：宁夏数字政务协同平台建设项目。
+
+
+
+评标办法
+  本节依据已确认字段编制。maximum_price：9500000；procurement_budget：
+
+9800000；procurement_scope：采购事项管理、协同办理、数据治理软件及实施服务；
+
+project_name：宁夏数字政务协同平台建设项目。
+
+
+
+
+                  项目文件链式生成平台 · 第 2 页
+                        Demo 招标文件通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+字段来源清单
+
+字段键              字段名称       级别        状态               值
+
+
+maximum_price    最高限价            P0   user_confirmed   9500000
+
+
+procurement_bu
+                 招标预算            P0   user_confirmed   9800000
+dget
+
+
+                                                       采购事项管理、
+
+procurement_sc                                         协同办理、数据
+                 采购范围            P0   user_confirmed
+ope                                                    治理软件及实施
+
+                                                       服务
+
+
+                                                       宁夏数字政务协
+project_name     项目名称            P0   user_confirmed
+                                                       同平台建设项目
+
+
+
+
+                        项目文件链式生成平台 · 第 3 页
+

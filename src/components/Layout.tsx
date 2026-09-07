@@ -1,5 +1,144 @@
 import { Icon, type IconName } from "./UI";
 import type { Page } from "../types";
-const nav:[string,IconName,Page][]=[["项目空间","grid","project-list"],["模板中心","template","template-center"],["字段字典","dictionary","field-dictionary"],["系统管理","settings","system-management"]];
-export function Sidebar({page,navigate,compact,setCompact}:{page:Page;navigate:(p:Page)=>void;compact:boolean;setCompact:(x:boolean)=>void}) {return <aside className={`flex shrink-0 flex-col border-r border-slate-200 bg-white ${compact?"w-[72px]":"w-[72px] xl:w-56"}`}><div className="flex h-16 items-center px-5"><span className="grid size-8 place-items-center rounded-[7px] bg-[#2E5495] text-white"><Icon name="file" size={17}/></span>{!compact&&<span className="ml-3 hidden whitespace-nowrap text-[15px] font-semibold text-slate-800 xl:block">文链 · 项目文件</span>}</div><nav className="flex-1 space-y-1 px-3 pt-4">{nav.map(([label,icon,target])=><button key={target} onClick={()=>navigate(target)} title={label} className={`flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm ${page===target||page==="project-detail"&&target==="project-list"||page==="template-detail"&&target==="template-center"?"bg-[#F2F6FC] font-medium text-[#24457C]":"text-slate-600 hover:bg-slate-50"}`}><Icon name={icon}/><span className="hidden xl:block">{label}</span></button>)}</nav><div className="hidden border-t border-slate-100 p-3 xl:block"><button onClick={()=>setCompact(!compact)} className="flex h-10 w-full items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50"><Icon name="panel"/></button></div></aside>}
-export function Topbar({page,navigate}:{page:Page;navigate:(p:Page)=>void}) { const crumb:Record<Page,string>={"project-list":"项目空间","project-detail":"某省公司中心机房节能改造项目","template-center":"模板中心","template-detail":"机房建设项目可行性研究报告模板","field-dictionary":"字段字典","system-management":"系统管理","field-confirmation":"招标 · 字段确认","template-selection":"招标 · 选择模板","generation-setup":"招标 · 配置生成","generation-progress":"招标 · 生成中","document-preview":"招标 · 审校","validation-center":"招标 · 校验报告","document-compare":"招标 · 版本对比","tender-source-selection":"招标 · 选择输入来源","tender-file-upload":"招标 · 上传文件","tender-parse-progress":"招标 · 解析中","tender-parse-summary":"招标 · 解析摘要","contract-source":"合同 · 选择输入来源","contract-file-upload":"合同 · 上传文件","contract-parse-summary":"合同 · 解析摘要","contract-field-confirmation":"合同 · 字段确认","contract-element-confirmation":"合同 · 要素确认","contract-template-selection":"合同 · 选择模板","contract-generation-setup":"合同 · 配置生成","contract-generation-progress":"合同 · 生成中","contract-document-workspace":"合同 · 审校","contract-validation":"合同 · 校验","contract-finalized":"合同 · 已定稿","contract-export":"合同 · 导出","requirement-source-selection":"需求说明 · 选择来源","requirement-input":"需求说明 · 结构化录入","requirement-file-upload":"需求说明 · 上传文件","requirement-field-confirmation":"需求说明 · 字段确认","proposal-template-selection":"项目建议书 · 选择模板","proposal-generation-setup":"项目建议书 · 配置生成","proposal-generation-progress":"项目建议书 · 生成中","proposal-document-workspace":"项目建议书 · 审校","proposal-validation":"项目建议书 · 校验","proposal-finalized":"项目建议书 · 已定稿","feasibility-source-selection":"可研报告 · 选择来源","feasibility-file-upload":"可研报告 · 上传文件","feasibility-parse-summary":"可研报告 · 解析摘要","feasibility-field-confirmation":"可研报告 · 字段确认","feasibility-profession-selection":"可研报告 · 选择专业","feasibility-template-selection":"可研报告 · 选择模板","feasibility-generation-setup":"可研报告 · 配置生成","feasibility-generation-progress":"可研报告 · 生成中","feasibility-document-workspace":"可研报告 · 审校","feasibility-validation":"可研报告 · 校验","feasibility-finalized":"可研报告 · 已定稿","ui-states":"UI 状态展示"};return <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6 xl:px-8"><div className="flex items-center gap-3 text-sm">{(page==="project-detail"||page==="template-detail")&&<button onClick={()=>navigate(page==="project-detail"?"project-list":"template-center")} className="text-slate-500 hover:text-[#24457C]">{page==="project-detail"?"项目空间":"模板中心"}</button>}{(page==="project-detail"||page==="template-detail")&&<span className="text-slate-300">/</span>}<span className="font-medium text-slate-800">{crumb[page]}</span></div><div className="flex items-center gap-3"><span className="grid size-8 place-items-center rounded-full bg-slate-100 text-xs font-semibold">王</span><span className="hidden text-sm text-slate-700 md:block">王明远</span></div></header>}
+const nav: [string, IconName, Page][] = [
+  ["项目空间", "grid", "project-list"],
+  ["模板中心", "template", "template-center"],
+  ["字段字典", "dictionary", "field-dictionary"],
+  ["系统管理", "settings", "system-management"],
+];
+export function Sidebar({
+  page,
+  navigate,
+  compact,
+  setCompact,
+}: {
+  page: Page;
+  navigate: (p: Page) => void;
+  compact: boolean;
+  setCompact: (x: boolean) => void;
+}) {
+  return (
+    <aside
+      className={`flex shrink-0 flex-col border-r border-slate-200 bg-white ${
+        compact ? "w-[72px]" : "w-[72px] xl:w-56"
+      }`}
+    >
+      <div className="flex h-16 items-center px-5">
+        <span className="grid size-8 place-items-center rounded-[7px] bg-[#2E5495] text-white">
+          <Icon name="file" size={17} />
+        </span>
+        {!compact && (
+          <span className="ml-3 hidden whitespace-nowrap text-[15px] font-semibold text-slate-800 xl:block">
+            文链 · 项目文件
+          </span>
+        )}
+      </div>
+      <nav className="flex-1 space-y-1 px-3 pt-4">
+        {nav.map(([label, icon, target]) => (
+          <button
+            key={target}
+            onClick={() => navigate(target)}
+            title={label}
+            className={`flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm ${
+              page === target ||
+              (page === "project-detail" && target === "project-list") ||
+              (page === "template-detail" && target === "template-center")
+                ? "bg-[#F2F6FC] font-medium text-[#24457C]"
+                : "text-slate-600 hover:bg-slate-50"
+            }`}
+          >
+            <Icon name={icon} />
+            <span className="hidden xl:block">{label}</span>
+          </button>
+        ))}
+      </nav>
+      <div className="hidden border-t border-slate-100 p-3 xl:block">
+        <button
+          onClick={() => setCompact(!compact)}
+          className="flex h-10 w-full items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50"
+        >
+          <Icon name="panel" />
+        </button>
+      </div>
+    </aside>
+  );
+}
+export function Topbar({ page, navigate }: { page: Page; navigate: (p: Page) => void }) {
+  const crumb: Record<Page, string> = {
+    "project-list": "项目空间",
+    "project-detail": "某省公司中心机房节能改造项目",
+    "template-center": "模板中心",
+    "template-detail": "机房建设项目可行性研究报告模板",
+    "field-dictionary": "字段字典",
+    "system-management": "系统管理",
+    "field-confirmation": "招标 · 字段确认",
+    "template-selection": "招标 · 选择模板",
+    "generation-setup": "招标 · 配置生成",
+    "generation-progress": "招标 · 生成中",
+    "document-preview": "招标 · 审校",
+    "validation-center": "招标 · 校验报告",
+    "document-compare": "招标 · 版本对比",
+    "tender-source-selection": "招标 · 选择输入来源",
+    "tender-file-upload": "招标 · 上传文件",
+    "tender-parse-progress": "招标 · 解析中",
+    "tender-parse-summary": "招标 · 解析摘要",
+    "contract-source": "合同 · 选择输入来源",
+    "contract-file-upload": "合同 · 上传文件",
+    "contract-parse-summary": "合同 · 解析摘要",
+    "contract-field-confirmation": "合同 · 字段确认",
+    "contract-element-confirmation": "合同 · 要素确认",
+    "contract-template-selection": "合同 · 选择模板",
+    "contract-generation-setup": "合同 · 配置生成",
+    "contract-generation-progress": "合同 · 生成中",
+    "contract-document-workspace": "合同 · 审校",
+    "contract-validation": "合同 · 校验",
+    "contract-finalized": "合同 · 已定稿",
+    "contract-export": "合同 · 导出",
+    "requirement-source-selection": "需求说明 · 选择来源",
+    "requirement-input": "需求说明 · 结构化录入",
+    "requirement-file-upload": "需求说明 · 上传文件",
+    "requirement-field-confirmation": "需求说明 · 字段确认",
+    "proposal-template-selection": "项目建议书 · 选择模板",
+    "proposal-generation-setup": "项目建议书 · 配置生成",
+    "proposal-generation-progress": "项目建议书 · 生成中",
+    "proposal-document-workspace": "项目建议书 · 审校",
+    "proposal-validation": "项目建议书 · 校验",
+    "proposal-finalized": "项目建议书 · 已定稿",
+    "feasibility-source-selection": "可研报告 · 选择来源",
+    "feasibility-file-upload": "可研报告 · 上传文件",
+    "feasibility-parse-summary": "可研报告 · 解析摘要",
+    "feasibility-field-confirmation": "可研报告 · 字段确认",
+    "feasibility-profession-selection": "可研报告 · 选择专业",
+    "feasibility-template-selection": "可研报告 · 选择模板",
+    "feasibility-generation-setup": "可研报告 · 配置生成",
+    "feasibility-generation-progress": "可研报告 · 生成中",
+    "feasibility-document-workspace": "可研报告 · 审校",
+    "feasibility-validation": "可研报告 · 校验",
+    "feasibility-finalized": "可研报告 · 已定稿",
+    "ui-states": "UI 状态展示",
+  };
+  return (
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6 xl:px-8">
+      <div className="flex items-center gap-3 text-sm">
+        {(page === "project-detail" || page === "template-detail") && (
+          <button
+            onClick={() => navigate(page === "project-detail" ? "project-list" : "template-center")}
+            className="text-slate-500 hover:text-[#24457C]"
+          >
+            {page === "project-detail" ? "项目空间" : "模板中心"}
+          </button>
+        )}
+        {(page === "project-detail" || page === "template-detail") && (
+          <span className="text-slate-300">/</span>
+        )}
+        <span className="font-medium text-slate-800">{crumb[page]}</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <span className="grid size-8 place-items-center rounded-full bg-slate-100 text-xs font-semibold">
+          王
+        </span>
+        <span className="hidden text-sm text-slate-700 md:block">王明远</span>
+      </div>
+    </header>
+  );
+}

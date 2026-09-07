@@ -1,0 +1,21 @@
+Title:           宁夏数字政务协同平台建设项目 项目建议书
+Subject:         项目文件链式生成平台正式输出
+Keywords:        document-version, 8a8d4ec1-79a1-4fe9-959e-bd55da5c4cd3
+Author:          python-docx
+Creator:         Writer
+Producer:        LibreOffice 24.2
+CreationDate:    Sun Sep  6 17:41:58 2026 UTC
+Custom Metadata: no
+Metadata Stream: no
+Tagged:          yes
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           3
+Encrypted:       no
+Page size:       595.304 x 841.89 pts (A4)
+Page rot:        0
+File size:       45313 bytes
+Optimized:       no
+PDF version:     1.7

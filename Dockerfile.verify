@@ -1,0 +1,38 @@
+FROM mcr.microsoft.com/playwright:v1.55.1-noble
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH=/opt/venv/bin:$PATH
+
+RUN find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) \
+        -exec sed -i \
+          -e 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g' \
+          -e 's|http://security.ubuntu.com|https://security.ubuntu.com|g' {} + \
+    && apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update \
+    && apt-get -o Acquire::Retries=5 -o Acquire::https::Timeout=30 install -y --no-install-recommends \
+        fonts-noto-cjk \
+        libreoffice-writer \
+        make \
+        poppler-utils \
+        python3.12 \
+        python3.12-venv \
+    && rm -rf /var/lib/apt/lists/* \
+    && python3.12 -m venv /opt/venv
+
+WORKDIR /workspace
+RUN corepack enable && corepack prepare pnpm@10.34.3 --activate
+
+COPY pyproject.toml ./
+COPY backend/app/__init__.py backend/app/__init__.py
+RUN pip install --retries 10 --timeout 60 --no-cache-dir -e ".[dev]"
+RUN python -m pip install --retries 10 --timeout 60 --no-cache-dir \
+    --index-url https://pypi.org/simple --upgrade "pip==26.2.1"
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+RUN mkdir -p /workspace/data
+
+CMD ["make", "verify"]

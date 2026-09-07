@@ -1,0 +1,18 @@
+{
+  "delivery_file_count": 20,
+  "sha256": {
+    "field-traceability.xlsx": "9ee10c233e9ecc90828da0baf5b2820e10820234e5d4f0374b53ed7b7f651315",
+    "format-compliance-report.json": "62827ffba2f2c2f7052563befa68da727770c8f4e60e0e71b04116c2b367c901",
+    "validation-report.json": "01ced8b61b2939de9c1e72817ff4069d3de92b9e67e1a8577d52bc95d07050a7",
+    "可行性研究报告_V1.0.docx": "7b9ecc71c63f85c16d10fd1dadaa037ce5e716fae631e7a3bb435ae6f2db65d3",
+    "可行性研究报告_V1.0.pdf": "d615e31bbe17f84d5e3b2d4ad8eb5e1f071dbc1296da9a81f626230743dd7c98",
+    "合同签约准备版_V1.0.docx": "178f01f96c273d7a42b3d8330f2901f7cb31045e153f622d4dfcb026ebf35b00",
+    "合同签约准备版_V1.0.pdf": "23f538f8ad0840a4937888fbe29e6ab72c9843395850e0a623c9892bd5f76b0a",
+    "合同预草案_V0.1.docx": "c5c8d1003c0829f0129fbea93ba5b13d975545de7d1eed89def3200c728770bd",
+    "招标文件_V1.0.docx": "21a2bc382ac333d04376b6fe1325354653396658d43749e32140c83f5ad177f9",
+    "招标文件_V1.0.pdf": "bd40bf5212115e69cde03b42894859295c93b229ab8efa72557de6778800a622",
+    "项目建议书_V1.0.docx": "e3b4f0656d1a190ade112527e951de723c6ed1133ba273e602dfb65c417dda0c",
+    "项目建议书_V1.0.pdf": "efd7e72b2f02a719658119941c9c2e79eb8c97195ed0e83b78265d533eb45a60"
+  },
+  "status": "passed"
+}

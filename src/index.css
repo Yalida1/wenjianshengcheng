@@ -1,24 +1,119 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: #f6f8fb;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .primary-button {
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg bg-[#155AA8] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#0F4D91] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .secondary-button {
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .text-button {
+    @apply text-sm font-medium text-blue-700 hover:text-blue-900 hover:underline;
+  }
+
+  .form-label {
+    @apply text-sm font-medium text-slate-700;
+  }
+
+  .form-input {
+    @apply block min-h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+  }
+
+  .field-error {
+    @apply mt-1 block text-xs text-red-600;
+  }
+
+  .section-title {
+    @apply text-base font-semibold text-slate-900;
+  }
+
+  .section-description {
+    @apply mt-1 text-sm leading-6 text-slate-500;
+  }
+
+  .selection-card {
+    @apply flex cursor-pointer gap-3 rounded-xl border border-slate-200 p-4 text-sm transition hover:border-blue-300;
+  }
+
+  .selection-card-active {
+    @apply border-blue-500 bg-blue-50;
+  }
+
+  .selection-card span {
+    @apply flex flex-col;
+  }
+
+  .selection-card strong {
+    @apply font-medium text-slate-900;
+  }
+
+  .selection-card small {
+    @apply mt-1 leading-5 text-slate-500;
+  }
+
+  .tab-button {
+    @apply rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100;
+  }
+
+  .tab-button-active {
+    @apply bg-[#12345B] text-white hover:bg-[#12345B];
+  }
+
+  .data-table {
+    @apply w-full min-w-[680px] border-separate border-spacing-0 text-left text-sm;
+  }
+
+  .data-table th {
+    @apply border-b border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-600;
+  }
+
+  .data-table td {
+    @apply border-b border-slate-100 px-4 py-4 text-slate-600;
+  }
+}
 
 :root {
-  --background: #F6F8FB;
-  --foreground: #0F172A;
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  --primary: #2E5495;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F2F6FC;
-  --secondary-foreground: #24457C;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #DCE7F7;
-  --accent-foreground: #24457C;
-  --border: #E2E8F0;
-  --ring: #416AAF;
+  --background: #f6f8fb;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #2e5495;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f6fc;
+  --secondary-foreground: #24457c;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #dce7f7;
+  --accent-foreground: #24457c;
+  --border: #e2e8f0;
+  --ring: #416aaf;
   --radius: 0.625rem;
-  --success: #168A5B;
-  --warning: #A86512;
-  --danger: #C2414B;
+  --success: #168a5b;
+  --warning: #a86512;
+  --danger: #c2414b;
 }
 
 @theme inline {
@@ -37,10 +132,24 @@
   --radius-lg: var(--radius);
 }
 
-html, body, #root { height: 100%; }
+html,
+body,
+#root {
+  height: 100%;
+}
 
-body { margin: 0; font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif; background: var(--background); }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  background: var(--background);
+}
 
-button, input { font: inherit; }
+button,
+input {
+  font: inherit;
+}
 
-::selection { background: #DCE7F7; color: #24457C; }
+::selection {
+  background: #dce7f7;
+  color: #24457c;
+}

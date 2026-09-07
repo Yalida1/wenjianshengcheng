@@ -1,0 +1,57 @@
+{
+  "case": "demo_001",
+  "forbidden_mapping_check": {
+    "facts": {
+      "contract_duration": "合同生效后 12 个月",
+      "feasibility_total_investment": 12800000,
+      "final_contract_amount": 9260000,
+      "project_period_months": 18,
+      "tender_budget": 9800000,
+      "tender_maximum_price": 9500000
+    },
+    "status": "passed"
+  },
+  "payment_check": {
+    "errors": [],
+    "status": "passed"
+  },
+  "provider": "demo/deterministic-v1",
+  "validations": {
+    "contract": {
+      "issue_counts": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      },
+      "run_id": "d6ba8974-bb28-49d8-a2d3-9781040555e8",
+      "status": "passed"
+    },
+    "feasibility": {
+      "issue_counts": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      },
+      "run_id": "a6535b14-4cff-4be0-9741-709813df3940",
+      "status": "passed"
+    },
+    "requirement": {
+      "issue_counts": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      },
+      "run_id": "b2f3e1d9-bbd4-4759-bd61-632c093d52df",
+      "status": "passed"
+    },
+    "tender": {
+      "issue_counts": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      },
+      "run_id": "34d09951-70e4-464d-b815-8d3c97205a8f",
+      "status": "passed"
+    }
+  }
+}

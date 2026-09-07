@@ -1,8 +1,10 @@
 node_modules/
+.pnpm-store/
 dist/
 build/
 .cache/
 .env*
+!.env.example
 .vite/
 vite.config.*.timestamp-*
 *.tsbuildinfo
@@ -18,3 +20,20 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+.env
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.audit-cache/
+htmlcov/
+.coverage
+data/
+outputs/runtime/
+tmp/
+playwright-report/
+test-results/
+.codex-git-checkpoint/

@@ -1,26 +1,52 @@
 export type Page =
-  | "project-list" | "project-detail"
-  | "template-center" | "template-detail"
-  | "field-dictionary" | "system-management"
-  // Tender stage (existing pipeline)
-  | "field-confirmation" | "template-selection" | "generation-setup"
-  | "generation-progress" | "document-preview" | "validation-center" | "document-compare"
-  // Tender pre-pages
-  | "tender-source-selection" | "tender-file-upload" | "tender-parse-progress" | "tender-parse-summary"
-  // Contract stage
-  | "contract-source" | "contract-file-upload" | "contract-parse-summary"
-  | "contract-field-confirmation" | "contract-element-confirmation"
-  | "contract-template-selection" | "contract-generation-setup" | "contract-generation-progress"
-  | "contract-document-workspace" | "contract-validation" | "contract-finalized" | "contract-export"
-  // Requirement / Proposal stage
-  | "requirement-source-selection" | "requirement-input" | "requirement-file-upload"
-  | "requirement-field-confirmation" | "proposal-template-selection"
-  | "proposal-generation-setup" | "proposal-generation-progress"
-  | "proposal-document-workspace" | "proposal-validation" | "proposal-finalized"
-  // Feasibility stage
-  | "feasibility-source-selection" | "feasibility-file-upload" | "feasibility-parse-summary"
-  | "feasibility-field-confirmation" | "feasibility-profession-selection"
-  | "feasibility-template-selection" | "feasibility-generation-setup" | "feasibility-generation-progress"
-  | "feasibility-document-workspace" | "feasibility-validation" | "feasibility-finalized"
-  // UI states showcase (not in main nav)
+  | "project-list"
+  | "project-detail"
+  | "template-center"
+  | "template-detail"
+  | "field-dictionary"
+  | "system-management" // Tender stage (existing pipeline)
+  | "field-confirmation"
+  | "template-selection"
+  | "generation-setup"
+  | "generation-progress"
+  | "document-preview"
+  | "validation-center"
+  | "document-compare" // Tender pre-pages
+  | "tender-source-selection"
+  | "tender-file-upload"
+  | "tender-parse-progress"
+  | "tender-parse-summary" // Contract stage
+  | "contract-source"
+  | "contract-file-upload"
+  | "contract-parse-summary"
+  | "contract-field-confirmation"
+  | "contract-element-confirmation"
+  | "contract-template-selection"
+  | "contract-generation-setup"
+  | "contract-generation-progress"
+  | "contract-document-workspace"
+  | "contract-validation"
+  | "contract-finalized"
+  | "contract-export" // Requirement / Proposal stage
+  | "requirement-source-selection"
+  | "requirement-input"
+  | "requirement-file-upload"
+  | "requirement-field-confirmation"
+  | "proposal-template-selection"
+  | "proposal-generation-setup"
+  | "proposal-generation-progress"
+  | "proposal-document-workspace"
+  | "proposal-validation"
+  | "proposal-finalized" // Feasibility stage
+  | "feasibility-source-selection"
+  | "feasibility-file-upload"
+  | "feasibility-parse-summary"
+  | "feasibility-field-confirmation"
+  | "feasibility-profession-selection"
+  | "feasibility-template-selection"
+  | "feasibility-generation-setup"
+  | "feasibility-generation-progress"
+  | "feasibility-document-workspace"
+  | "feasibility-validation"
+  | "feasibility-finalized" // UI states showcase (not in main nav)
   | "ui-states";

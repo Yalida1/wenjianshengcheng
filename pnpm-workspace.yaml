@@ -1,0 +1,13 @@
+packages:
+  - .
+
+allowBuilds:
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
+
+overrides:
+  ansi-regex: 5.0.1
+  nanoid: 3.3.18
+  postcss: 8.5.23

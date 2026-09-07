@@ -1,0 +1,382 @@
+       Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+宁夏数字政务协同平台建设项目 合同
+            版本 1
+
+    DEMO 通用模板，仅用于平台闭环验证
+
+
+
+
+     项目文件链式生成平台 · 第 1 页
+                               Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+合同主体
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+合同标的和范围
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+
+                            项目文件链式生成平台 · 第 2 页
+                               Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+价款和税费
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+履行和交付
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+验收和质保
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+
+                            项目文件链式生成平台 · 第 3 页
+                               Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+付款安排
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+违约和争议解决
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+
+
+                            项目文件链式生成平台 · 第 4 页
+                               Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+生效条件
+    本节依据已确认字段编制。acceptance：按照合同范围、技术要求和双方确认的验收方
+
+案组织初验与终验；breach：违约责任按照双方确认的合同条款承担；contract_duration：
+
+合同生效后 12 个月；contract_scope：交付事项管理、协同办理和数据治理软件，完成部
+
+署、培训及验收支持；contract_subject：数字政务协同平台软件及实施服务；
+
+delivery_location：宁夏回族自治区银川市甲方指定地点；effective_conditions：双方法定代
+
+表人或授权代表签字并加盖公章后生效；final_contract_amount：9260000；party_a：宁夏
+
+示例政务服务中心；party_b：示例数字科技有限公司；payment_plan：[{'label': '预付款',
+
+'ratio': 30, 'amount': 2778000, 'trigger': '合同生效并收到合规发票'}, {'label': '初验款',
+
+'ratio': 40, 'amount': 3704000, 'trigger': '系统完成初验'}, {'label': '终验款', 'ratio': 30,
+
+'amount': 2778000, 'trigger': '系统完成终验'}]；tax_inclusion：含税总价；tax_rate：6；
+
+warranty：终验合格之日起提供十二个月免费质保服务。
+
+
+
+
+                            项目文件链式生成平台 · 第 5 页
+                            Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+字段来源清单
+
+字段键                字段名称       级别         状态               值
+
+
+                                                          按照合同范围、
+
+                                                          技术要求和双方
+acceptance         验收约定            P0    user_confirmed
+                                                          确认的验收方案
+
+                                                          组织初验与终验
+
+
+                                                          违约责任按照双
+
+breach             违约责任            P0    user_confirmed   方确认的合同条
+
+                                                          款承担
+
+
+contract_duratio                                          合同生效后 12
+                   履行期限            P0    user_confirmed
+n                                                         个月
+
+
+                                                          交付事项管理、
+
+                                                          协同办理和数据
+
+contract_scope     本合同范围           P0    user_confirmed   治理软件，完成
+
+                                                          部署、培训及验
+
+                                                          收支持
+
+
+                                                          数字政务协同平
+contract_subjec
+                   合同标的            P0    user_confirmed   台软件及实施服
+t
+                                                          务
+
+
+                                                          宁夏回族自治区
+delivery_locatio
+                   交付地点            P0    user_confirmed   银川市甲方指定
+n
+                                                          地点
+
+
+effective_conditi 生效条件             P0    user_confirmed   双方法定代表人
+
+ons                                                       或授权代表签字
+
+                                                          并加盖公章后生
+
+
+                           项目文件链式生成平台 · 第 6 页
+                            Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+                                                         效
+
+
+final_contract_a
+                   最终合同金额        P0     user_confirmed   9260000
+mount
+
+
+                                                         宁夏示例政务服
+party_a            甲方完整主体        P0     user_confirmed
+                                                         务中心
+
+
+                                                         示例数字科技有
+party_b            乙方完整主体        P0     user_confirmed
+                                                         限公司
+
+
+                                                         [{'label': '预付
+
+                                                         款', 'ratio': 30,
+
+                                                         'amount':
+
+                                                         2778000,
+
+                                                         'trigger': '合同
+
+                                                         生效并收到合规
+
+                                                         发票'}, {'label':
+
+                                                         '初验款', 'ratio':
+
+                                                         40, 'amount':
+payment_plan       付款计划          P0     user_confirmed
+                                                         3704000,
+
+                                                         'trigger': '系统
+
+                                                         完成初验'},
+
+                                                         {'label': '终验
+
+                                                         款', 'ratio': 30,
+
+                                                         'amount':
+
+                                                         2778000,
+
+                                                         'trigger': '系统
+
+                                                         完成终验'}]
+
+
+tax_inclusion      含税方式          P0     user_confirmed   含税总价
+
+
+tax_rate           税率            P0     user_confirmed   6
+
+
+
+                          项目文件链式生成平台 · 第 7 页
+                   Demo 合同通用模板 · DEMO 通用模板（非客户正式模板）
+
+
+
+
+                                                 终验合格之日起
+
+warranty   质保约定          P0     user_confirmed   提供十二个月免
+
+                                                 费质保服务
+
+
+
+
+                  项目文件链式生成平台 · 第 8 页
+
