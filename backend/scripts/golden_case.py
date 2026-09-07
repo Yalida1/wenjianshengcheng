@@ -22,6 +22,7 @@ from openpyxl import Workbook  # noqa: E402
 from openpyxl.styles import Alignment, Font, PatternFill  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
+from backend.app.config import get_settings  # noqa: E402
 from backend.app.db import Base, SessionLocal, engine  # noqa: E402
 from backend.app.models import (  # noqa: E402
     Document,
@@ -452,7 +453,7 @@ def generate() -> None:
     manifest: dict[str, Any] = {"demo_only": True, "artifacts": {}}
     with SessionLocal() as db:
         organization = db.scalar(select(Organization).where(Organization.name == "Demo 组织"))
-        admin = db.scalar(select(User).where(User.email == "admin@example.com"))
+        admin = db.scalar(select(User).where(User.email == get_settings().demo_admin_account))
         if organization is None or admin is None:
             raise RuntimeError("Demo seed failed")
         project = _create_project(db, organization, admin)

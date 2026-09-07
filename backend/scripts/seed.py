@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from backend.app.config import get_settings
 from backend.app.db import SessionLocal
@@ -20,7 +20,7 @@ from backend.app.models import (
     User,
     UserRole,
 )
-from backend.app.security import hash_password
+from backend.app.security import hash_password, verify_password
 from backend.app.services.providers import SECTION_PLANS
 from backend.app.services.storage import get_storage, sha256_bytes
 from backend.app.services.templates import DEMO_TEMPLATE_CONTENT_TYPE, build_demo_template
@@ -149,16 +149,29 @@ def seed() -> None:
                         )
                     )
 
-        admin = db.scalar(select(User).where(User.email == "admin@example.com"))
+        admin_account = settings.demo_admin_account.strip().lower()
+        admin = db.scalar(select(User).where(func.lower(User.email) == admin_account))
+        if admin is None and admin_account != "admin@example.com":
+            admin = db.scalar(select(User).where(func.lower(User.email) == "admin@example.com"))
         if admin is None:
             admin = User(
                 organization_id=organization.id,
-                email="admin@example.com",
+                email=admin_account,
                 display_name="Demo 管理员",
-                password_hash=hash_password(settings.demo_admin_password),
+                password_hash=hash_password(settings.demo_admin_password, minimum_length=8),
             )
             db.add(admin)
             db.flush()
+        else:
+            credentials_changed = False
+            if admin.email != admin_account:
+                admin.email = admin_account
+                credentials_changed = True
+            if not verify_password(settings.demo_admin_password, admin.password_hash):
+                admin.password_hash = hash_password(settings.demo_admin_password, minimum_length=8)
+                credentials_changed = True
+            if credentials_changed:
+                admin.session_version += 1
         if (
             db.scalar(
                 select(UserRole).where(
@@ -312,7 +325,7 @@ def seed() -> None:
                         )
                     )
         db.commit()
-        print("Seed complete: admin@example.com and Demo templates are ready")
+        print(f"Seed complete: {admin_account} and Demo templates are ready")
 
 
 if __name__ == "__main__":

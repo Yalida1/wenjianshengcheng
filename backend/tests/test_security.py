@@ -1,6 +1,12 @@
 from __future__ import annotations
 
 from fastapi.testclient import TestClient
+from sqlalchemy import select
+
+from backend.app.db import SessionLocal
+from backend.app.models import User
+from backend.app.security import hash_password
+from backend.scripts.seed import seed
 
 
 def test_login_and_csrf_protection(client: TestClient) -> None:
@@ -8,7 +14,7 @@ def test_login_and_csrf_protection(client: TestClient) -> None:
     assert unauthenticated.status_code == 401
     login = client.post(
         "/api/v1/auth/login",
-        json={"email": "admin@example.com", "password": "TestAdmin123!"},
+        json={"email": "admin", "password": "admin123"},
     )
     assert login.status_code == 200
     blocked = client.post(
@@ -26,3 +32,27 @@ def test_login_rate_limit_has_uniform_auth_error(client: TestClient) -> None:
     )
     assert response.status_code == 401
     assert response.json()["error"]["code"] == "invalid_credentials"
+
+
+def test_seed_migrates_legacy_admin_credentials(client: TestClient) -> None:
+    with SessionLocal() as db:
+        admin = db.scalar(select(User).where(User.email == "admin"))
+        assert admin is not None
+        previous_session_version = admin.session_version
+        admin.email = "admin@example.com"
+        admin.password_hash = hash_password("LegacyPassword123!")
+        db.commit()
+
+    seed()
+
+    with SessionLocal() as db:
+        admin = db.scalar(select(User).where(User.email == "admin"))
+        assert admin is not None
+        assert admin.session_version == previous_session_version + 1
+        assert db.scalar(select(User).where(User.email == "admin@example.com")) is None
+
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"email": "admin", "password": "admin123"},
+    )
+    assert login.status_code == 200

@@ -46,7 +46,7 @@
     "validation_runs": 4
   },
   "method": "SQLite online backup plus ZIP object archive smoke test",
-  "object_count": 36,
+  "object_count": 44,
   "production_note": "PostgreSQL and MinIO use scripts/backup.sh and scripts/restore.sh.",
   "status": "passed"
 }

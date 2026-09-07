@@ -18,7 +18,8 @@ os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB.as_posix()}"
 os.environ["STORAGE_BACKEND"] = "local"
 os.environ["LOCAL_STORAGE_PATH"] = str(TEST_STORAGE)
 os.environ["CELERY_TASK_ALWAYS_EAGER"] = "true"
-os.environ["DEMO_ADMIN_PASSWORD"] = "TestAdmin123!"  # noqa: S105
+os.environ["DEMO_ADMIN_ACCOUNT"] = "admin"
+os.environ["DEMO_ADMIN_PASSWORD"] = "admin123"  # noqa: S105
 
 from backend.app.api import _login_attempts  # noqa: E402
 from backend.app.db import Base, engine  # noqa: E402
@@ -45,7 +46,7 @@ def client() -> TestClient:
 def authenticated_client(client: TestClient) -> TestClient:
     response = client.post(
         "/api/v1/auth/login",
-        json={"email": "admin@example.com", "password": "TestAdmin123!"},
+        json={"email": "admin", "password": "admin123"},
     )
     assert response.status_code == 200, response.text
     client.headers["X-CSRF-Token"] = response.json()["csrf_token"]

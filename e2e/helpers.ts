@@ -46,8 +46,8 @@ export const FIELD_VALUES: Record<StageKey, Record<string, unknown>> = {
 
 export async function login(page: Page) {
   await page.goto("/login");
-  await page.getByLabel("邮箱").fill("admin@example.com");
-  await page.getByLabel("密码").fill("ChangeMe123!");
+  await page.getByLabel("账号").fill("admin");
+  await page.getByLabel("密码").fill("admin123");
   await page.getByRole("button", { name: "登录" }).click();
   await expect(page).toHaveURL(/\/projects$/);
 }

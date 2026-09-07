@@ -7,7 +7,7 @@
 1. 复制 `.env.example` 为 `.env`，至少修改应用密钥、数据库密码、MinIO 密码和演示管理员密码。
 2. 执行 `make up`（或 `docker compose up -d --build`）。
 3. 等所有服务为 healthy 后访问 `http://localhost:8080`。
-4. 开发默认账号：`admin@example.com`；密码取 `DEMO_ADMIN_PASSWORD`，示例值仅供本机 Demo。
+4. 开发默认账号：`admin`；默认密码：`admin123`。它们分别由 `DEMO_ADMIN_ACCOUNT` 和 `DEMO_ADMIN_PASSWORD` 控制，仅供本机 Demo，生产部署必须更换为至少 12 位的强密码。
 
 常用命令：`make install`、`make migrate`、`make seed`、`make test`、`make test-e2e`、`make golden-case`、`make verify`、`make down`。`make clean` 仅清理可再生缓存和构建目录，保留源码、Golden Case 输入与 `artifacts` 交付物。
 

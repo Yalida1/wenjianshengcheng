@@ -17,10 +17,11 @@
 - 将原 Hash/MockStore 主链改为 React Router、TanStack Query、React Hook Form/Zod、OpenAPI 类型与真实 API；保留深蓝/白/浅灰主要视觉。
 - 建立 Docker Compose 六服务、生产覆盖、备份恢复脚本、Nginx SPA 刷新回退、Makefile 和一键交付门禁。
 - 建立脱敏 Demo Golden Case，实际生成四阶段 DOCX/PDF、合同预草案、字段追溯 XLSX 和校验报告。
-- 最终回归：后端 pytest 15/15、覆盖率 79.33%；前端 Vitest 6/6；Ruff、mypy、前端 lint/typecheck/build、OpenAPI 契约、密钥扫描、Python 和 pnpm 依赖审计通过。
+- 最终回归：后端 pytest 16/16、覆盖率 79.41%；前端 Vitest 6/6；Ruff、mypy、前端 lint/typecheck/build、OpenAPI 契约、密钥扫描、Python 和 pnpm 依赖审计通过。
 - 安全扫描曾发现 pytest、Vite/PostCSS/Nanoid/ansi-regex/Playwright 已知漏洞，升级/覆盖到修复版本后重新审计通过。
 - 使用 artifact-tool 导入并渲染追溯工作簿全部 2 个工作表，公式错误匹配 0；人工查看未见截断或布局错误。
 - Docker 六个运行服务均为 healthy；API 与 worker 使用非 root 的 `docchain` 用户。
 - Playwright E2E 4/4 通过，覆盖四阶段生成定稿导出主链、错误态、并发冲突、退出保护、路由刷新、三种桌面宽度和基础可访问性。
 - Golden Case 149/149 自动检查通过；5 份 DOCX 共 26 页、4 份 PDF 共 18 页和 XLSX 的 2 个工作表均完成渲染与人工视觉检查。
 - 2026-09-07 最终执行 `docker compose --profile verify run --rm verify`，容器内字面量 `make verify` 返回退出码 0，最终交付件门禁通过。
+- 2026-09-07 将本机 Demo 管理员凭据统一为 `admin/admin123`，现有旧管理员原位迁移、旧会话失效，生产模式继续强制至少 12 位管理员密码。

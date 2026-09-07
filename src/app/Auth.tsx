@@ -68,7 +68,7 @@ export function ProtectedRoute({ children }: PropsWithChildren) {
 }
 
 const loginSchema = z.object({
-  email: z.string().email("请输入有效邮箱"),
+  email: z.string().trim().min(3, "请输入账号"),
   password: z.string().min(1, "请输入密码"),
 });
 type LoginValues = z.infer<typeof loginSchema>;
@@ -79,7 +79,7 @@ export function LoginPage() {
   const queryClient = useQueryClient();
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "admin@example.com", password: "" },
+    defaultValues: { email: "admin", password: "" },
   });
   const login = useMutation({
     mutationFn: async (values: LoginValues) => {
@@ -116,7 +116,7 @@ export function LoginPage() {
             onSubmit={form.handleSubmit((values) => login.mutate(values))}
           >
             <label className="block text-sm font-medium text-slate-700">
-              邮箱
+              账号
               <input
                 className="form-input mt-2"
                 autoComplete="username"

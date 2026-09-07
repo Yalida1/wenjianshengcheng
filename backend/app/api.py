@@ -198,9 +198,9 @@ def _set_auth_cookies(response: Response, user: User) -> tuple[str, int]:
 @auth_router.post("/login", response_model=SessionView)
 def login(payload: LoginRequest, request: Request, response: Response, db: DbSession) -> SessionView:
     _rate_limit_login(request)
-    user = db.scalar(select(User).where(func.lower(User.email) == payload.email.lower()))
+    user = db.scalar(select(User).where(func.lower(User.email) == payload.email.strip().lower()))
     if user is None or not user.is_active or not verify_password(payload.password, user.password_hash):
-        raise APIError(401, "invalid_credentials", "邮箱或密码错误")
+        raise APIError(401, "invalid_credentials", "账号或密码错误")
     csrf, expires_at = _set_auth_cookies(response, user)
     record_audit(db, request, user, "auth.login", "user", user.id)
     db.commit()

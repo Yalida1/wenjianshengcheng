@@ -28,9 +28,9 @@ class SessionClaims:
     expires_at: int
 
 
-def hash_password(password: str) -> str:
-    if len(password) < 12:
-        raise ValueError("Password must contain at least 12 characters")
+def hash_password(password: str, *, minimum_length: int = 12) -> str:
+    if len(password) < minimum_length:
+        raise ValueError(f"Password must contain at least {minimum_length} characters")
     return password_hasher.hash(password)
 
 
