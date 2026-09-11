@@ -26,6 +26,7 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
     ...stageRoutes,
     "/templates",
     "/field-dictionary",
+    "/admin/approvals",
     "/system/users",
     "/system/roles",
     "/system/audit-logs",
@@ -129,10 +130,21 @@ test("核心路由刷新、三种桌面宽度与基础可访问性通过", async
 
   await page.goto("/projects");
   const projectCard = page.locator("main section").filter({ hasText: project.code }).first();
-  await projectCard.getByRole("button", { name: "删除项目" }).click();
-  const deleteDialog = page.getByRole("dialog", { name: "确认删除项目" });
+  await projectCard.getByRole("button", { name: "申请删除项目" }).click();
+  const deleteDialog = page.getByRole("dialog", { name: "申请删除项目" });
   await expect(deleteDialog).toBeVisible();
-  await deleteDialog.getByRole("button", { name: "确认删除" }).click();
-  await expect(deleteDialog).toBeHidden();
+  await deleteDialog.getByPlaceholder("请说明申请删除的原因").fill("E2E 巡检完成后申请删除");
+  await deleteDialog.getByPlaceholder(project.code).fill(project.code);
+  await deleteDialog.getByRole("button", { name: "提交删除申请" }).click();
+  await expect(page.getByRole("dialog", { name: "删除申请已提交" })).toBeVisible();
+  await page.getByRole("button", { name: "知道了" }).click();
+  await expect(page.getByText(project.code, { exact: true })).toBeVisible();
+
+  await page.goto("/admin/approvals");
+  await expect(page.getByRole("heading", { name: "申请审批" })).toBeVisible();
+  const approvalCard = page.locator("main section").filter({ hasText: project.code }).first();
+  await approvalCard.getByRole("button", { name: "通过并删除" }).click();
+  await expect(page.getByText(project.code, { exact: true })).toHaveCount(0);
+  await page.goto("/projects");
   await expect(page.getByText(project.code, { exact: true })).toHaveCount(0);
 });

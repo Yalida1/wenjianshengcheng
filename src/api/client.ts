@@ -14,6 +14,9 @@ export type User = ApiSchemas["UserView"];
 export type ProcurementPlan = ApiSchemas["ProcurementPlanView"];
 export type ProcurementAnalysisRun = ApiSchemas["ProcurementAnalysisRunView"];
 export type ProcurementGenerationBatch = ApiSchemas["ProcurementGenerationBatchView"];
+export type ProjectType = ApiSchemas["ProjectTypeView"];
+export type ProjectCodeRule = ApiSchemas["ProjectCodeRuleView"];
+export type ApprovalRequest = ApiSchemas["ApprovalRequestView"];
 
 export class ApiClientError extends Error {
   readonly status: number;

@@ -7,7 +7,7 @@ import time
 from collections import defaultdict, deque
 from datetime import date
 from decimal import Decimal
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 from urllib.parse import quote
 
 from fastapi import APIRouter, Body, Depends, Query, Request, Response, UploadFile
@@ -28,6 +28,7 @@ from .dependencies import (
 from .errors import APIError
 from .field_catalog import BASE_FIELD_DEFINITIONS, default_rules_for_field
 from .models import (
+    ApprovalRequest,
     AuditLog,
     ComparisonItem,
     ComparisonRun,
@@ -53,6 +54,7 @@ from .models import (
     GenerationEvent,
     GenerationJob,
     GenerationJobStep,
+    Organization,
     ParsedDocument,
     ParsedTable,
     Permission,
@@ -62,8 +64,10 @@ from .models import (
     ProcurementPlan,
     ProcurementRuleSet,
     Project,
+    ProjectCodeRule,
     ProjectMember,
     ProjectStage,
+    ProjectType,
     Role,
     Template,
     TemplateExtractionJob,
@@ -82,11 +86,16 @@ from .schemas import (
     AITextOptimizeResponse,
     ApplicableFieldsResponse,
     ApplicableFieldView,
+    ApprovalDecisionRequest,
+    ApprovalRequestView,
+    BrandingPatch,
+    BrandingView,
     CommentCreate,
     CommentResolve,
     ComparisonRequest,
     ContentBlockPatch,
     ContractPaymentCheck,
+    EnsureDefaultGroupingRequest,
     ExportRequest,
     FieldCandidateExtractionView,
     FieldConfirmationRequest,
@@ -103,6 +112,10 @@ from .schemas import (
     FormatProfileView,
     GenerationJobView,
     GenerationRequest,
+    LlmModelCatalogView,
+    LlmModelProfileCreate,
+    LlmModelProfilePatch,
+    LlmModelProfileView,
     LoginRequest,
     OrganizationView,
     Page,
@@ -112,7 +125,6 @@ from .schemas import (
     ProcurementBatchGenerationRequest,
     ProcurementGenerationBatchView,
     ProcurementIssueResolveRequest,
-    EnsureDefaultGroupingRequest,
     ProcurementPlanConfirmRequest,
     ProcurementPlanStructureUpdate,
     ProcurementPlanView,
@@ -120,12 +132,18 @@ from .schemas import (
     ProcurementRuleSetPublishRequest,
     ProcurementRuleSetView,
     ProjectApplicableFieldsResponse,
+    ProjectCodeRulePut,
+    ProjectCodeRuleView,
     ProjectCreate,
     ProjectDeleteRequest,
     ProjectDeleteResult,
+    ProjectDeletionRequestCreate,
     ProjectMemberCreate,
     ProjectMemberView,
     ProjectPatch,
+    ProjectTypeCreate,
+    ProjectTypePatch,
+    ProjectTypeView,
     ProjectView,
     SessionView,
     StageSourceOption,
@@ -153,8 +171,34 @@ from .security import (
     verify_password,
 )
 from .services.auto_draft import build_file_auto_draft_job
+from .services.branding import (
+    brand_logo_object_key,
+    branding_payload,
+    validate_brand_logo,
+)
 from .services.exporting import export_filename
 from .services.generation import build_generation_job, document_version_sha256
+from .services.llm_models import (
+    activate_profile as activate_llm_profile,
+)
+from .services.llm_models import (
+    create_profile as create_llm_profile,
+)
+from .services.llm_models import (
+    delete_profile as delete_llm_profile,
+)
+from .services.llm_models import (
+    get_profile as get_llm_profile,
+)
+from .services.llm_models import (
+    list_profiles as list_llm_profiles,
+)
+from .services.llm_models import (
+    profile_payload as llm_profile_payload,
+)
+from .services.llm_models import (
+    update_profile as update_llm_profile,
+)
 from .services.procurement_planning import (
     build_analysis_run,
     confirm_plan,
@@ -163,6 +207,12 @@ from .services.procurement_planning import (
     plan_view,
     recalculate_plan,
     replace_plan_structure,
+)
+from .services.project_codes import (
+    allocate_project_code,
+    ensure_project_code_rule,
+    preview_project_code,
+    validate_code_rule,
 )
 from .services.project_deletion import delete_project_graph
 from .services.providers import (
@@ -194,6 +244,8 @@ router = APIRouter(prefix="/api/v1")
 logger = logging.getLogger(__name__)
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 project_router = APIRouter(prefix="/projects", tags=["projects"])
+project_type_router = APIRouter(prefix="/project-types", tags=["project-types"])
+project_code_rule_router = APIRouter(prefix="/project-code-rules", tags=["project-code-rules"])
 file_router = APIRouter(prefix="/files", tags=["files"])
 field_router = APIRouter(prefix="/field-values", tags=["fields"])
 template_router = APIRouter(prefix="/templates", tags=["templates"])
@@ -203,11 +255,12 @@ document_router = APIRouter(prefix="/documents", tags=["documents"])
 validation_router = APIRouter(prefix="/validation-runs", tags=["validation"])
 export_router = APIRouter(prefix="/exports", tags=["exports"])
 system_router = APIRouter(tags=["system"])
+approval_router = APIRouter(prefix="/approval-requests", tags=["approvals"])
 comparison_router = APIRouter(prefix="/comparisons", tags=["comparisons"])
 format_profile_router = APIRouter(prefix="/format-profiles", tags=["templates"])
 procurement_router = APIRouter(tags=["procurement-planning"])
 
-STAGES = ("requirement", "feasibility", "tender", "contract")
+STAGES = ("demand", "requirement", "feasibility", "tender", "contract")
 STAGE_INDEX = {stage: index for index, stage in enumerate(STAGES)}
 MUTATION_ROLES = {
     "system_admin",
@@ -306,8 +359,11 @@ def list_projects(
     user: CurrentUser,
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
+    workspace_kind: Literal["managed", "adhoc"] | None = Query(default=None),
 ) -> Page:
     base = select(Project).where(Project.organization_id == user.organization_id)
+    if workspace_kind is not None:
+        base = base.where(Project.workspace_kind == workspace_kind)
     total = db.scalar(select(func.count()).select_from(base.subquery())) or 0
     items = list(
         db.scalars(base.order_by(Project.updated_at.desc()).offset((page - 1) * page_size).limit(page_size))
@@ -320,26 +376,222 @@ def list_projects(
     )
 
 
-def _allocate_project_code(db: DbSession, organization_id: str, preferred: str | None) -> str:
-    """Allocate a unique project code; preferred may be None for temporary TMP-* codes."""
-    candidates: list[str] = []
-    if preferred and preferred.strip():
-        candidates.append(preferred.strip())
-    # Temporary codes until source materials are parsed and backfilled.
-    stamp = int(time.time() * 1000)
-    candidates.append(f"TMP-{stamp}")
-    for index in range(1, 8):
-        candidates.append(f"TMP-{stamp}-{index}")
-    for code in candidates:
-        exists = db.scalar(
-            select(Project.id).where(
-                Project.organization_id == organization_id,
-                Project.code == code,
-            )
+def _allocate_project_code(
+    db: DbSession,
+    organization_id: str,
+    project_type: str,
+    preferred: str | None,
+    *,
+    actor_id: str | None = None,
+) -> str:
+    """Allocate a unique project code using the organization rule (or preferred)."""
+    return allocate_project_code(
+        db,
+        organization_id=organization_id,
+        project_type=project_type,
+        preferred=preferred,
+        actor_id=actor_id,
+    )
+
+
+def _project_code_rule_view(rule: ProjectCodeRule) -> ProjectCodeRuleView:
+    preview = preview_project_code(
+        pattern=rule.pattern,
+        date_format=rule.date_format,
+        seq_width=rule.seq_width,
+    )
+    return ProjectCodeRuleView(
+        id=rule.id,
+        organization_id=rule.organization_id,
+        pattern=rule.pattern,
+        date_format=rule.date_format,
+        seq_width=rule.seq_width,
+        reset_scope=rule.reset_scope,
+        revision=rule.revision,
+        created_at=rule.created_at,
+        updated_at=rule.updated_at,
+        preview=preview,
+    )
+
+
+def _require_active_project_type(db: DbSession, organization_id: str, code: str) -> ProjectType:
+    project_type = db.scalar(
+        select(ProjectType).where(
+            ProjectType.organization_id == organization_id,
+            ProjectType.code == code,
         )
-        if exists is None:
-            return code
-    raise APIError(409, "project_code_conflict", "无法分配唯一项目编号，请稍后重试")
+    )
+    if project_type is None:
+        raise APIError(422, "project_type_unknown", "项目类型不存在，请先在项目单配置中维护")
+    if not project_type.is_active:
+        raise APIError(422, "project_type_inactive", "项目类型已停用，请选择其他类型")
+    return project_type
+
+
+def _get_project_type(db: DbSession, user: User, type_id: str) -> ProjectType:
+    project_type = db.scalar(
+        select(ProjectType).where(
+            ProjectType.id == type_id,
+            ProjectType.organization_id == user.organization_id,
+        )
+    )
+    if project_type is None:
+        raise APIError(404, "project_type_not_found", "项目类型不存在")
+    return project_type
+
+
+@project_type_router.get("", response_model=list[ProjectTypeView])
+def list_project_types(
+    db: DbSession,
+    user: CurrentUser,
+    active_only: bool = Query(default=False),
+) -> list[ProjectType]:
+    query = select(ProjectType).where(ProjectType.organization_id == user.organization_id)
+    if active_only:
+        query = query.where(ProjectType.is_active.is_(True))
+    query = query.order_by(ProjectType.sort_order.asc(), ProjectType.code.asc())
+    return list(db.scalars(query))
+
+
+@project_type_router.post("", response_model=ProjectTypeView, status_code=201)
+def create_project_type(
+    payload: ProjectTypeCreate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ProjectType:
+    exists = db.scalar(
+        select(ProjectType.id).where(
+            ProjectType.organization_id == user.organization_id,
+            ProjectType.code == payload.code,
+        )
+    )
+    if exists:
+        raise APIError(409, "project_type_exists", "同组织下项目类型编码已存在")
+    project_type = ProjectType(
+        organization_id=user.organization_id,
+        code=payload.code,
+        name=payload.name,
+        description=payload.description,
+        sort_order=payload.sort_order,
+        is_active=True,
+        is_system=False,
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(project_type)
+    db.flush()
+    record_audit(
+        db,
+        request,
+        user,
+        "project_type.create",
+        "project_type",
+        project_type.id,
+        after={"code": project_type.code, "name": project_type.name},
+    )
+    db.commit()
+    db.refresh(project_type)
+    return project_type
+
+
+@project_type_router.patch("/{type_id}", response_model=ProjectTypeView)
+def patch_project_type(
+    type_id: str,
+    payload: ProjectTypePatch,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ProjectType:
+    project_type = _get_project_type(db, user, type_id)
+    if project_type.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "项目类型已被其他用户修改")
+    if payload.name is not None:
+        project_type.name = payload.name
+    if payload.description is not None or "description" in payload.model_fields_set:
+        project_type.description = payload.description
+    if payload.sort_order is not None:
+        project_type.sort_order = payload.sort_order
+    if payload.is_active is not None:
+        project_type.is_active = payload.is_active
+    project_type.revision += 1
+    project_type.updated_by = user.id
+    record_audit(
+        db,
+        request,
+        user,
+        "project_type.update",
+        "project_type",
+        project_type.id,
+        after={
+            "code": project_type.code,
+            "name": project_type.name,
+            "is_active": project_type.is_active,
+            "sort_order": project_type.sort_order,
+        },
+    )
+    db.commit()
+    db.refresh(project_type)
+    return project_type
+
+
+@project_code_rule_router.get("", response_model=ProjectCodeRuleView)
+def get_project_code_rule(
+    db: DbSession,
+    user: CurrentUser,
+) -> ProjectCodeRuleView:
+    rule = ensure_project_code_rule(db, user.organization_id, actor_id=user.id)
+    db.commit()
+    db.refresh(rule)
+    return _project_code_rule_view(rule)
+
+
+@project_code_rule_router.put("", response_model=ProjectCodeRuleView)
+def put_project_code_rule(
+    payload: ProjectCodeRulePut,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ProjectCodeRuleView:
+    validate_code_rule(
+        pattern=payload.pattern.strip(),
+        date_format=payload.date_format.strip(),
+        seq_width=payload.seq_width,
+        reset_scope=payload.reset_scope,
+    )
+    rule = ensure_project_code_rule(db, user.organization_id, actor_id=user.id)
+    if rule.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "编号规则已被其他用户修改")
+    before = {
+        "pattern": rule.pattern,
+        "date_format": rule.date_format,
+        "seq_width": rule.seq_width,
+        "reset_scope": rule.reset_scope,
+    }
+    rule.pattern = payload.pattern.strip()
+    rule.date_format = payload.date_format.strip()
+    rule.seq_width = payload.seq_width
+    rule.reset_scope = payload.reset_scope
+    rule.revision += 1
+    rule.updated_by = user.id
+    record_audit(
+        db,
+        request,
+        user,
+        "project_code_rule.update",
+        "project_code_rule",
+        rule.id,
+        before=before,
+        after={
+            "pattern": rule.pattern,
+            "date_format": rule.date_format,
+            "seq_width": rule.seq_width,
+            "reset_scope": rule.reset_scope,
+        },
+    )
+    db.commit()
+    db.refresh(rule)
+    return _project_code_rule_view(rule)
 
 
 @project_router.post("", response_model=ProjectView, status_code=201)
@@ -350,7 +602,14 @@ def create_project(
     user: Annotated[User, Depends(require_permission("project.create"))],
 ) -> Project:
     data = payload.model_dump()
-    data["code"] = _allocate_project_code(db, user.organization_id, data.get("code"))
+    _require_active_project_type(db, user.organization_id, data["project_type"])
+    data["code"] = _allocate_project_code(
+        db,
+        user.organization_id,
+        data["project_type"],
+        data.get("code"),
+        actor_id=user.id,
+    )
     project = Project(
         organization_id=user.organization_id,
         **data,
@@ -386,7 +645,11 @@ def create_project(
         "project.create",
         "project",
         project.id,
-        after={"code": project.code, "name": project.name},
+        after={
+            "code": project.code,
+            "name": project.name,
+            "workspace_kind": project.workspace_kind,
+        },
     )
     db.commit()
     db.refresh(project)
@@ -483,12 +746,37 @@ def delete_project(
     if payload.confirmation_code != project.code:
         raise APIError(422, "project_confirmation_mismatch", "输入的项目编号不正确")
 
+    result, storage_keys = _execute_project_delete(db=db, request=request, user=user, project=project)
+    db.commit()
+    return _cleanup_project_storage(result.project_id, storage_keys)
+
+
+def _approval_request_view(db: Session, item: ApprovalRequest) -> ApprovalRequestView:
+    requester = db.get(User, item.requester_id)
+    reviewer = db.get(User, item.reviewer_id) if item.reviewer_id else None
+    view = ApprovalRequestView.model_validate(item)
+    return view.model_copy(
+        update={
+            "requester_name": requester.display_name if requester else None,
+            "reviewer_name": reviewer.display_name if reviewer else None,
+        }
+    )
+
+
+def _execute_project_delete(
+    *,
+    db: Session,
+    request: Request,
+    user: User,
+    project: Project,
+) -> tuple[ProjectDeleteResult, list[str]]:
     before = {
         "code": project.code,
         "name": project.name,
         "status": project.status,
         "revision": project.revision,
     }
+    project_id = project.id
     storage_keys = delete_project_graph(db, project)
     record_audit(
         db,
@@ -500,8 +788,19 @@ def delete_project(
         before=before,
         metadata={"storage_object_count": len(storage_keys)},
     )
-    db.commit()
+    db.flush()
+    return (
+        ProjectDeleteResult(
+            project_id=project_id,
+            deleted=True,
+            storage_objects_deleted=len(storage_keys),
+            storage_cleanup_failed=0,
+        ),
+        storage_keys,
+    )
 
+
+def _cleanup_project_storage(project_id: str, storage_keys: list[str]) -> ProjectDeleteResult:
     cleanup_failed = 0
     storage = get_storage()
     for key in storage_keys:
@@ -518,11 +817,270 @@ def delete_project(
     )
 
 
+@project_router.post(
+    "/{project_id}/deletion-requests",
+    response_model=ApprovalRequestView,
+    status_code=201,
+)
+def create_project_deletion_request(
+    project_id: str,
+    payload: ProjectDeletionRequestCreate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("project.write"))],
+) -> ApprovalRequestView:
+    project = db.scalar(
+        select(Project).where(
+            Project.id == project_id,
+            Project.organization_id == user.organization_id,
+        )
+    )
+    if project is None:
+        raise APIError(404, "project_not_found", "项目不存在")
+    if project.revision != payload.revision:
+        raise APIError(
+            409,
+            "revision_conflict",
+            "项目已被其他用户修改，请刷新后重试",
+            details={"expected": payload.revision, "actual": project.revision},
+        )
+    if payload.confirmation_code != project.code:
+        raise APIError(422, "project_confirmation_mismatch", "输入的项目编号不正确")
+
+    existing = db.scalar(
+        select(ApprovalRequest).where(
+            ApprovalRequest.organization_id == user.organization_id,
+            ApprovalRequest.request_type == "project_delete",
+            ApprovalRequest.target_id == project.id,
+            ApprovalRequest.status == "pending",
+        )
+    )
+    if existing is not None:
+        raise APIError(
+            409,
+            "deletion_request_exists",
+            "该项目已有待审批的删除申请，请勿重复提交",
+            details={"request_id": existing.id},
+        )
+
+    reason = payload.reason.strip()
+    if len(reason) < 2:
+        raise APIError(422, "invalid_reason", "请填写删除原因")
+
+    kind_label = "临时编标" if project.workspace_kind == "adhoc" else "正式项目"
+    item = ApprovalRequest(
+        organization_id=user.organization_id,
+        request_type="project_delete",
+        status="pending",
+        title=f"删除{kind_label}：{project.name}",
+        reason=reason,
+        target_type="project",
+        target_id=project.id,
+        target_code=project.code,
+        target_name=project.name,
+        payload_json={
+            "project_revision": project.revision,
+            "workspace_kind": project.workspace_kind,
+            "confirmation_code": project.code,
+        },
+        requester_id=user.id,
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(item)
+    db.flush()
+    record_audit(
+        db,
+        request,
+        user,
+        "approval_request.create",
+        "approval_request",
+        item.id,
+        after={
+            "request_type": item.request_type,
+            "target_id": item.target_id,
+            "target_code": item.target_code,
+            "status": item.status,
+        },
+    )
+    db.commit()
+    db.refresh(item)
+    return _approval_request_view(db, item)
+
+
+@approval_router.get("", response_model=Page)
+def list_approval_requests(
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    status: Literal["pending", "approved", "rejected", "cancelled"] | None = Query(default=None),
+    request_type: Literal["project_delete"] | None = Query(default=None),
+) -> Page:
+    base = select(ApprovalRequest).where(ApprovalRequest.organization_id == user.organization_id)
+    if status is not None:
+        base = base.where(ApprovalRequest.status == status)
+    if request_type is not None:
+        base = base.where(ApprovalRequest.request_type == request_type)
+    total = db.scalar(select(func.count()).select_from(base.subquery())) or 0
+    items = list(
+        db.scalars(
+            base.order_by(ApprovalRequest.created_at.desc())
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+        )
+    )
+    return Page(
+        items=[_approval_request_view(db, item).model_dump() for item in items],
+        total=total,
+        page=page,
+        page_size=page_size,
+    )
+
+
+@approval_router.get("/{request_id}", response_model=ApprovalRequestView)
+def get_approval_request(
+    request_id: str,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ApprovalRequestView:
+    item = db.get(ApprovalRequest, request_id)
+    if item is None or item.organization_id != user.organization_id:
+        raise APIError(404, "approval_request_not_found", "审批申请不存在")
+    return _approval_request_view(db, item)
+
+
+@approval_router.post("/{request_id}/approve", response_model=ApprovalRequestView)
+def approve_approval_request(
+    request_id: str,
+    payload: ApprovalDecisionRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ApprovalRequestView:
+    item = db.scalar(
+        select(ApprovalRequest)
+        .where(
+            ApprovalRequest.id == request_id,
+            ApprovalRequest.organization_id == user.organization_id,
+        )
+        .with_for_update()
+    )
+    if item is None:
+        raise APIError(404, "approval_request_not_found", "审批申请不存在")
+    if item.revision != payload.revision:
+        raise APIError(
+            409,
+            "revision_conflict",
+            "申请已被其他用户处理，请刷新后重试",
+            details={"expected": payload.revision, "actual": item.revision},
+        )
+    if item.status != "pending":
+        raise APIError(409, "approval_not_pending", "仅待审批申请可执行通过操作")
+
+    storage_keys: list[str] = []
+    if item.request_type == "project_delete":
+        project = db.scalar(
+            select(Project)
+            .where(
+                Project.id == item.target_id,
+                Project.organization_id == user.organization_id,
+            )
+            .with_for_update()
+        )
+        if project is None:
+            raise APIError(404, "project_not_found", "待删除项目已不存在，请驳回或关闭本申请")
+        expected_revision = int(item.payload_json.get("project_revision") or 0)
+        if expected_revision and project.revision != expected_revision:
+            raise APIError(
+                409,
+                "project_changed_since_request",
+                "项目在申请后已被修改，请驳回后重新发起删除申请",
+                details={"expected": expected_revision, "actual": project.revision},
+            )
+        _, storage_keys = _execute_project_delete(db=db, request=request, user=user, project=project)
+    else:
+        raise APIError(422, "unsupported_request_type", f"暂不支持的申请类型：{item.request_type}")
+
+    item.status = "approved"
+    item.reviewer_id = user.id
+    item.review_comment = (payload.comment or "").strip() or None
+    item.reviewed_at = utc_now()
+    item.updated_by = user.id
+    item.revision += 1
+    record_audit(
+        db,
+        request,
+        user,
+        "approval_request.approve",
+        "approval_request",
+        item.id,
+        after={"status": item.status, "request_type": item.request_type, "target_id": item.target_id},
+    )
+    db.commit()
+    if storage_keys:
+        _cleanup_project_storage(item.target_id, storage_keys)
+    db.refresh(item)
+    return _approval_request_view(db, item)
+
+
+@approval_router.post("/{request_id}/reject", response_model=ApprovalRequestView)
+def reject_approval_request(
+    request_id: str,
+    payload: ApprovalDecisionRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> ApprovalRequestView:
+    item = db.scalar(
+        select(ApprovalRequest)
+        .where(
+            ApprovalRequest.id == request_id,
+            ApprovalRequest.organization_id == user.organization_id,
+        )
+        .with_for_update()
+    )
+    if item is None:
+        raise APIError(404, "approval_request_not_found", "审批申请不存在")
+    if item.revision != payload.revision:
+        raise APIError(
+            409,
+            "revision_conflict",
+            "申请已被其他用户处理，请刷新后重试",
+            details={"expected": payload.revision, "actual": item.revision},
+        )
+    if item.status != "pending":
+        raise APIError(409, "approval_not_pending", "仅待审批申请可执行驳回操作")
+
+    comment = (payload.comment or "").strip()
+    if len(comment) < 2:
+        raise APIError(422, "invalid_review_comment", "驳回时请填写原因")
+
+    item.status = "rejected"
+    item.reviewer_id = user.id
+    item.review_comment = comment
+    item.reviewed_at = utc_now()
+    item.updated_by = user.id
+    item.revision += 1
+    record_audit(
+        db,
+        request,
+        user,
+        "approval_request.reject",
+        "approval_request",
+        item.id,
+        after={"status": item.status, "request_type": item.request_type, "target_id": item.target_id},
+    )
+    db.commit()
+    db.refresh(item)
+    return _approval_request_view(db, item)
+
+
 @project_router.get("/{project_id}/stages", response_model=list[StageView])
 def list_stages(project_id: str, db: DbSession, user: CurrentUser) -> list[ProjectStage]:
     require_project_access(db, user, project_id)
     records = list(db.scalars(select(ProjectStage).where(ProjectStage.project_id == project_id)))
-    return sorted(records, key=lambda item: STAGE_INDEX[item.stage])
+    return sorted(records, key=lambda item: STAGE_INDEX.get(item.stage, len(STAGES)))
 
 
 @project_router.get("/{project_id}/members", response_model=list[ProjectMemberView])
@@ -3139,7 +3697,7 @@ def optimize_content_block_text(
         block_text = str(block.content or "")
     if payload.selected_text not in block_text:
         raise APIError(409, "selection_stale", "选取内容已发生变化，请重新选择后再优化")
-    provider = get_provider()
+    provider = get_provider(organization_id=user.organization_id, db=db)
     try:
         result = provider.optimize_text(
             selected_text=payload.selected_text,
@@ -3728,10 +4286,283 @@ def create_user(
 
 @system_router.get("/organizations", response_model=list[OrganizationView])
 def list_organizations(db: DbSession, user: CurrentUser) -> list[Any]:
-    from .models import Organization
-
     organization = db.get(Organization, user.organization_id)
     return [organization] if organization else []
+
+
+def _resolve_branding_organization(db: Session, user: User | None = None) -> Organization | None:
+    if user is not None:
+        return db.get(Organization, user.organization_id)
+    return db.scalar(
+        select(Organization)
+        .where(Organization.status == "active")
+        .order_by(Organization.created_at.asc())
+        .limit(1)
+    )
+
+
+@system_router.get("/branding", response_model=BrandingView)
+def get_branding(db: DbSession) -> BrandingView:
+    organization = _resolve_branding_organization(db)
+    return BrandingView.model_validate(branding_payload(organization))
+
+
+@system_router.patch("/branding", response_model=BrandingView)
+def update_branding(
+    payload: BrandingPatch,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> BrandingView:
+    organization = _resolve_branding_organization(db, user)
+    if organization is None:
+        raise APIError(404, "organization_not_found", "组织不存在")
+    if organization.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "品牌配置已被其他用户修改，请刷新后重试")
+    before = branding_payload(organization)
+    if payload.name is not None:
+        organization.brand_name = payload.name.strip()
+    if payload.subtitle is not None:
+        organization.brand_subtitle = payload.subtitle.strip()
+    if payload.mark is not None:
+        organization.brand_mark = payload.mark.strip()
+    if payload.clear_logo and organization.brand_logo_key:
+        storage = get_storage()
+        try:
+            storage.delete(organization.brand_logo_key)
+        except Exception:
+            logger.exception("Failed to delete brand logo", extra={"organization_id": organization.id})
+        organization.brand_logo_key = None
+        organization.brand_logo_content_type = None
+    organization.revision += 1
+    organization.updated_by = user.id
+    record_audit(
+        db,
+        request,
+        user,
+        "branding.update",
+        "organization",
+        organization.id,
+        before=before,
+        after=branding_payload(organization),
+    )
+    db.commit()
+    db.refresh(organization)
+    return BrandingView.model_validate(branding_payload(organization))
+
+
+@system_router.post("/branding/logo", response_model=BrandingView)
+async def upload_brand_logo(
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+    upload: Annotated[UploadFile, UploadMarker()],
+    revision: Annotated[int, Query(ge=1)],
+) -> BrandingView:
+    organization = _resolve_branding_organization(db, user)
+    if organization is None:
+        raise APIError(404, "organization_not_found", "组织不存在")
+    if organization.revision != revision:
+        raise APIError(409, "revision_conflict", "品牌配置已被其他用户修改，请刷新后重试")
+    content = await upload.read(2 * 1024 * 1024 + 1)
+    extension, mime_type = validate_brand_logo(upload.filename or "logo.png", upload.content_type, content)
+    storage = get_storage()
+    if organization.brand_logo_key:
+        try:
+            storage.delete(organization.brand_logo_key)
+        except Exception:
+            logger.exception("Failed to replace brand logo", extra={"organization_id": organization.id})
+    key = brand_logo_object_key(organization.id, extension)
+    storage.put(key, content, mime_type)
+    before = branding_payload(organization)
+    organization.brand_logo_key = key
+    organization.brand_logo_content_type = mime_type
+    organization.revision += 1
+    organization.updated_by = user.id
+    record_audit(
+        db,
+        request,
+        user,
+        "branding.logo.upload",
+        "organization",
+        organization.id,
+        before=before,
+        after=branding_payload(organization),
+    )
+    db.commit()
+    db.refresh(organization)
+    return BrandingView.model_validate(branding_payload(organization))
+
+
+@system_router.get("/branding/logo")
+def download_brand_logo(db: DbSession) -> StreamingResponse:
+    organization = _resolve_branding_organization(db)
+    if organization is None or not organization.brand_logo_key:
+        raise APIError(404, "brand_logo_not_found", "尚未配置自定义 Logo")
+    storage = get_storage()
+    if not storage.exists(organization.brand_logo_key):
+        raise APIError(404, "brand_logo_not_found", "Logo 文件不存在")
+    content = storage.get(organization.brand_logo_key)
+    content_type = organization.brand_logo_content_type or "application/octet-stream"
+    return StreamingResponse(
+        iter([content]),
+        media_type=content_type,
+        headers={
+            "Cache-Control": "public, max-age=300",
+            "Content-Disposition": 'inline; filename="brand-logo"',
+        },
+    )
+
+
+@system_router.get("/llm-models", response_model=LlmModelCatalogView)
+def list_llm_models(
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> LlmModelCatalogView:
+    settings = get_settings()
+    profiles = list_llm_profiles(db, user.organization_id)
+    items = [LlmModelProfileView.model_validate(llm_profile_payload(item)) for item in profiles]
+    active = next((item for item in items if item.is_active), None)
+    env_configured = settings.llm_provider == "demo" or bool(
+        settings.openai_base_url and settings.openai_api_key and settings.openai_model
+    )
+    return LlmModelCatalogView(
+        items=items,
+        active_id=active.id if active else None,
+        env_fallback={
+            "provider": settings.llm_provider,
+            "base_url": settings.openai_base_url,
+            "model_name": settings.openai_model
+            or ("deterministic-v1" if settings.llm_provider == "demo" else None),
+            "configured": env_configured,
+        },
+    )
+
+
+@system_router.post("/llm-models", response_model=LlmModelProfileView, status_code=201)
+def create_llm_model(
+    payload: LlmModelProfileCreate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> LlmModelProfileView:
+    profile = create_llm_profile(
+        db,
+        organization_id=user.organization_id,
+        user_id=user.id,
+        name=payload.name,
+        provider=payload.provider,
+        base_url=payload.base_url,
+        model_name=payload.model_name,
+        api_key=payload.api_key,
+        timeout_seconds=payload.timeout_seconds,
+        notes=payload.notes,
+        activate=payload.activate,
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "llm_model.create",
+        "llm_model_profile",
+        profile.id,
+        after=llm_profile_payload(profile),
+    )
+    db.commit()
+    db.refresh(profile)
+    return LlmModelProfileView.model_validate(llm_profile_payload(profile))
+
+
+@system_router.patch("/llm-models/{profile_id}", response_model=LlmModelProfileView)
+def update_llm_model(
+    profile_id: str,
+    payload: LlmModelProfilePatch,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> LlmModelProfileView:
+    profile = get_llm_profile(db, user.organization_id, profile_id)
+    before = llm_profile_payload(profile)
+    update_llm_profile(
+        db,
+        profile=profile,
+        user_id=user.id,
+        name=payload.name,
+        provider=payload.provider,
+        base_url=payload.base_url,
+        model_name=payload.model_name,
+        api_key=payload.api_key,
+        clear_api_key=payload.clear_api_key,
+        timeout_seconds=payload.timeout_seconds,
+        notes=payload.notes,
+        revision=payload.revision,
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "llm_model.update",
+        "llm_model_profile",
+        profile.id,
+        before=before,
+        after=llm_profile_payload(profile),
+    )
+    db.commit()
+    db.refresh(profile)
+    return LlmModelProfileView.model_validate(llm_profile_payload(profile))
+
+
+@system_router.post("/llm-models/{profile_id}/activate", response_model=LlmModelProfileView)
+def activate_llm_model(
+    profile_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> LlmModelProfileView:
+    profile = get_llm_profile(db, user.organization_id, profile_id)
+    before = llm_profile_payload(profile)
+    activate_llm_profile(
+        db,
+        organization_id=user.organization_id,
+        profile=profile,
+        user_id=user.id,
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "llm_model.activate",
+        "llm_model_profile",
+        profile.id,
+        before=before,
+        after=llm_profile_payload(profile),
+    )
+    db.commit()
+    db.refresh(profile)
+    return LlmModelProfileView.model_validate(llm_profile_payload(profile))
+
+
+@system_router.delete("/llm-models/{profile_id}", status_code=204, response_class=Response)
+def delete_llm_model(
+    profile_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> Response:
+    profile = get_llm_profile(db, user.organization_id, profile_id)
+    before = llm_profile_payload(profile)
+    delete_llm_profile(db, profile=profile, user_id=user.id)
+    record_audit(
+        db,
+        request,
+        user,
+        "llm_model.delete",
+        "llm_model_profile",
+        profile_id,
+        before=before,
+    )
+    db.commit()
+    return Response(status_code=204)
 
 
 @system_router.post("/users/{user_id}/deactivate", response_model=UserView)
@@ -4452,6 +5283,9 @@ def retry_procurement_generation_batch(
 
 router.include_router(auth_router)
 router.include_router(project_router)
+router.include_router(project_type_router)
+router.include_router(project_code_rule_router)
+router.include_router(approval_router)
 router.include_router(file_router)
 router.include_router(field_router)
 router.include_router(template_router)

@@ -8,6 +8,7 @@ from typing import Any, TypeVar
 
 import httpx
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 
 from ..config import get_settings
 from .section_tree import SectionPlanItem, build_heading_tree_candidates
@@ -569,14 +570,24 @@ def _generation_system_prompt() -> str:
 class OpenAICompatibleProvider(GenerationProvider):
     name = "openai_compatible"
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        base_url: str | None = None,
+        api_key: str | None = None,
+        model: str | None = None,
+        timeout_seconds: int | None = None,
+    ) -> None:
         settings = get_settings()
-        if not settings.openai_base_url or not settings.openai_api_key or not settings.openai_model:
+        resolved_base = (base_url or settings.openai_base_url or "").rstrip("/")
+        resolved_key = api_key or settings.openai_api_key
+        resolved_model = model or settings.openai_model
+        if not resolved_base or not resolved_key or not resolved_model:
             raise RuntimeError("OpenAI-compatible provider configuration is incomplete")
-        self.base_url = settings.openai_base_url.rstrip("/")
-        self.api_key = settings.openai_api_key
-        self.model = settings.openai_model
-        self.timeout_seconds = settings.llm_timeout_seconds
+        self.base_url = resolved_base
+        self.api_key = resolved_key
+        self.model = resolved_model
+        self.timeout_seconds = timeout_seconds or settings.llm_timeout_seconds
 
     def _request_model(
         self,
@@ -705,8 +716,33 @@ class OpenAICompatibleProvider(GenerationProvider):
         )
 
 
-def get_provider() -> GenerationProvider:
-    if get_settings().llm_provider == "openai_compatible":
+def get_provider(
+    *,
+    organization_id: str | None = None,
+    db: Session | None = None,
+) -> GenerationProvider:
+    settings = get_settings()
+    if db is not None and organization_id:
+        from .llm_models import PROVIDER_OPENAI, resolve_config
+
+        config = resolve_config(
+            db,
+            organization_id,
+            env_provider=settings.llm_provider,
+            env_base_url=settings.openai_base_url,
+            env_api_key=settings.openai_api_key,
+            env_model=settings.openai_model,
+            env_timeout=settings.llm_timeout_seconds,
+        )
+        if config.provider == PROVIDER_OPENAI:
+            return OpenAICompatibleProvider(
+                base_url=config.base_url,
+                api_key=config.api_key,
+                model=config.model_name,
+                timeout_seconds=config.timeout_seconds,
+            )
+        return DemoProvider()
+    if settings.llm_provider == "openai_compatible":
         return OpenAICompatibleProvider()
     return DemoProvider()
 

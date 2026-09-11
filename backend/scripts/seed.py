@@ -16,6 +16,8 @@ from backend.app.models import (
     Organization,
     Permission,
     ProcurementRuleSet,
+    ProjectCodeRule,
+    ProjectType,
     Role,
     RolePermission,
     Template,
@@ -82,6 +84,16 @@ DEMO_TEMPLATES = {
     "contract": "通用采购合同参考模板",
 }
 FIELD_DEFINITIONS = BASE_FIELD_DEFINITIONS
+DEFAULT_PROJECT_TYPES = (
+    ("government_investment", "政府投资项目", 10),
+    ("enterprise_investment", "企业投资项目", 20),
+)
+DEFAULT_PROJECT_CODE_RULE = {
+    "pattern": "{project_type}_{date}_{seq}",
+    "date_format": "YYYYMMDD",
+    "seq_width": 4,
+    "reset_scope": "type_day",
+}
 
 
 def _is_legacy_demo_source(storage_key: str | None) -> bool:
@@ -111,6 +123,12 @@ def seed() -> None:
             organization = Organization(name=settings.demo_organization_name)
             db.add(organization)
             db.flush()
+        if not organization.brand_name:
+            organization.brand_name = "智能招标管理"
+        if not organization.brand_subtitle:
+            organization.brand_subtitle = "受控生成与定稿平台"
+        if not organization.brand_mark:
+            organization.brand_mark = "智"
 
         permission_rows: dict[str, Permission] = {}
         for code, name in PERMISSIONS.items():
@@ -186,6 +204,49 @@ def seed() -> None:
                     organization_id=organization.id,
                     user_id=admin.id,
                     role_id=roles["system_admin"].id,
+                )
+            )
+
+        for code, name, sort_order in DEFAULT_PROJECT_TYPES:
+            project_type = db.scalar(
+                select(ProjectType).where(
+                    ProjectType.organization_id == organization.id,
+                    ProjectType.code == code,
+                )
+            )
+            if project_type is None:
+                db.add(
+                    ProjectType(
+                        organization_id=organization.id,
+                        code=code,
+                        name=name,
+                        sort_order=sort_order,
+                        is_active=True,
+                        is_system=True,
+                        created_by=admin.id,
+                        updated_by=admin.id,
+                    )
+                )
+            else:
+                if not project_type.name:
+                    project_type.name = name
+                if project_type.sort_order is None:
+                    project_type.sort_order = sort_order
+                project_type.is_system = True
+
+        code_rule = db.scalar(
+            select(ProjectCodeRule).where(ProjectCodeRule.organization_id == organization.id)
+        )
+        if code_rule is None:
+            db.add(
+                ProjectCodeRule(
+                    organization_id=organization.id,
+                    pattern=DEFAULT_PROJECT_CODE_RULE["pattern"],
+                    date_format=DEFAULT_PROJECT_CODE_RULE["date_format"],
+                    seq_width=DEFAULT_PROJECT_CODE_RULE["seq_width"],
+                    reset_scope=DEFAULT_PROJECT_CODE_RULE["reset_scope"],
+                    created_by=admin.id,
+                    updated_by=admin.id,
                 )
             )
 

@@ -334,7 +334,7 @@ def build_generation_job(
     template_sha256 = hashlib.sha256(template_content).hexdigest()
     if locked_template.sha256 and locked_template.sha256 != template_sha256:
         raise APIError(409, "template_integrity_error", "模板源文件 SHA-256 与锁定值不一致")
-    provider = get_provider()
+    provider = get_provider(organization_id=project.organization_id, db=db)
     job = GenerationJob(
         organization_id=project.organization_id,
         project_id=project.id,
@@ -528,7 +528,7 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
     # The provider call can take minutes. Commit the task checkpoint before it starts so
     # polling clients see the real running state instead of a queued job until completion.
     db.commit()
-    provider = get_provider()
+    provider = get_provider(organization_id=project.organization_id, db=db)
     procurement_snapshot = job.procurement_snapshot or {}
     procurement_group = _dict_value(procurement_snapshot.get("document_group"))
     procurement_packages = [_dict_value(item) for item in _list_value(procurement_snapshot.get("packages"))]

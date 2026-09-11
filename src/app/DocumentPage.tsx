@@ -942,7 +942,9 @@ function WorkspaceView({
                       const fieldKey = String(issue.location.field_key ?? "");
                       if (fieldKey) {
                         window.location.assign(
-                          `/projects/${encodeURIComponent(projectId)}/stages/${encodeURIComponent(stage)}/fields`,
+                          `/projects/${encodeURIComponent(projectId)}/stages/${encodeURIComponent(stage)}/${
+                            stage === "tender" ? "basics" : "fields"
+                          }`,
                         );
                         return;
                       }
@@ -1471,15 +1473,15 @@ function ValidationView({
                     <div className="mt-3 flex flex-wrap gap-2">
                       <Link
                         className="primary-button"
-                        to={`/projects/${projectId}/stages/${stage}/generation?from=fields`}
+                        to={`/projects/${projectId}/stages/${stage}/generation?from=${stage === "tender" ? "basics" : "fields"}`}
                       >
                         基于已确认字段重新生成
                       </Link>
                       <Link
                         className="secondary-button"
-                        to={`/projects/${projectId}/stages/${stage}/fields`}
+                        to={`/projects/${projectId}/stages/${stage}/${stage === "tender" ? "basics" : "fields"}`}
                       >
-                        返回字段确认
+                        {stage === "tender" ? "返回基础数据" : "返回字段确认"}
                       </Link>
                     </div>
                   )}

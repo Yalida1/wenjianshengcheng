@@ -83,3 +83,53 @@ def parse_session_token(token: str) -> SessionClaims | None:
 
 def new_csrf_token() -> str:
     return secrets.token_urlsafe(32)
+
+
+def _secret_key_material(purpose: str) -> bytes:
+    return hashlib.sha256(f"{purpose}:{get_settings().app_secret_key}".encode()).digest()
+
+
+def _keystream(key: bytes, iv: bytes, length: int) -> bytes:
+    output = bytearray()
+    counter = 0
+    while len(output) < length:
+        block = hashlib.sha256(key + iv + counter.to_bytes(4, "big")).digest()
+        output.extend(block)
+        counter += 1
+    return bytes(output[:length])
+
+
+def seal_secret(plaintext: str) -> str:
+    """Authenticated obfuscation for at-rest secrets (API keys)."""
+    raw = plaintext.encode("utf-8")
+    key = _secret_key_material("llm-api-key")
+    iv = secrets.token_bytes(16)
+    ciphertext = bytes(a ^ b for a, b in zip(raw, _keystream(key, iv, len(raw)), strict=True))
+    tag = hmac.new(key, iv + ciphertext, hashlib.sha256).digest()[:16]
+    return _encode(iv + tag + ciphertext)
+
+
+def unseal_secret(token: str) -> str | None:
+    try:
+        data = _decode(token)
+        if len(data) < 33:
+            return None
+        iv, tag, ciphertext = data[:16], data[16:32], data[32:]
+        key = _secret_key_material("llm-api-key")
+        expected = hmac.new(key, iv + ciphertext, hashlib.sha256).digest()[:16]
+        if not hmac.compare_digest(tag, expected):
+            return None
+        plaintext = bytes(
+            a ^ b for a, b in zip(ciphertext, _keystream(key, iv, len(ciphertext)), strict=True)
+        )
+        return plaintext.decode("utf-8")
+    except (ValueError, UnicodeDecodeError):
+        return None
+
+
+def mask_secret(secret: str | None) -> str | None:
+    if not secret:
+        return None
+    if len(secret) <= 8:
+        return "*" * len(secret)
+    return f"{secret[:3]}{'*' * max(4, len(secret) - 7)}{secret[-4:]}"

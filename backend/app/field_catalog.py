@@ -9,6 +9,13 @@ BUILTIN_ALIASES_VERSION = 2
 
 # (field_key, field_label, data_type, unit, criticality, required)
 BASE_FIELD_DEFINITIONS: dict[str, list[tuple[str, str, str, str | None, str, bool]]] = {
+    "demand": [
+        ("project_name", "项目名称", "string", None, "P0", True),
+        ("project_owner", "项目单位", "string", None, "P0", True),
+        ("construction_scope", "建设范围与内容", "text", None, "P0", True),
+        ("project_period", "建设周期", "duration", "月", "P1", False),
+        ("project_location", "建设地点", "string", None, "P1", False),
+    ],
     "requirement": [
         ("project_name", "项目名称", "string", None, "P0", True),
         ("project_owner", "项目单位", "string", None, "P0", True),

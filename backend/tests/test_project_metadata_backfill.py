@@ -40,11 +40,11 @@ def test_backfill_updates_temporary_code_and_empty_description(
 ) -> None:
     created = authenticated_client.post(
         "/api/v1/projects",
-        json={"name": "待补齐项目"},
+        json={"code": "TMP-1710000000001", "name": "待补齐项目"},
     )
     assert created.status_code == 201, created.text
     project_id = created.json()["id"]
-    assert created.json()["code"].startswith("TMP-")
+    assert created.json()["code"] == "TMP-1710000000001"
 
     with SessionLocal() as db:
         project = db.get(Project, project_id)
@@ -99,6 +99,35 @@ def test_backfill_does_not_overwrite_formal_code(authenticated_client: TestClien
         assert project.revision == revision
 
 
+def test_backfill_does_not_overwrite_rule_generated_code(authenticated_client: TestClient) -> None:
+    created = authenticated_client.post(
+        "/api/v1/projects",
+        json={"name": "规则编号项目", "project_type": "government_investment"},
+    )
+    assert created.status_code == 201, created.text
+    project_id = created.json()["id"]
+    original_code = created.json()["code"]
+    assert original_code.startswith("government_investment_")
+
+    with SessionLocal() as db:
+        project = db.get(Project, project_id)
+        assert project is not None
+        result = backfill_project_metadata_from_blocks(
+            db,
+            project_id=project.id,
+            blocks=[
+                _block(1, "项目编号：SHOULD-NOT-APPLY"),
+                _block(2, "项目说明：仅说明可补齐"),
+            ],
+            actor_id=project.updated_by or project.created_by,
+        )
+        db.commit()
+        db.refresh(project)
+        assert result == {"updated": True, "code": False, "description": True}
+        assert project.code == original_code
+        assert project.description == "仅说明可补齐"
+
+
 def test_parse_source_material_backfills_project_metadata(
     authenticated_client: TestClient,
 ) -> None:
@@ -108,11 +137,11 @@ def test_parse_source_material_backfills_project_metadata(
 
     created = authenticated_client.post(
         "/api/v1/projects",
-        json={"name": "解析回填项目"},
+        json={"code": "TMP-1710000000002", "name": "解析回填项目"},
     )
     assert created.status_code == 201, created.text
     project = created.json()
-    assert project["code"].startswith("TMP-")
+    assert project["code"] == "TMP-1710000000002"
     assert project["description"] is None
 
     stream = io.BytesIO()

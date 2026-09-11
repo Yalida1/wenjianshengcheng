@@ -270,7 +270,7 @@ def extract_template_task(self: Task, extraction_job_id: str) -> str:
         try:
             if version is None or file_record is None:
                 raise ValueError("Template extraction source file was not found")
-            provider = get_provider()
+            provider = get_provider(organization_id=job.organization_id, db=db)
             job.status = "running"
             job.attempt += 1
             job.provider_name = provider.name

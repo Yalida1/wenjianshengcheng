@@ -7,7 +7,7 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-StageKey = Literal["requirement", "feasibility", "tender", "contract"]
+StageKey = Literal["demand", "requirement", "feasibility", "tender", "contract"]
 FieldStatus = Literal[
     "extracted",
     "user_confirmed",
@@ -65,24 +65,141 @@ class OrganizationView(ORMModel):
     revision: int
 
 
+class BrandingView(BaseModel):
+    name: str
+    subtitle: str
+    mark: str
+    document_title: str
+    has_custom_logo: bool
+    logo_url: str | None = None
+    revision: int
+
+
+class BrandingPatch(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+    subtitle: str | None = Field(default=None, min_length=1, max_length=200)
+    mark: str | None = Field(default=None, min_length=1, max_length=8)
+    clear_logo: bool = False
+    revision: int = Field(ge=1)
+
+
+LlmProviderKind = Literal["demo", "openai_compatible"]
+
+
+class LlmModelProfileView(BaseModel):
+    id: str
+    name: str
+    provider: LlmProviderKind
+    base_url: str | None = None
+    model_name: str | None = None
+    timeout_seconds: int
+    is_active: bool
+    notes: str | None = None
+    has_api_key: bool
+    api_key_hint: str | None = None
+    revision: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class LlmModelProfileCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    provider: LlmProviderKind = "openai_compatible"
+    base_url: str | None = Field(default=None, max_length=500)
+    model_name: str | None = Field(default=None, max_length=200)
+    api_key: str | None = Field(default=None, max_length=500)
+    timeout_seconds: int = Field(default=90, ge=10, le=600)
+    notes: str | None = Field(default=None, max_length=500)
+    activate: bool = True
+
+
+class LlmModelProfilePatch(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+    provider: LlmProviderKind | None = None
+    base_url: str | None = Field(default=None, max_length=500)
+    model_name: str | None = Field(default=None, max_length=200)
+    api_key: str | None = Field(default=None, max_length=500)
+    clear_api_key: bool = False
+    timeout_seconds: int | None = Field(default=None, ge=10, le=600)
+    notes: str | None = Field(default=None, max_length=500)
+    revision: int = Field(ge=1)
+
+
+class LlmModelCatalogView(BaseModel):
+    items: list[LlmModelProfileView]
+    active_id: str | None = None
+    env_fallback: dict[str, Any]
+
+
 class SessionView(BaseModel):
     user: UserView
     csrf_token: str
     expires_at: int
 
 
+class ProjectTypeCreate(BaseModel):
+    code: str = Field(min_length=2, max_length=80, pattern=r"^[a-z][a-z0-9_]{1,79}$")
+    name: str = Field(min_length=1, max_length=120)
+    description: str | None = Field(default=None, max_length=2_000)
+    sort_order: int = Field(default=100, ge=0, le=10_000)
+
+
+class ProjectTypePatch(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=120)
+    description: str | None = Field(default=None, max_length=2_000)
+    sort_order: int | None = Field(default=None, ge=0, le=10_000)
+    is_active: bool | None = None
+    revision: int = Field(ge=1)
+
+
+class ProjectTypeView(ORMModel):
+    id: str
+    organization_id: str
+    code: str
+    name: str
+    description: str | None
+    sort_order: int
+    is_active: bool
+    is_system: bool
+    revision: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class ProjectCodeRuleView(ORMModel):
+    id: str
+    organization_id: str
+    pattern: str
+    date_format: str
+    seq_width: int
+    reset_scope: str
+    revision: int
+    created_at: datetime
+    updated_at: datetime
+    preview: str
+
+
+class ProjectCodeRulePut(BaseModel):
+    pattern: str = Field(min_length=5, max_length=120)
+    date_format: str = Field(default="YYYYMMDD", min_length=4, max_length=20)
+    seq_width: int = Field(default=4, ge=1, le=8)
+    reset_scope: Literal["type_day", "day", "organization"] = "type_day"
+    revision: int = Field(ge=1)
+
+
 class ProjectCreate(BaseModel):
-    """新建项目只需名称与类型；编号与说明可由后续材料解析回填。"""
+    """新建项目只需名称与类型；编号按组织规则自动生成，也可显式传入。"""
 
     code: str | None = Field(
         default=None,
         min_length=2,
         max_length=80,
         pattern=r"^[A-Za-z0-9_-]+$",
-        description="可选；省略时由服务端生成临时编号，上传依据材料后可解析补齐",
+        description="可选；省略时按组织编号规则自动生成",
     )
     name: str = Field(min_length=2, max_length=300)
     project_type: str = Field(default="government_investment", max_length=80)
+    workspace_kind: Literal["managed", "adhoc"] = "managed"
     description: str | None = Field(default=None, max_length=4_000)
 
 
@@ -96,6 +213,7 @@ class ProjectPatch(BaseModel):
     name: str | None = Field(default=None, min_length=2, max_length=300)
     description: str | None = Field(default=None, max_length=4_000)
     status: Literal["active", "archived"] | None = None
+    workspace_kind: Literal["managed", "adhoc"] | None = None
     revision: int = Field(ge=1)
 
 
@@ -111,12 +229,47 @@ class ProjectDeleteResult(BaseModel):
     storage_cleanup_failed: int
 
 
+class ProjectDeletionRequestCreate(BaseModel):
+    revision: int = Field(ge=1)
+    confirmation_code: str = Field(min_length=2, max_length=80)
+    reason: str = Field(min_length=2, max_length=2_000)
+
+
+class ApprovalDecisionRequest(BaseModel):
+    comment: str | None = Field(default=None, max_length=2_000)
+    revision: int = Field(ge=1)
+
+
+class ApprovalRequestView(ORMModel):
+    id: str
+    organization_id: str
+    request_type: str
+    status: str
+    title: str
+    reason: str
+    target_type: str
+    target_id: str
+    target_code: str | None
+    target_name: str | None
+    payload_json: dict[str, Any]
+    requester_id: str
+    requester_name: str | None = None
+    reviewer_id: str | None
+    reviewer_name: str | None = None
+    review_comment: str | None
+    reviewed_at: datetime | None
+    revision: int
+    created_at: datetime
+    updated_at: datetime
+
+
 class ProjectView(ORMModel):
     id: str
     organization_id: str
     code: str
     name: str
     project_type: str
+    workspace_kind: str
     status: str
     description: str | None
     revision: int

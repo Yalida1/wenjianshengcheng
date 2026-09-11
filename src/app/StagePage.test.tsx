@@ -94,7 +94,7 @@ describe("fieldDraftGuidance", () => {
     });
     expect(guidance.kind).toBe("needs_regen");
     expect(guidance.primaryLabel).toBe("基于已确认字段重新生成");
-    expect(guidance.primaryTo).toContain("/generation?from=fields");
+    expect(guidance.primaryTo).toContain("/generation?from=basics");
     expect(guidance.body).toContain("不会自动改写");
   });
 
@@ -154,7 +154,8 @@ describe("fieldDraftGuidance", () => {
       pendingDocumentCount: 2,
       allPendingConfirmed: false,
     });
-    expect(guidance.primaryTo).toContain("/stages/tender/generation?from=fields");
+    expect(guidance.primaryTo).toContain("/stages/tender/generation?from=basics");
+    expect(guidance.secondaryTo).toContain("/stages/tender/basics");
     expect(guidance.body).toContain("2 份招标文件");
     expect(guidance.body).toContain("【待确认】");
     expect(guidance.body).toContain("阻止定稿");
@@ -171,7 +172,7 @@ describe("fieldDraftGuidance", () => {
       allPendingConfirmed: false,
     });
     expect(guidance.primaryLabel).toBe("生成受控草稿");
-    expect(guidance.primaryTo).toContain("/stages/tender/generation?from=fields");
+    expect(guidance.primaryTo).toContain("/stages/tender/generation?from=basics");
   });
 });
 

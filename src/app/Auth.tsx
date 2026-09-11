@@ -4,6 +4,8 @@ import { createContext, useContext, type PropsWithChildren } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { BrandIdentity } from "../components/BrandIdentity";
+import { useBranding } from "../config/BrandingProvider";
 import { api, apiError, type User } from "../api/client";
 
 type AuthContextValue = {
@@ -77,6 +79,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
+  const { branding } = useBranding();
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "admin", password: "" },
@@ -89,7 +92,7 @@ export function LoginPage() {
     },
     onSuccess: (session) => {
       queryClient.setQueryData(["session"], session.user);
-      const from = (location.state as { from?: string } | null)?.from ?? "/projects";
+      const from = (location.state as { from?: string } | null)?.from ?? "/projects?kind=managed";
       navigate(from, { replace: true });
     },
   });
@@ -97,9 +100,7 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl md:grid-cols-[1.1fr_1fr]">
         <section className="hidden bg-[#12345B] p-12 text-white md:block">
-          <div className="mb-16 text-sm font-semibold tracking-[0.2em] text-blue-200">
-            项目文件链式生成平台
-          </div>
+          <BrandIdentity variant="login" className="mb-16" />
           <h1 className="text-3xl font-semibold leading-tight">从需求到合同的受控文件链</h1>
           <p className="mt-6 max-w-md leading-7 text-blue-100">
             字段来源、人工确认、模板版本、生成记录和定稿门禁在同一项目空间内留痕。
@@ -109,7 +110,7 @@ export function LoginPage() {
           </div>
         </section>
         <section className="p-8 sm:p-12">
-          <h2 className="text-2xl font-semibold text-slate-900">登录平台</h2>
+          <h2 className="text-2xl font-semibold text-slate-900">登录{branding.name}</h2>
           <p className="mt-2 text-sm text-slate-500">使用组织账号继续</p>
           <form
             className="mt-8 space-y-5"

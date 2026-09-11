@@ -263,3 +263,521 @@ input {
     animation: none;
   }
 }
+
+.stage-basis-board {
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #dbe7f5;
+  background:
+    radial-gradient(800px 160px at 0% 0%, rgb(21 90 168 / 0.06), transparent 55%),
+    #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+}
+
+.stage-basis-board-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-bottom: 1px solid #e8eef5;
+  padding: 1.15rem 1.25rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .stage-basis-board-head {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.stage-basis-grid {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+}
+
+@media (min-width: 1024px) {
+  .stage-basis-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stage-basis-card {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: stage-flow-enter 0.45s ease forwards;
+  border-radius: 0.9rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 1rem;
+}
+
+.stage-basis-card.is-current {
+  border-color: rgb(21 90 168 / 0.35);
+  background: linear-gradient(180deg, rgb(239 246 255 / 0.95), #fff 60%);
+  box-shadow: 0 8px 20px rgb(15 52 91 / 0.05);
+}
+
+.stage-basis-card.is-done {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, rgb(236 253 245 / 0.7), #fff 55%);
+}
+
+.stage-basis-card.is-upcoming {
+  background: #fbfcfe;
+}
+
+.stage-basis-converge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  border-top: 1px dashed #dbe4f0;
+  padding: 0.35rem 1rem 1rem;
+}
+
+.stage-basis-converge-lines {
+  display: flex;
+  width: min(100%, 36rem);
+  justify-content: space-around;
+  padding: 0 1rem;
+}
+
+.stage-basis-converge-lines span {
+  display: block;
+  width: 2px;
+  height: 1.1rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #93c5fd, #155aa8);
+  animation: stage-basis-drip 1.4s ease-in-out infinite;
+}
+
+.stage-basis-converge-lines span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.stage-basis-converge-lines span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stage-basis-converge-arrow {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: #12345b;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 6px 16px rgb(18 52 91 / 0.18);
+}
+
+@keyframes stage-basis-drip {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scaleY(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-basis-card,
+  .stage-basis-converge-lines span {
+    animation: none !important;
+  }
+
+  .stage-basis-card {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 项目生命周期流程 — 动态推进 */
+.stage-flow-board-head {
+  background:
+    radial-gradient(1200px 180px at 10% -40%, rgb(21 90 168 / 0.12), transparent 60%),
+    linear-gradient(120deg, #f4f7fb 0%, #fff 45%, #eef5fc 100%);
+}
+
+.stage-flow-board-sheen {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgb(255 255 255 / 0.55) 45%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: stage-flow-sheen 7s ease-in-out infinite;
+}
+
+.stage-flow-live-dot {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: #16a34a;
+  box-shadow: 0 0 0 0 rgb(22 163 74 / 0.45);
+  animation: stage-flow-live 1.6s ease-out infinite;
+}
+
+.stage-flow-meter {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #e8eef5;
+}
+
+.stage-flow-meter-fill {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #12345b, #155aa8 55%, #3b82f6);
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stage-flow-meter-glow {
+  position: absolute;
+  inset: 0 auto 0 -30%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+  animation: stage-flow-glow 1.8s linear infinite;
+}
+
+.stage-flow-rail {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 1.25rem 1rem 1.5rem;
+  border-top: 1px solid #eef2f7;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 640px) {
+  .stage-flow-rail {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.stage-flow-step {
+  position: relative;
+  display: flex;
+  min-width: 6.75rem;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: stage-flow-enter 0.45s ease forwards;
+}
+
+.stage-flow-step-label {
+  margin-top: 0.75rem;
+  padding: 0 0.25rem;
+  text-align: center;
+}
+
+.stage-flow-step-label strong {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.stage-flow-step.is-done .stage-flow-step-label strong {
+  color: #0f172a;
+}
+
+.stage-flow-step.is-current .stage-flow-step-label strong {
+  color: #155aa8;
+}
+
+.stage-flow-step-label small {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.6875rem;
+  color: #94a3b8;
+}
+
+.stage-flow-dot {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 2px solid #cbd5e1;
+  background: #fff;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.stage-flow-dot.is-done {
+  border-color: #116b46;
+  background: #116b46;
+  color: #fff;
+}
+
+.stage-flow-dot.is-current {
+  border-color: #155aa8;
+  background: #155aa8;
+  color: #fff;
+  box-shadow: 0 0 0 4px rgb(21 90 168 / 0.16);
+  animation: stage-flow-pulse 1.8s ease-in-out infinite;
+}
+
+.stage-flow-connector {
+  position: absolute;
+  top: 1.125rem;
+  left: calc(50% + 1.15rem);
+  right: calc(-50% + 1.15rem);
+  height: 2px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #e2e8f0;
+}
+
+.stage-flow-connector.is-done {
+  background: linear-gradient(90deg, #116b46, #2f9e6e);
+}
+
+.stage-flow-connector.is-active {
+  background: #dbe7f5;
+}
+
+.stage-flow-connector.is-active .stage-flow-connector-run,
+.stage-flow-timeline-line.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, #155aa8, transparent);
+  animation: stage-flow-run 1.4s linear infinite;
+}
+
+.stage-flow-connector.is-active .stage-flow-connector-run {
+  display: block;
+  height: 100%;
+}
+
+.stage-flow-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stage-flow-timeline-item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.9rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: stage-flow-enter 0.5s ease forwards;
+}
+
+.stage-flow-timeline-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stage-flow-timeline-line {
+  position: relative;
+  margin-top: 0.35rem;
+  width: 2px;
+  flex: 1;
+  min-height: 1.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #e2e8f0;
+}
+
+.stage-flow-timeline-line.is-done {
+  background: linear-gradient(180deg, #116b46, #34a87a);
+}
+
+.stage-flow-timeline-line.is-active {
+  background: #dbe7f5;
+}
+
+.stage-flow-panel {
+  margin-bottom: 0.85rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 1rem 1.1rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.stage-flow-panel.is-done {
+  background: linear-gradient(180deg, rgb(236 253 245 / 0.55), #fff 48%);
+  border-color: #d1fae5;
+}
+
+.stage-flow-panel.is-current {
+  border-color: rgb(21 90 168 / 0.35);
+  background: linear-gradient(180deg, rgb(239 246 255 / 0.9), #fff 52%);
+  box-shadow:
+    0 10px 30px rgb(15 52 91 / 0.06),
+    0 0 0 1px rgb(21 90 168 / 0.08);
+  transform: translateY(-1px);
+}
+
+.stage-flow-panel.is-upcoming {
+  background: #fbfcfe;
+  opacity: 0.92;
+}
+
+.stage-flow-now-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  background: #fff7ed;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #9a3412;
+}
+
+.stage-flow-now-badge span {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: #f97316;
+  animation: stage-flow-live 1.4s ease-out infinite;
+}
+
+.stage-flow-panel-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px dashed #dbe4f0;
+  padding-top: 0.85rem;
+}
+
+.stage-flow-panel-progress-track {
+  position: relative;
+  height: 0.35rem;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #e8eef5;
+}
+
+.stage-flow-panel-progress-run {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #12345b, #3b82f6);
+  animation: stage-flow-indeterminate 1.35s ease-in-out infinite;
+}
+
+@keyframes stage-flow-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stage-flow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(21 90 168 / 0.28);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgb(21 90 168 / 0);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes stage-flow-live {
+  0% {
+    box-shadow: 0 0 0 0 rgb(22 163 74 / 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgb(22 163 74 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(22 163 74 / 0);
+  }
+}
+
+@keyframes stage-flow-sheen {
+  0%,
+  100% {
+    background-position: 120% 0;
+  }
+  50% {
+    background-position: -20% 0;
+  }
+}
+
+@keyframes stage-flow-glow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(420%);
+  }
+}
+
+@keyframes stage-flow-run {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(280%);
+  }
+}
+
+@keyframes stage-flow-indeterminate {
+  0% {
+    left: -35%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-flow-board-sheen,
+  .stage-flow-live-dot,
+  .stage-flow-meter-glow,
+  .stage-flow-dot.is-current,
+  .stage-flow-connector.is-active .stage-flow-connector-run,
+  .stage-flow-panel-progress-run,
+  .stage-flow-now-badge span,
+  .stage-flow-step,
+  .stage-flow-timeline-item {
+    animation: none !important;
+  }
+
+  .stage-flow-step,
+  .stage-flow-timeline-item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stage-flow-meter-fill {
+    transition: none;
+  }
+}

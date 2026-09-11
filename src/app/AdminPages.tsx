@@ -10,18 +10,21 @@ import {
   type User,
 } from "../api/client";
 import { TaskProgressPanel, type TaskProgressStage } from "../components/TaskProgressPanel";
+import { BrandingSettingsPage } from "./BrandingSettingsPage";
+import { ModelSettingsPage } from "./ModelSettingsPage";
 import { ErrorNotice } from "./Auth";
 import { Card, PageHeader, StatusBadge } from "./Shell";
 
 const STAGE_NAMES: Record<string, string> = {
-  requirement: "项目建议书",
-  feasibility: "可研报告",
-  tender: "招标文件",
+  demand: "项目需求",
+  requirement: "建议书",
+  feasibility: "可行性研究报告",
+  tender: "招投标",
   contract: "合同",
 };
 
-/** 模板中心列表与成品提取仅展示招标/合同；与项目概览可见阶段一致。 */
-const VISIBLE_TEMPLATE_STAGES = ["tender", "contract"] as const;
+/** 模板中心列表与成品提取展示全部主链路阶段；与项目概览可见阶段一致。 */
+const VISIBLE_TEMPLATE_STAGES = ["requirement", "feasibility", "tender", "contract"] as const;
 
 const EXTRACTION_STATUS_NAMES: Record<string, string> = {
   queued: "等待处理",
@@ -1022,7 +1025,7 @@ export function FieldDictionaryPage() {
         const fieldKey = generateFieldKey(form.field_label);
         const result = await api.POST("/api/v1/field-definitions", {
           body: {
-            stage: stage as "requirement" | "feasibility" | "tender" | "contract",
+            stage: stage as "demand" | "requirement" | "feasibility" | "tender" | "contract",
             field_key: fieldKey,
             field_label: form.field_label.trim(),
             data_type: form.data_type,
@@ -1081,7 +1084,7 @@ export function FieldDictionaryPage() {
     mutationFn: async () => {
       const result = await api.POST("/api/v1/field-definitions/restore-base", {
         params: {
-          query: { stage: stage as "requirement" | "feasibility" | "tender" | "contract" },
+          query: { stage: stage as "demand" | "requirement" | "feasibility" | "tender" | "contract" },
         },
       });
       if (result.error) throw apiError(result.error, result.response);
@@ -1334,9 +1337,12 @@ export function SystemPage() {
   const error = users.error || roles.error || logs.error;
   return (
     <>
-      <PageHeader title="系统管理" description="用户、角色与审计日志均受组织边界和权限控制。" />
+      <PageHeader
+        title="系统管理"
+        description="用户、角色、审计日志、品牌与模型配置均受组织边界和权限控制。"
+      />
       <Card className="mb-5 p-0">
-        <div className="flex gap-1 p-2">
+        <div className="flex flex-wrap gap-1 p-2">
           <Link
             className={`tab-button ${tab === "users" ? "tab-button-active" : ""}`}
             to="/admin/users"
@@ -1355,43 +1361,63 @@ export function SystemPage() {
           >
             审计日志
           </Link>
+          <Link
+            className={`tab-button ${tab === "branding" ? "tab-button-active" : ""}`}
+            to="/admin/branding"
+          >
+            品牌设置
+          </Link>
+          <Link
+            className={`tab-button ${tab === "models" ? "tab-button-active" : ""}`}
+            to="/admin/models"
+          >
+            模型配置
+          </Link>
         </div>
       </Card>
-      {error && <ErrorNotice error={error} />}
-      <Card>
-        {tab === "users" && (
-          <SimpleTable
-            headers={["姓名", "邮箱", "状态", "修订"]}
-            rows={
-              users.data?.map((user) => [
-                user.display_name,
-                user.email,
-                user.is_active ? "启用" : "停用",
-                `R${user.revision}`,
-              ]) ?? []
-            }
-          />
-        )}
-        {tab === "roles" && (
-          <SimpleTable
-            headers={["角色名称", "角色键", "角色 ID"]}
-            rows={roles.data?.map((role) => [role.name, role.key, role.id]) ?? []}
-          />
-        )}
-        {tab === "audit-logs" && (
-          <SimpleTable
-            headers={["时间", "动作", "对象", "请求 ID"]}
-            rows={
-              logs.data?.map((log) => [
-                log.created_at,
-                log.action,
-                `${log.object_type} ${log.object_id ?? ""}`,
-                log.request_id,
-              ]) ?? []
-            }
-          />
-        )}
-      </Card>
+      {tab === "branding" ? (
+        <BrandingSettingsPage />
+      ) : tab === "models" ? (
+        <ModelSettingsPage />
+      ) : (
+        <>
+          {error && <ErrorNotice error={error} />}
+          <Card>
+            {tab === "users" && (
+              <SimpleTable
+                headers={["姓名", "邮箱", "状态", "修订"]}
+                rows={
+                  users.data?.map((user) => [
+                    user.display_name,
+                    user.email,
+                    user.is_active ? "启用" : "停用",
+                    `R${user.revision}`,
+                  ]) ?? []
+                }
+              />
+            )}
+            {tab === "roles" && (
+              <SimpleTable
+                headers={["角色名称", "角色键", "角色 ID"]}
+                rows={roles.data?.map((role) => [role.name, role.key, role.id]) ?? []}
+              />
+            )}
+            {tab === "audit-logs" && (
+              <SimpleTable
+                headers={["时间", "动作", "对象", "请求 ID"]}
+                rows={
+                  logs.data?.map((log) => [
+                    log.created_at,
+                    log.action,
+                    `${log.object_type} ${log.object_id ?? ""}`,
+                    log.request_id,
+                  ]) ?? []
+                }
+              />
+            )}
+          </Card>
+        </>
+      )}
     </>
   );
 }

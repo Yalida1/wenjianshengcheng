@@ -46,6 +46,11 @@ class Organization(RecordMixin, Base):
     __tablename__ = "organizations"
     name: Mapped[str] = mapped_column(String(200), unique=True)
     status: Mapped[str] = mapped_column(String(30), default="active")
+    brand_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    brand_subtitle: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    brand_mark: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    brand_logo_key: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    brand_logo_content_type: Mapped[str | None] = mapped_column(String(120), nullable=True)
 
 
 class User(TenantRecordMixin, Base):
@@ -96,12 +101,35 @@ class UserRole(TenantRecordMixin, Base):
     role_id: Mapped[str] = mapped_column(ForeignKey("roles.id", ondelete="CASCADE"))
 
 
+class ProjectType(TenantRecordMixin, Base):
+    __tablename__ = "project_types"
+    __table_args__ = (UniqueConstraint("organization_id", "code"),)
+    code: Mapped[str] = mapped_column(String(80))
+    name: Mapped[str] = mapped_column(String(120))
+    description: Mapped[str | None] = mapped_column(Text)
+    sort_order: Mapped[int] = mapped_column(Integer, default=100)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_system: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class ProjectCodeRule(TenantRecordMixin, Base):
+    """Organization-scoped rule for auto-allocating project codes."""
+
+    __tablename__ = "project_code_rules"
+    __table_args__ = (UniqueConstraint("organization_id"),)
+    pattern: Mapped[str] = mapped_column(String(120), default="{project_type}_{date}_{seq}")
+    date_format: Mapped[str] = mapped_column(String(20), default="YYYYMMDD")
+    seq_width: Mapped[int] = mapped_column(Integer, default=4)
+    reset_scope: Mapped[str] = mapped_column(String(30), default="type_day")
+
+
 class Project(TenantRecordMixin, Base):
     __tablename__ = "projects"
     __table_args__ = (UniqueConstraint("organization_id", "code"),)
     code: Mapped[str] = mapped_column(String(80))
     name: Mapped[str] = mapped_column(String(300))
     project_type: Mapped[str] = mapped_column(String(80), default="government_investment")
+    workspace_kind: Mapped[str] = mapped_column(String(30), default="managed", index=True)
     status: Mapped[str] = mapped_column(String(30), default="active")
     description: Mapped[str | None] = mapped_column(Text)
 
@@ -823,3 +851,37 @@ class AuditLog(TenantRecordMixin, Base):
     before: Mapped[dict[str, object] | None] = mapped_column(JSON)
     after: Mapped[dict[str, object] | None] = mapped_column(JSON)
     metadata_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+
+
+class ApprovalRequest(TenantRecordMixin, Base):
+    """Organization-scoped approval tickets (e.g. project deletion)."""
+
+    __tablename__ = "approval_requests"
+    request_type: Mapped[str] = mapped_column(String(80), index=True)
+    status: Mapped[str] = mapped_column(String(30), default="pending", index=True)
+    title: Mapped[str] = mapped_column(String(300))
+    reason: Mapped[str] = mapped_column(Text)
+    target_type: Mapped[str] = mapped_column(String(80), index=True)
+    target_id: Mapped[str] = mapped_column(String(36), index=True)
+    target_code: Mapped[str | None] = mapped_column(String(80))
+    target_name: Mapped[str | None] = mapped_column(String(300))
+    payload_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    requester_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    reviewer_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    review_comment: Mapped[str | None] = mapped_column(Text)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class LlmModelProfile(TenantRecordMixin, Base):
+    """Organization-managed AI model connection profiles."""
+
+    __tablename__ = "llm_model_profiles"
+    __table_args__ = (UniqueConstraint("organization_id", "name"),)
+    name: Mapped[str] = mapped_column(String(120))
+    provider: Mapped[str] = mapped_column(String(40), default="openai_compatible")
+    base_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    model_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    api_key_encrypted: Mapped[str | None] = mapped_column(Text, nullable=True)
+    timeout_seconds: Mapped[int] = mapped_column(Integer, default=90)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+    notes: Mapped[str | None] = mapped_column(String(500), nullable=True)

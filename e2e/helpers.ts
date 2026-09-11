@@ -4,7 +4,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { expect, type Page } from "@playwright/test";
 
-export type StageKey = "requirement" | "feasibility" | "tender" | "contract";
+export type StageKey = "demand" | "requirement" | "feasibility" | "tender" | "contract";
 
 export const SINGLE_EQUIPMENT_SOURCE_FIXTURE = path.resolve(
   "test-results",

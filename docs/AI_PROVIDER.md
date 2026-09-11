@@ -1,12 +1,14 @@
 # AI Provider
 
-`backend/app/services/providers.py` 定义统一 Provider、版本化提示词和 Pydantic 输出 Schema。当前正文生成提示词版本为 `document-section-v2`：要求按正式文书小标题组织章节、每章至少 4 段且不少于约 400 字，并对缺失的金额/主体/日期等关键项强制输出 `【待确认】` 占位，禁止编造或跨阶段金额换算。`demo/deterministic-v1` 按同一结构确定性生成，供离线测试与 Demo 使用；`openai_compatible` 通过环境变量配置 base URL、API key、model 和请求超时，并附带章节结构提示供模型扩写润色。
+`backend/app/services/providers.py` 定义统一 Provider、版本化提示词和 Pydantic 输出 Schema。当前正文生成提示词版本为 `document-section-v2`：要求按正式文书小标题组织章节、每章至少 4 段且不少于约 400 字，并对缺失的金额/主体/日期等关键项强制输出 `【待确认】` 占位，禁止编造或跨阶段金额换算。`demo/deterministic-v1` 按同一结构确定性生成，供离线测试与 Demo 使用；`openai_compatible` 通过组织「系统管理 → 模型配置」或环境变量配置 base URL、API key、model 和请求超时，并附带章节结构提示供模型扩写润色。
 
-DeepSeek 官方接口使用 JSON Object 模式，并由服务端 Pydantic Schema 做第二次严格校验；其他支持 Structured Outputs 的 OpenAI-compatible 服务仍使用严格 JSON Schema。空响应、非法 JSON 或不符合 Schema 的内容不会进入业务数据，任务会按既定次数重试并保留失败状态。当前配置项如下：
+DeepSeek 官方接口使用 JSON Object 模式，并由服务端 Pydantic Schema 做第二次严格校验；其他支持 Structured Outputs 的 OpenAI-compatible 服务仍使用严格 JSON Schema。空响应、非法 JSON 或不符合 Schema 的内容不会进入业务数据，任务会按既定次数重试并保留失败状态。
+
+优先读取组织内已启用的模型配置；未配置时回退到环境变量：
 
 - `LLM_PROVIDER=openai_compatible`
 - `OPENAI_BASE_URL=https://api.deepseek.com`
-- `OPENAI_API_KEY`：只写入本机 `.env`
+- `OPENAI_API_KEY`：只写入本机 `.env` 或系统管理模型配置（脱敏展示）
 - `OPENAI_MODEL`：填写账号可用模型名称
 - `LLM_TIMEOUT_SECONDS=90`
 

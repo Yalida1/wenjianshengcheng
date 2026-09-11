@@ -45,7 +45,9 @@ import {
 } from "../lib/tenderWorkflow";
 import { TaskProgressPanel, type TaskProgressStage } from "../components/TaskProgressPanel";
 import { ErrorNotice, FullPageMessage } from "./Auth";
+import { BasicsDataPanel } from "./BasicsDataPanel";
 import { DocumentPage } from "./DocumentPage";
+import { ParseResultsPanel } from "./ParseResultsPanel";
 import { Card, PageHeader, StatusBadge } from "./Shell";
 
 function cookieValue(name: string): string | undefined {
@@ -78,17 +80,29 @@ async function ensureDefaultDocumentGrouping(
 }
 
 const STAGE_NAMES: Record<string, string> = {
-  requirement: "项目建议书",
+  demand: "项目需求",
+  requirement: "建议书",
   feasibility: "可行性研究报告",
   tender: "招标文件",
   contract: "合同",
 };
+const BASIS_MATERIAL_STAGES = new Set(["demand", "requirement", "feasibility"]);
 const TABS = [
   ["source", "来源选择"],
   ["files", "文件材料"],
   ["fields", "字段确认"],
   ["generation", "文档生成"],
   ["confirmation", "文档确认"],
+] as const;
+/** 招标阶段：基础数据 → 文档生成 → 文档确认；材料上传仍可通过 /files 直达。 */
+const TENDER_TABS = [
+  ["basics", "基础数据"],
+  ["generation", "文档生成"],
+  ["confirmation", "文档确认"],
+] as const;
+const BASIS_TABS = [
+  ["files", "文件材料"],
+  ["fields", "解析结果"],
 ] as const;
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
@@ -100,6 +114,7 @@ const SOURCE_TYPE_LABELS: Record<string, string> = {
   template_default: "模板默认值",
 };
 const FIELD_ORDER: Record<string, string[]> = {
+  demand: ["project_name", "project_owner", "construction_scope", "project_period", "project_location"],
   requirement: ["project_name", "project_owner", "construction_scope", "project_period"],
   feasibility: ["project_name", "construction_scope", "project_period", "total_investment"],
   tender: ["project_name", "procurement_scope", "procurement_budget", "maximum_price"],
@@ -258,8 +273,9 @@ export function fieldDraftGuidance(args: {
   } = args;
   const stageName = STAGE_NAMES[stage] ?? "本阶段文档";
   const draftLabel = stage === "tender" ? "招采草稿" : "文档草稿";
-  const generationTo = `/projects/${projectId}/stages/${stage}/generation?from=fields`;
+  const generationTo = `/projects/${projectId}/stages/${stage}/generation?from=${stage === "tender" ? "basics" : "fields"}`;
   const filesTo = `/projects/${projectId}/stages/${stage}/files`;
+  const basicsTo = `/projects/${projectId}/stages/tender/basics`;
   const documentTo = documentId ? `/projects/${projectId}/documents/${documentId}` : undefined;
   const requiredDone = requiredCount > 0 && completedRequiredCount >= requiredCount;
 
@@ -272,8 +288,8 @@ export function fieldDraftGuidance(args: {
       body: `本项目需编制 ${pendingDocumentCount} 份招标文件。未确认字段会以【待确认】写入草稿，草稿可审阅但不可用于发布；P0/P1 问题仍会阻止定稿。不得为生成草稿而编造金额、日期、地点或资格条件。`,
       primaryLabel: documentId ? "生成新草稿" : "生成受控草稿",
       primaryTo: generationTo,
-      secondaryLabel: "继续确认字段",
-      secondaryTo: `/projects/${projectId}/stages/tender/fields`,
+      secondaryLabel: "继续确认基础数据",
+      secondaryTo: basicsTo,
       tone: "amber",
     };
   }
@@ -367,6 +383,9 @@ export function StagePage() {
   const { projectId = "", stage = "tender" } = useParams();
   const location = useLocation();
   const activeTab = location.pathname.split("/").at(-1) ?? "source";
+  const isBasisMaterial = BASIS_MATERIAL_STAGES.has(stage);
+  const isTender = stage === "tender";
+  const stageTabs = isBasisMaterial ? BASIS_TABS : isTender ? TENDER_TABS : TABS;
   const stages = useQuery({
     queryKey: ["stages", projectId],
     queryFn: async () => {
@@ -378,14 +397,19 @@ export function StagePage() {
     },
   });
 
-  if (stage === "requirement" || stage === "feasibility") {
-    return <Navigate to={`/projects/${projectId}`} replace />;
-  }
-
   const stageRecord = stages.data?.find((item: Stage) => item.stage === stage);
   if (stages.isLoading) return <FullPageMessage title="正在加载阶段" />;
   if (stages.error) return <ErrorNotice error={stages.error} />;
   if (!stageRecord) return <FullPageMessage title="阶段不存在" detail="请返回项目空间重新选择" />;
+  if (isBasisMaterial && !["files", "fields"].includes(activeTab)) {
+    return <Navigate to={`/projects/${projectId}/stages/${stage}/files`} replace />;
+  }
+  if (isTender && activeTab === "fields") {
+    return <Navigate to={`/projects/${projectId}/stages/tender/basics`} replace />;
+  }
+  if (isTender && ["source", "templates", "procurement"].includes(activeTab)) {
+    return <Navigate to={`/projects/${projectId}/stages/tender/basics`} replace />;
+  }
   if (activeTab === "templates") {
     return <Navigate to={`/projects/${projectId}/stages/${stage}/generation`} replace />;
   }
@@ -396,7 +420,13 @@ export function StagePage() {
     <>
       <PageHeader
         title={STAGE_NAMES[stage] ?? stage}
-        description="来源、字段和生成记录都按版本留痕。"
+        description={
+          isBasisMaterial
+            ? "上传本阶段对应材料，由大模型完成解析；此处不进入招标文件编写。"
+            : isTender
+              ? "先确认基础数据，再生成招标文件草稿并定稿。"
+              : "来源、字段和生成记录都按版本留痕。"
+        }
         actions={
           <Link className="secondary-button" to={`/projects/${projectId}`}>
             返回项目
@@ -405,7 +435,7 @@ export function StagePage() {
       />
       <Card className="mb-5 p-0">
         <div className="flex gap-1 overflow-x-auto p-2" role="tablist">
-          {TABS.map(([key, label]) => (
+          {stageTabs.map(([key, label]) => (
             <Link
               key={key}
               role="tab"
@@ -424,7 +454,21 @@ export function StagePage() {
         <SourcePanel projectId={projectId} stage={stage} record={stageRecord} />
       )}
       {activeTab === "files" && <FilesPanel projectId={projectId} stage={stage} />}
-      {activeTab === "fields" && <FieldsPanel projectId={projectId} stage={stage} />}
+      {activeTab === "basics" && stage === "tender" && (
+        <BasicsDataPanel
+          projectId={projectId}
+          stage={stage}
+          renderFields={(focusProps) => (
+            <FieldsPanel projectId={projectId} stage={stage} embedded {...focusProps} />
+          )}
+        />
+      )}
+      {activeTab === "fields" &&
+        (isBasisMaterial ? (
+          <ParseResultsPanel projectId={projectId} stage={stage} />
+        ) : (
+          <FieldsPanel projectId={projectId} stage={stage} />
+        ))}
       {activeTab === "generation" && <GenerationPanel projectId={projectId} stage={stage} />}
       {activeTab === "confirmation" && <ConfirmationPanel projectId={projectId} stage={stage} />}
     </>
@@ -621,7 +665,7 @@ function SourcePanel({
           <h3 className="section-title">确定本阶段来源</h3>
           <p className="section-description">
             {stage === "tender"
-              ? "招标阶段以用户上传的采购依据材料为来源；上传后系统自动绑定最新可用文件。"
+              ? "招标阶段汇入项目需求、建议书、可研等采购依据材料；上传或引用定稿后，系统自动绑定最新可用文件。"
               : "点击任一来源方式后，系统自动识别并绑定对应最新可用文件，无需再手动下拉选择。"}
           </p>
         </div>
@@ -667,7 +711,7 @@ function SourcePanel({
             <strong>{stage === "tender" ? "使用采购依据材料" : "使用用户已有文件"}</strong>
             <small>
               {stage === "tender"
-                ? "上传可研、需求说明等依据材料后自动绑定"
+                ? "上传需求说明、建议书、可研等依据材料后自动绑定，作为招标编制与定稿核对来源"
                 : "点击后自动绑定本项目最新已上传文件"}
             </small>
           </span>
@@ -1108,7 +1152,9 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
             : "材料解析完成，已识别采购包，但主文件组织方式仍待确认。请在下方确认待编制文件清单后再进入字段确认。",
         );
       } else {
-        setNotice(`${batch.uploaded.length} 份文件已上传并完成解析，可前往“字段确认”核对候选值。`);
+        setNotice(
+          `${batch.uploaded.length} 份文件已上传并完成解析，请前往「解析结果」查看提取正文。`,
+        );
       }
       void queryClient.invalidateQueries({ queryKey: ["files", projectId, stage] });
       void queryClient.invalidateQueries({ queryKey: ["field-values", projectId, stage] });
@@ -1447,7 +1493,13 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
             <p className="section-description">
               {isTender
                 ? "点击“上传并解析”后，系统将一次完成文件校验、内容解析、采购方案分析，并生成待编制文件清单。"
-                : "上传后自动校验、解析，并从原文中提取带定位证据的字段候选。"}
+                : stage === "demand"
+                  ? "上传项目需求 / 需求说明等材料，系统校验后由大模型解析提取关键信息。本阶段不进入招标编写。"
+                  : stage === "requirement"
+                    ? "上传项目建议书材料，系统校验后由大模型解析建设目标、范围等信息。本阶段不进入招标编写。"
+                    : stage === "feasibility"
+                      ? "上传可行性研究报告材料，系统校验后由大模型解析方案、投资与边界。本阶段不进入招标编写。"
+                      : "上传后自动校验、解析，并从原文中提取带定位证据的字段候选。"}
             </p>
           </div>
           <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
@@ -1517,7 +1569,7 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
             outcome={
               isTender
                 ? "完成后将得到按文件划分的待编制清单，并进入关键字段确认"
-                : "完成后可逐项核对字段候选、原文位置与置信度"
+                : "完成后可前往「解析结果」查看提取正文与表格"
             }
           />
         )}
@@ -1597,9 +1649,9 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
               <div className="mt-3">
                 <Link
                   className="primary-button inline-flex"
-                  to={`/projects/${projectId}/stages/tender/fields`}
+                  to={`/projects/${projectId}/stages/tender/basics`}
                 >
-                  前往字段确认
+                  前往基础数据确认
                 </Link>
               </div>
             )}
@@ -1676,7 +1728,7 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
             <p className="section-description">
               {isTender
                 ? "解析会识别采购包；主文件组织方式需在上方确认后才生成待编制清单。也可手动刷新字段候选，不会覆盖人工录入或已确认值。"
-                : "解析完成后可刷新字段候选，不会覆盖人工录入或已确认值。"}
+                : "解析完成后可在「解析结果」查看正文；也可手动刷新字段候选，不会覆盖人工录入或已确认值。"}
             </p>
           </div>
           <span className="text-xs text-slate-500">共 {files.data?.length ?? 0} 份</span>
@@ -1704,6 +1756,14 @@ function FilesPanel({ projectId, stage }: { projectId: string; stage: string }) 
                   <StatusBadge status={file.status} />
                   {file.status === "parsed" && (
                     <>
+                      {!isTender && (
+                        <Link
+                          className="secondary-button"
+                          to={`/projects/${projectId}/stages/${stage}/fields?fileId=${encodeURIComponent(file.id)}`}
+                        >
+                          查看解析结果
+                        </Link>
+                      )}
                       {(!isTender || pendingListReady) && (
                         <button
                           className="secondary-button"
@@ -1772,10 +1832,28 @@ function emptyDocumentDraft(): DocumentDraftState {
   return { values: {}, origins: {}, seeded: false, dirtyKeys: [] };
 }
 
-function FieldsPanel({ projectId, stage }: { projectId: string; stage: string }) {
+export type FieldsPanelProps = {
+  projectId: string;
+  stage: string;
+  /** When true, title/copy assume BasicsDataPanel owns the overview CTA. */
+  embedded?: boolean;
+  focusGroupId?: string | null;
+  focusFieldKey?: string | null;
+  onFocusHandled?: () => void;
+};
+
+export function FieldsPanel({
+  projectId,
+  stage,
+  embedded = false,
+  focusGroupId = null,
+  focusFieldKey = null,
+  onFocusHandled,
+}: FieldsPanelProps) {
   const queryClient = useQueryClient();
   const isTender = stage === "tender";
   const [selectedDocumentId, setSelectedDocumentId] = useState("");
+  const [highlightFieldKey, setHighlightFieldKey] = useState<string | null>(null);
   const [draftByDocument, setDraftByDocument] = useState<Record<string, DocumentDraftState>>({});
   const [manualEvidenceDrafts, setManualEvidenceDrafts] = useState<Record<string, string>>({});
   const draftKey = isTender ? selectedDocumentId || "__shared__" : "__shared__";
@@ -1953,6 +2031,20 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
       firstIncompletePendingDocumentId(pendingDocuments, definitionsByGroup, values.data),
     );
   }, [definitionsByGroup, isTender, pendingDocuments, selectedDocumentId, values.data]);
+
+  useEffect(() => {
+    if (!focusFieldKey) return;
+    if (focusGroupId && pendingDocuments.some((item) => item.id === focusGroupId)) {
+      setSelectedDocumentId(focusGroupId);
+    }
+    setHighlightFieldKey(focusFieldKey);
+    const timer = window.setTimeout(() => {
+      const node = document.getElementById(`basics-field-${focusFieldKey}`);
+      node?.scrollIntoView({ behavior: "smooth", block: "center" });
+      onFocusHandled?.();
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [focusFieldKey, focusGroupId, onFocusHandled, pendingDocuments]);
 
   useEffect(() => {
     if (!isTender || !selectedDocumentId) return;
@@ -2212,10 +2304,12 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
     <Card>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h3 className="section-title">字段确认</h3>
+          <h3 className="section-title">{embedded ? "字段确认与修改" : "字段确认"}</h3>
           <p className="section-description">
             {isTender
-              ? "请按待编制文件分别确认关键字段。未确认项可以带【待确认】标记进入草稿，但 P0/P1 问题会阻止定稿；AI 提取值仍须人工核对后才能成为正式值。"
+              ? embedded
+                ? "展示候选与证据，支持冲突择一、手工修改/补录后确认。AI 建议确认前不会成为正式值。"
+                : "请按待编制文件分别确认关键字段。未确认项可以带【待确认】标记进入草稿，但 P0/P1 问题会阻止定稿；AI 提取值仍须人工核对后才能成为正式值。"
               : `这里确认的是将写入${STAGE_NAMES[stage] ? `《${STAGE_NAMES[stage]}》` : "本阶段文档"}的正式业务字段，不是确认整份来源文件。材料提取值只是候选，核对无误后才可确认；确认完成后请重新生成，新草稿才会带上正式确认值。`}
           </p>
         </div>
@@ -2291,6 +2385,7 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
           )}
         </div>
       )}
+      {!embedded && (
       <div className="mt-5 grid gap-3 sm:grid-cols-4">
         {[
           ["已解析材料", parsedFileCount],
@@ -2325,7 +2420,8 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
           </div>
         ))}
       </div>
-      {stage === "tender" || generatedDocument || confirmedCount > 0 ? (
+      )}
+      {!embedded && (stage === "tender" || generatedDocument || confirmedCount > 0) ? (
         <div
           className={`mt-5 rounded-xl border p-4 text-sm leading-6 ${
             draftGuidance.tone === "amber"
@@ -2347,6 +2443,7 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
                 </Link>
               ) : canEnterGeneration ||
                 draftGuidance.primaryTo.includes("/files") ||
+                draftGuidance.primaryTo.includes("/basics") ||
                 draftGuidance.primaryTo.includes("/fields") ||
                 draftGuidance.primaryTo.includes("/documents/") ? (
                 <Link
@@ -2354,7 +2451,7 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
                   to={
                     canEnterGeneration || !draftGuidance.primaryTo.includes("/generation")
                       ? draftGuidance.primaryTo
-                      : `/projects/${projectId}/stages/${stage}/fields`
+                      : `/projects/${projectId}/stages/${stage}/basics`
                   }
                 >
                   {canEnterGeneration || !draftGuidance.primaryTo.includes("/generation")
@@ -2501,7 +2598,15 @@ function FieldsPanel({ projectId, stage }: { projectId: string; stage: string })
                       : "bg-slate-100 text-slate-600";
             const submitGroupId = selectedDocumentId;
             return (
-              <div key={definition.id} className="grid gap-4 py-5 lg:grid-cols-[200px_1fr_auto]">
+              <div
+                key={definition.id}
+                id={`basics-field-${definition.field_key}`}
+                className={`grid gap-4 py-5 lg:grid-cols-[200px_1fr_auto] ${
+                  highlightFieldKey === definition.field_key
+                    ? "rounded-xl bg-amber-50/70 ring-1 ring-amber-200"
+                    : ""
+                }`}
+              >
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-slate-900">{definition.field_label}</span>
@@ -2937,7 +3042,8 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedTemplateId = searchParams.get("template") ?? "";
   const requestedJobId = searchParams.get("job");
-  const fromFields = searchParams.get("from") === "fields";
+  const fromFields =
+    searchParams.get("from") === "fields" || searchParams.get("from") === "basics";
   const storedDraft = useMemo(() => readGenerationDraft(projectId, stage), [projectId, stage]);
   const urlOverridesTemplate =
     Boolean(requestedTemplateId) && requestedTemplateId !== (storedDraft?.templateId ?? "");
@@ -3506,6 +3612,9 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
           <Link className="secondary-button" to={`/projects/${projectId}/stages/tender/files`}>
             前往文件材料
           </Link>
+          <Link className="secondary-button" to={`/projects/${projectId}/stages/tender/basics`}>
+            前往基础数据
+          </Link>
         </div>
       </Card>
     );
@@ -3513,6 +3622,21 @@ function GenerationPanel({ projectId, stage }: { projectId: string; stage: strin
 
   return (
     <div className="space-y-5">
+      {stage === "tender" && (
+        <Card>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h3 className="section-title">基础数据摘要</h3>
+              <p className="section-description">
+                生成前请确认冲突与关键字段。未确认项可带【待确认】进入草稿，但会阻止定稿。
+              </p>
+            </div>
+            <Link className="secondary-button" to={`/projects/${projectId}/stages/tender/basics`}>
+              返回基础数据
+            </Link>
+          </div>
+        </Card>
+      )}
       <Card>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
