@@ -14,8 +14,8 @@ from backend.app.services.providers import (
 from backend.app.services.section_tree import SectionPlanItem
 
 
-def test_prompt_version_is_v2() -> None:
-    assert PROMPT_VERSION == "document-section-v2"
+def test_prompt_version_is_v3() -> None:
+    assert PROMPT_VERSION == "document-section-v3"
 
 
 def test_field_text_marks_missing_values() -> None:
@@ -160,3 +160,62 @@ def test_demo_tender_draft_marks_feasibility_context_as_reference_only() -> None
     assert "来源可研要点（草稿参考）" in joined
     assert "不等同于已确认采购范围" in joined
     assert "知识底座" in joined
+
+
+def test_openai_compatible_generate_calls_llm_once_per_section(monkeypatch) -> None:
+    from typing import Any
+
+    from backend.app.services.providers import OpenAICompatibleProvider
+
+    calls: list[list[str]] = []
+
+    def fake_request(
+        self: OpenAICompatibleProvider,
+        model_type: type[Any],
+        *,
+        schema_name: str,
+        system: str,
+        user_payload: dict[str, Any],
+    ) -> Any:
+        del self, schema_name, system
+        assert model_type is DraftResponse
+        keys = [item["key"] for item in user_payload["section_plan"]]
+        calls.append(keys)
+        assert len(keys) == 1
+        assert "document_outline" in user_payload
+        assert len(user_payload["document_outline"]) == 2
+        key = keys[0]
+        title = next(item["title"] for item in user_payload["section_plan"])
+        return DraftResponse(
+            sections=[
+                SectionDraft(
+                    key=key,
+                    title=title,
+                    level=1,
+                    parent_key=None,
+                    paragraphs=["段落一。", "段落二。", "段落三。", "段落四。"],
+                    field_refs=["project_name"],
+                )
+            ]
+        )
+
+    monkeypatch.setattr(OpenAICompatibleProvider, "_request_model", fake_request)
+    provider = object.__new__(OpenAICompatibleProvider)
+    provider.base_url = "https://api.deepseek.com"
+    provider.api_key = "test-only-key"
+    provider.model = "deepseek-v4-flash"
+    provider.timeout_seconds = 180
+    draft = provider.generate(
+        ProviderContext(
+            stage="tender",
+            project_name="示例项目",
+            fields={"project_name": "示例项目"},
+            section_plan=[
+                SectionPlanItem("announcement", "招标公告", 1, None, 1),
+                SectionPlanItem("instructions", "投标人须知", 1, None, 2),
+            ],
+            source_context=[],
+        )
+    )
+    assert calls == [["announcement"], ["instructions"]]
+    assert [section.key for section in draft.sections] == ["announcement", "instructions"]

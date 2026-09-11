@@ -250,8 +250,8 @@ const STAGE_LABELS: Record<string, { name: string; detail: string }> = {
   contract: { name: "合同", detail: "合同主体、范围、金额、期限和付款安排" },
 };
 
-/** 项目概览仅展示招标与合同；项目建议书/可研卡片暂隐藏。 */
-const VISIBLE_STAGES = ["tender", "contract"] as const;
+/** 项目概览展示完整四阶段主链路。 */
+const VISIBLE_STAGES = ["requirement", "feasibility", "tender", "contract"] as const;
 
 export function ProjectOverviewPage() {
   const { projectId = "" } = useParams();
@@ -282,7 +282,7 @@ export function ProjectOverviewPage() {
     <>
       <PageHeader
         title={project.data?.name ?? "项目"}
-        description={`${isTemporaryProjectCode(project.data?.code) ? "编号待从材料解析" : project.data?.code} · 招标与合同主链路`}
+        description={`${isTemporaryProjectCode(project.data?.code) ? "编号待从材料解析" : project.data?.code} · 项目建议书 → 可研 → 招标 → 合同`}
         actions={
           <Link className="secondary-button" to="/projects">
             返回项目列表

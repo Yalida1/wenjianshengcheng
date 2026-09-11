@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 from ..config import get_settings
 from .section_tree import SectionPlanItem, build_heading_tree_candidates
 
-PROMPT_VERSION = "document-section-v2"
+PROMPT_VERSION = "document-section-v3"
 TEMPLATE_EXTRACTION_PROMPT_VERSION = "template-extraction-v1"
 TEXT_OPTIMIZATION_PROMPT_VERSION = "document-selection-optimize-v1"
 PENDING_MARKER = "【待确认】"
@@ -117,6 +117,7 @@ class ProviderContext:
     fields: dict[str, Any]
     section_plan: list[SectionPlanItem]
     source_context: list[str]
+    document_outline: list[dict[str, Any]] | None = None
 
 
 @dataclass(frozen=True)
@@ -626,7 +627,7 @@ class OpenAICompatibleProvider(GenerationProvider):
                 last_error = exc
         raise RuntimeError("LLM structured output failed validation") from last_error
 
-    def generate(self, context: ProviderContext) -> DraftResponse:
+    def _generate_section_batch(self, context: ProviderContext) -> DraftResponse:
         outline = {
             item.key: (
                 _parent_intro_paragraphs(item.title, context.project_name, context.fields)
@@ -642,16 +643,28 @@ class OpenAICompatibleProvider(GenerationProvider):
             )
             for item in context.section_plan
         }
+        document_outline = context.document_outline or [
+            {
+                "key": item.key,
+                "title": item.title,
+                "level": item.level,
+                "parent_key": item.parent_key,
+                "has_children": item.has_children,
+            }
+            for item in context.section_plan
+        ]
         user_payload = {
             "stage": context.stage,
             "project_name": context.project_name,
             "fields": context.fields,
             "section_plan": [item.__dict__ for item in context.section_plan],
+            "document_outline": document_outline,
             "source_context": context.source_context,
             "field_labels": FIELD_LABELS,
             "section_outline_hints": outline,
             "pending_marker": PENDING_MARKER,
             "instructions": (
+                "只生成 section_plan 中的章节，不要输出 document_outline 里的其他章节；"
                 "优先把 section_outline_hints 扩展为更完整的正式初稿；"
                 "可以改写润色；对 fields 中已确认值（无【待确认】前缀）和 project_name 不得再加【待确认】；"
                 "仅保留原本就带【待确认】的候选值，以及其他确实缺失项的【待确认：事项名称】占位，"
@@ -668,6 +681,56 @@ class OpenAICompatibleProvider(GenerationProvider):
             user_payload=user_payload,
         )
         return finalize_draft_response(context, draft)
+
+    def generate(self, context: ProviderContext) -> DraftResponse:
+        # One LLM call per section keeps payloads small and allows mid-job progress.
+        if len(context.section_plan) <= 1:
+            return self._generate_section_batch(context)
+        document_outline = context.document_outline or [
+            {
+                "key": item.key,
+                "title": item.title,
+                "level": item.level,
+                "parent_key": item.parent_key,
+                "has_children": item.has_children,
+            }
+            for item in context.section_plan
+        ]
+        sections: list[SectionDraft] = []
+        for item in context.section_plan:
+            partial = self._generate_section_batch(
+                ProviderContext(
+                    stage=context.stage,
+                    project_name=context.project_name,
+                    fields=context.fields,
+                    section_plan=[item],
+                    source_context=context.source_context,
+                    document_outline=document_outline,
+                )
+            )
+            matched = next((section for section in partial.sections if section.key == item.key), None)
+            if matched is None and len(partial.sections) == 1:
+                matched = partial.sections[0].model_copy(
+                    update={
+                        "key": item.key,
+                        "title": item.title,
+                        "level": item.level,
+                        "parent_key": item.parent_key,
+                    }
+                )
+            if matched is None:
+                raise RuntimeError(f"LLM did not return section '{item.key}'")
+            sections.append(
+                matched.model_copy(
+                    update={
+                        "key": item.key,
+                        "title": item.title,
+                        "level": item.level,
+                        "parent_key": item.parent_key,
+                    }
+                )
+            )
+        return DraftResponse(sections=sections)
 
     def optimize_text(self, *, selected_text: str, prompt: str, action: str) -> TextOptimizationResponse:
         return self._request_model(

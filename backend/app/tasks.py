@@ -434,7 +434,13 @@ def start_procurement_analysis_watchdog(**_kwargs: object) -> None:
         procurement_analysis_watchdog_task.apply_async(countdown=1)
 
 
-@celery_app.task(bind=True, max_retries=2, default_retry_delay=10)
+@celery_app.task(
+    bind=True,
+    max_retries=2,
+    default_retry_delay=10,
+    soft_time_limit=settings.generation_soft_time_limit_seconds,
+    time_limit=settings.generation_time_limit_seconds,
+)
 def generate_document_task(self: Task, job_id: str) -> str:
     with SessionLocal() as db:
         try:

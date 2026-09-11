@@ -25,7 +25,15 @@ from ..models import (
     TemplateSection,
     TemplateVersion,
 )
-from .providers import PENDING_MARKER, PROMPT_VERSION, SECTION_PLANS, ProviderContext, get_provider
+from .providers import (
+    PENDING_MARKER,
+    PROMPT_VERSION,
+    SECTION_PLANS,
+    DraftResponse,
+    ProviderContext,
+    SectionDraft,
+    get_provider,
+)
 from .section_tree import SectionPlanItem, flatten_section_nodes, section_nodes_from_pairs
 from .storage import get_storage
 from .tender_document import TenderBlockSpec, tender_blocks_for_section, tender_notice_title
@@ -511,44 +519,102 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
     job.attempt += 1
     for step_key in selected_keys:
         step = steps.get(step_key)
-        if step is not None:
-            step.status = "running"
-            step.error = None
+        if step is None:
+            continue
+        cached_draft = (step.output or {}).get("section_draft") if step.status == "succeeded" else None
+        if step.status == "succeeded" and isinstance(cached_draft, dict):
+            continue
+        step.status = "pending"
+        step.error = None
     db.add(
         GenerationEvent(
             organization_id=project.organization_id,
             generation_job_id=job.id,
             sequence=2,
             event_type="running",
-            payload={"attempt": job.attempt},
+            payload={"attempt": job.attempt, "selected_section_count": len(selected_keys)},
             created_by=job.created_by,
             updated_by=job.updated_by,
         )
     )
-    # The provider call can take minutes. Commit the task checkpoint before it starts so
-    # polling clients see the real running state instead of a queued job until completion.
+    # Commit before the first LLM call so polling clients see running/pending steps.
     db.commit()
     provider = get_provider()
     procurement_snapshot = job.procurement_snapshot or {}
     procurement_group = _dict_value(procurement_snapshot.get("document_group"))
     procurement_packages = [_dict_value(item) for item in _list_value(procurement_snapshot.get("packages"))]
     procurement_evidence_ids = [str(item) for item in _list_value(procurement_snapshot.get("evidence_ids"))]
-    draft = provider.generate(
-        ProviderContext(
-            stage=job.stage,
-            project_name=project.name,
-            fields=values,
-            section_plan=generation_plan,
-            source_context=(
-                [
-                    str(procurement_snapshot.get("scope", "")),
-                    str(procurement_group.get("rationale", "")),
-                ]
-                if job.procurement_snapshot
-                else _source_context(db, job)
-            ),
-        )
+    source_context = (
+        [
+            str(procurement_snapshot.get("scope", "")),
+            str(procurement_group.get("rationale", "")),
+        ]
+        if job.procurement_snapshot
+        else _source_context(db, job)
     )
+    document_outline = [
+        {
+            "key": item.key,
+            "title": item.title,
+            "level": item.level,
+            "parent_key": item.parent_key,
+            "has_children": item.has_children,
+        }
+        for item in section_plan
+    ]
+    draft_sections: list[SectionDraft] = []
+    for item in generation_plan:
+        step = steps.get(item.key)
+        if step is None:
+            raise RuntimeError(f"Generation step missing for section '{item.key}'")
+        cached = (step.output or {}).get("section_draft") if step.status == "succeeded" else None
+        if isinstance(cached, dict):
+            try:
+                draft_sections.append(SectionDraft.model_validate(cached))
+                continue
+            except (TypeError, ValueError):
+                step.status = "pending"
+                step.error = None
+        step.status = "running"
+        step.error = None
+        db.commit()
+        partial = provider.generate(
+            ProviderContext(
+                stage=job.stage,
+                project_name=project.name,
+                fields=values,
+                section_plan=[item],
+                source_context=source_context,
+                document_outline=document_outline,
+            )
+        )
+        section_draft = next((section for section in partial.sections if section.key == item.key), None)
+        if section_draft is None and len(partial.sections) == 1:
+            section_draft = partial.sections[0]
+        if section_draft is None:
+            step.status = "failed"
+            step.error = f"Provider did not return section '{item.key}'"
+            job.status = "failed"
+            job.error = step.error
+            db.commit()
+            raise RuntimeError(step.error)
+        section_draft = section_draft.model_copy(
+            update={
+                "key": item.key,
+                "title": item.title,
+                "level": item.level,
+                "parent_key": item.parent_key,
+            }
+        )
+        draft_sections.append(section_draft)
+        step.status = "succeeded"
+        step.output = {
+            "section_draft": section_draft.model_dump(),
+            "generated": True,
+        }
+        step.error = None
+        db.commit()
+    draft = DraftResponse(sections=draft_sections)
     draft_by_key = {section.key: section for section in draft.sections if section.key in selected_keys}
     missing_drafts = sorted(selected_keys - set(draft_by_key))
     if missing_drafts:

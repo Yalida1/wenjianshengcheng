@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     openai_base_url: str | None = None
     openai_api_key: str | None = None
     openai_model: str | None = None
-    llm_timeout_seconds: int = 90
+    llm_timeout_seconds: int = 180
     session_cookie_secure: bool = False
     session_ttl_seconds: int = 28_800
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:8080", "http://localhost:8443"]
@@ -43,6 +43,8 @@ class Settings(BaseSettings):
     procurement_analysis_time_limit_seconds: int = 1_860
     procurement_analysis_stale_after_seconds: int = 300
     procurement_analysis_recovery_interval_seconds: int = 60
+    generation_soft_time_limit_seconds: int = 7_200
+    generation_time_limit_seconds: int = 7_260
 
     @field_validator("cors_origins", mode="before")
     @classmethod
