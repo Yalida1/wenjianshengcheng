@@ -1,0 +1,311 @@
+[
+  {
+    "path": "artifacts/builtin_template_acceptance/contract/合同签约准备版_V1.0.pdf",
+    "status": "passed",
+    "mime_signature": "application/pdf",
+    "size_bytes": 182105,
+    "sha256": "d0a003df036223bb6d4a2ae7a410b16c05d4359879f4f36e37277fdf859971e2",
+    "page_count": 6,
+    "pages": [
+      {
+        "page": 1,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 125
+      },
+      {
+        "page": 2,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1061
+      },
+      {
+        "page": 3,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1223
+      },
+      {
+        "page": 4,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 779
+      },
+      {
+        "page": 5,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 524
+      },
+      {
+        "page": 6,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 371
+      }
+    ],
+    "text_length": 4088,
+    "unresolved_variables": [],
+    "screenshots": [
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-3.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-6.png"
+    ],
+    "visual_review": "passed_by_delivery_visual_review",
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/feasibility/可行性研究报告_V1.0.pdf",
+    "status": "passed",
+    "mime_signature": "application/pdf",
+    "size_bytes": 269394,
+    "sha256": "2c4a87bbe3f63b100aa8ea2d8985a16b9bb22ffa1a2b17175ec9b4ccb498031b",
+    "page_count": 17,
+    "pages": [
+      {
+        "page": 1,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 119
+      },
+      {
+        "page": 2,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 916
+      },
+      {
+        "page": 3,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 970
+      },
+      {
+        "page": 4,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1067
+      },
+      {
+        "page": 5,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 934
+      },
+      {
+        "page": 6,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 964
+      },
+      {
+        "page": 7,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1068
+      },
+      {
+        "page": 8,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 924
+      },
+      {
+        "page": 9,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 958
+      },
+      {
+        "page": 10,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1068
+      },
+      {
+        "page": 11,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 933
+      },
+      {
+        "page": 12,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 960
+      },
+      {
+        "page": 13,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1066
+      },
+      {
+        "page": 14,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 933
+      },
+      {
+        "page": 15,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 958
+      },
+      {
+        "page": 16,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 230
+      },
+      {
+        "page": 17,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 309
+      }
+    ],
+    "text_length": 14393,
+    "unresolved_variables": [],
+    "screenshots": [
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-8.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-17.png"
+    ],
+    "visual_review": "passed_by_delivery_visual_review",
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/requirement/项目建议书_V1.0.pdf",
+    "status": "passed",
+    "mime_signature": "application/pdf",
+    "size_bytes": 134046,
+    "sha256": "9db21a483742d0a6031e50458944b4b324d2aae83272d9d187d79fe997dc3ab6",
+    "page_count": 5,
+    "pages": [
+      {
+        "page": 1,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 103
+      },
+      {
+        "page": 2,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 943
+      },
+      {
+        "page": 3,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1078
+      },
+      {
+        "page": 4,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 148
+      },
+      {
+        "page": 5,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 288
+      }
+    ],
+    "text_length": 2564,
+    "unresolved_variables": [],
+    "screenshots": [
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-5.png"
+    ],
+    "visual_review": "passed_by_delivery_visual_review",
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/tender/招标文件_V1.0.pdf",
+    "status": "passed",
+    "mime_signature": "application/pdf",
+    "size_bytes": 199786,
+    "sha256": "d9dbd952f0644282d54af05ee0dc202041cf3ff928dbf159b769ef46369caa71",
+    "page_count": 5,
+    "pages": [
+      {
+        "page": 1,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 125
+      },
+      {
+        "page": 2,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 988
+      },
+      {
+        "page": 3,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 1003
+      },
+      {
+        "page": 4,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 384
+      },
+      {
+        "page": 5,
+        "width_pt": 595.303937007874,
+        "height_pt": 841.889763779528,
+        "a4": true,
+        "text_length": 339
+      }
+    ],
+    "text_length": 2843,
+    "unresolved_variables": [],
+    "screenshots": [
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-5.png"
+    ],
+    "visual_review": "passed_by_delivery_visual_review",
+    "errors": []
+  }
+]

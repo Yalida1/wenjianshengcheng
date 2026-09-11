@@ -7,6 +7,12 @@ import zipfile
 from fastapi.testclient import TestClient
 from openpyxl import load_workbook
 from pypdf import PdfReader
+from sqlalchemy import select
+
+from backend.app import api as api_module
+from backend.app.db import SessionLocal
+from backend.app.models import TemplateSection
+from backend.app.tasks import export_document_task
 
 REQUIREMENT_FIELDS = {
     "project_name": ("项目名称", "宁夏政务服务平台建设项目", None),
@@ -80,6 +86,48 @@ def _review_all_blocks(client: TestClient, version_id: str) -> None:
             assert response.status_code == 200, response.text
 
 
+def test_export_rejects_a_document_revision_changed_after_queueing(
+    authenticated_client: TestClient, monkeypatch
+) -> None:
+    project_id = _create_project(authenticated_client)
+    _document_id, version_id = _generate(authenticated_client, project_id)
+    monkeypatch.setattr(api_module.export_document_task, "delay", lambda _job_id: None)
+
+    queued = authenticated_client.post(
+        f"/api/v1/exports?version_id={version_id}",
+        json={
+            "output_format": "docx",
+            "idempotency_key": f"stale-export-{uuid.uuid4()}",
+        },
+    )
+    assert queued.status_code == 202, queued.text
+    job = queued.json()
+    assert job["version_revision"] == 1
+
+    version = authenticated_client.get(f"/api/v1/documents/versions/{version_id}").json()
+    block = next(
+        block
+        for section in version["sections"]
+        for block in section["blocks"]
+        if block["source_kind"] != "fixed_template"
+    )
+    changed = authenticated_client.patch(
+        f"/api/v1/documents/blocks/{block['id']}",
+        json={
+            "content": block["content"],
+            "reviewed": True,
+            "revision": block["revision"],
+        },
+    )
+    assert changed.status_code == 200, changed.text
+
+    assert export_document_task.run(job["id"]) == "stale"
+    export_status = authenticated_client.get(f"/api/v1/exports/{job['id']}")
+    assert export_status.status_code == 200
+    assert export_status.json()["status"] == "failed"
+    assert "已更新" in export_status.json()["error"]
+
+
 def test_p0_gate_blocks_missing_fields(authenticated_client: TestClient) -> None:
     project_id = _create_project(authenticated_client)
     _document_id, version_id = _generate(authenticated_client, project_id)
@@ -88,7 +136,12 @@ def test_p0_gate_blocks_missing_fields(authenticated_client: TestClient) -> None
     assert validation.json()["issue_counts"]["P0"] >= len(REQUIREMENT_FIELDS)
     finalize = authenticated_client.post(
         f"/api/v1/documents/versions/{version_id}/finalize",
-        json={"revision": 1, "declaration": "已完成审核并申请定稿"},
+        json={
+            "revision": authenticated_client.get(f"/api/v1/documents/versions/{version_id}").json()[
+                "revision"
+            ],
+            "declaration": "已完成审核并申请定稿",
+        },
     )
     assert finalize.status_code == 422
     assert finalize.json()["error"]["code"] == "finalization_blocked"
@@ -101,10 +154,17 @@ def test_full_flow_finalizes_and_exports_real_files(authenticated_client: TestCl
     _review_all_blocks(authenticated_client, version_id)
     validation = authenticated_client.post(f"/api/v1/documents/versions/{version_id}/validate")
     assert validation.status_code == 200
-    assert validation.json()["status"] == "passed"
+    assert validation.json()["status"] == "passed", [
+        (item["rule_key"], item["location"]) for item in validation.json()["issues"]
+    ]
     finalized = authenticated_client.post(
         f"/api/v1/documents/versions/{version_id}/finalize",
-        json={"revision": 1, "declaration": "关键字段和生成内容已完成人工复核"},
+        json={
+            "revision": authenticated_client.get(f"/api/v1/documents/versions/{version_id}").json()[
+                "revision"
+            ],
+            "declaration": "关键字段和生成内容已完成人工复核",
+        },
     )
     assert finalized.status_code == 200, finalized.text
 
@@ -129,10 +189,130 @@ def test_full_flow_finalizes_and_exports_real_files(authenticated_client: TestCl
             assert len(PdfReader(io.BytesIO(content)).pages) >= 2
         else:
             workbook = load_workbook(io.BytesIO(content), read_only=True)
-            assert workbook.sheetnames == ["文档结构", "字段来源"]
+            assert workbook.sheetnames == ["字段来源"]
 
     detail = authenticated_client.get(f"/api/v1/documents/{document_id}").json()
     assert detail["versions"][0]["immutable"] is True
+
+
+def test_outline_selected_generation_accumulates_sections_and_supports_ai_optimization(
+    authenticated_client: TestClient,
+) -> None:
+    project_id = _create_project(authenticated_client)
+    templates = authenticated_client.get("/api/v1/templates?stage=requirement&generation_only=true").json()
+    template = templates[0]
+    outline = authenticated_client.get(
+        f"/api/v1/templates/{template['id']}/versions/{template['current_version']}/sections"
+    )
+    assert outline.status_code == 200, outline.text
+    section_keys = [item["key"] for item in outline.json()]
+    assert len(section_keys) >= 2
+
+    first_job = authenticated_client.post(
+        f"/api/v1/generation-jobs?project_id={project_id}&stage=requirement",
+        json={
+            "template_id": template["id"],
+            "template_version": template["current_version"],
+            "idempotency_key": f"selected-generation-{uuid.uuid4()}",
+            "selected_section_keys": [section_keys[0]],
+        },
+    )
+    assert first_job.status_code == 202, first_job.text
+    assert first_job.json()["status"] == "succeeded"
+    steps = authenticated_client.get(f"/api/v1/generation-jobs/{first_job.json()['id']}/steps").json()
+    assert next(item for item in steps if item["step_key"] == section_keys[0])["status"] == "succeeded"
+    assert next(item for item in steps if item["step_key"] == section_keys[1])["status"] == "skipped"
+
+    document_id = authenticated_client.get(f"/api/v1/documents?project_id={project_id}").json()[0]["id"]
+    document = authenticated_client.get(f"/api/v1/documents/{document_id}").json()
+    first_version = authenticated_client.get(
+        f"/api/v1/documents/versions/{document['versions'][0]['id']}"
+    ).json()
+    first_by_key = {section["key"]: section for section in first_version["sections"]}
+    assert set(first_by_key) == set(section_keys)
+    assert first_by_key[section_keys[0]]["blocks"]
+    assert first_by_key[section_keys[1]]["blocks"] == []
+    retained_text = first_by_key[section_keys[0]]["blocks"][0]["content"]["text"]
+
+    second_job = authenticated_client.post(
+        f"/api/v1/generation-jobs?project_id={project_id}&stage=requirement",
+        json={
+            "template_id": template["id"],
+            "template_version": template["current_version"],
+            "idempotency_key": f"selected-generation-{uuid.uuid4()}",
+            "selected_section_keys": [section_keys[1]],
+        },
+    )
+    assert second_job.status_code == 202, second_job.text
+    document = authenticated_client.get(f"/api/v1/documents/{document_id}").json()
+    second_version = authenticated_client.get(
+        f"/api/v1/documents/versions/{document['versions'][0]['id']}"
+    ).json()
+    second_by_key = {section["key"]: section for section in second_version["sections"]}
+    assert second_by_key[section_keys[0]]["blocks"][0]["content"]["text"] == retained_text
+    generated_block = second_by_key[section_keys[1]]["blocks"][0]
+
+    selected_text = generated_block["content"]["text"][:30]
+    optimized = authenticated_client.post(
+        f"/api/v1/documents/blocks/{generated_block['id']}/ai-optimize",
+        json={"selected_text": selected_text, "prompt": "语言更正式、简洁", "action": "polish"},
+    )
+    assert optimized.status_code == 200, optimized.text
+    assert optimized.json()["optimized_prompt"]
+    assert optimized.json()["suggestion"]
+    assert optimized.json()["provider"] == "demo"
+
+
+def test_leaf_generation_and_explicit_selection_preserve_unselected_body(
+    authenticated_client: TestClient,
+) -> None:
+    client = authenticated_client
+    project_id = _create_project(client)
+    template = client.get("/api/v1/templates?stage=requirement&generation_only=true").json()[0]
+    outline_url = f"/api/v1/templates/{template['id']}/versions/{template['current_version']}/sections"
+    outline = client.get(outline_url).json()
+    root, first_child, second_child = outline[:3]
+    with SessionLocal() as db:
+        for child in (first_child, second_child):
+            section = db.scalar(select(TemplateSection).where(TemplateSection.id == child["id"]))
+            assert section is not None
+            section.parent_id = root["id"]
+            section.level = 2
+        db.commit()
+
+    def generate(keys: list[str]) -> dict:
+        response = client.post(
+            f"/api/v1/generation-jobs?project_id={project_id}&stage=requirement",
+            json={
+                "template_id": template["id"],
+                "template_version": template["current_version"],
+                "idempotency_key": f"leaf-generation-{uuid.uuid4()}",
+                "selected_section_keys": keys,
+                "include_descendants": False,
+            },
+        )
+        assert response.status_code == 202, response.text
+        assert response.json()["status"] == "succeeded"
+        steps = client.get(f"/api/v1/generation-jobs/{response.json()['id']}/steps").json()
+        assert {step["step_key"] for step in steps if step["status"] == "succeeded"} == set(keys)
+        document_id = client.get(f"/api/v1/documents?project_id={project_id}").json()[0]["id"]
+        document = client.get(f"/api/v1/documents/{document_id}").json()
+        return client.get(f"/api/v1/documents/versions/{document['versions'][0]['id']}").json()
+
+    first = generate([first_child["key"]])
+    sections = {section["key"]: section for section in first["sections"]}
+    assert sections[root["key"]]["blocks"] == []
+    assert sections[second_child["key"]]["blocks"] == []
+    assert sections[first_child["key"]]["blocks"]
+    assert sections[first_child["key"]]["parent_id"] == sections[root["key"]]["id"]
+    retained_body = [block["content"] for block in sections[first_child["key"]]["blocks"]]
+
+    second = generate([root["key"], second_child["key"]])
+    sections = {section["key"]: section for section in second["sections"]}
+    assert sections[root["key"]]["blocks"]
+    assert sections[second_child["key"]]["blocks"]
+    assert [block["content"] for block in sections[first_child["key"]]["blocks"]] == retained_body
+    assert second["provenance"]["selected_section_keys"] == [root["key"], second_child["key"]]
 
 
 def test_forbidden_cross_stage_mapping_is_rejected(authenticated_client: TestClient) -> None:

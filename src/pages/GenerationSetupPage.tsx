@@ -197,8 +197,8 @@ export function GenerationSetupPage({
             某省公司中心机房节能改造项目
           </button>
           <span>/</span>
-          <button onClick={() => navigate("template-selection")} className="hover:text-[#24457C]">
-            选择模板
+          <button onClick={() => navigate("field-confirmation")} className="hover:text-[#24457C]">
+            字段确认
           </button>
           <span>/</span>
           <span className="font-medium text-slate-800">配置生成</span>
@@ -497,10 +497,10 @@ export function GenerationSetupPage({
                 {done ? "确认并开始生成" : "请先完成预检"}
               </button>
               <button
-                onClick={() => navigate("template-selection")}
+                onClick={() => navigate("field-confirmation")}
                 className="w-full h-10 rounded-lg border border-slate-300 bg-white text-sm text-slate-600 hover:border-[#2E5495]"
               >
-                返回选择模板
+                返回字段确认
               </button>
             </div>
           </div>

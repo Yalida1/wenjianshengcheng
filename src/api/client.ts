@@ -11,6 +11,9 @@ export type Template = ApiSchemas["TemplateView"];
 export type TemplateExtractionJob = ApiSchemas["TemplateExtractionJobView"];
 export type FileRecord = ApiSchemas["FileView"];
 export type User = ApiSchemas["UserView"];
+export type ProcurementPlan = ApiSchemas["ProcurementPlanView"];
+export type ProcurementAnalysisRun = ApiSchemas["ProcurementAnalysisRunView"];
+export type ProcurementGenerationBatch = ApiSchemas["ProcurementGenerationBatchView"];
 
 export class ApiClientError extends Error {
   readonly status: number;

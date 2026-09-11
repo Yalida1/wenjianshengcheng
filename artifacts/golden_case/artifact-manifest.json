@@ -1,84 +1,84 @@
 {
   "artifacts": {
     "field-traceability.xlsx": {
-      "sha256": "b2f68c7f77316e6334a32e75340c990d4ad7f7d910c80cba47dc6293aeb3bfce",
+      "sha256": "684527fda5485d122dbb2ada3ba750e236b3291e76eb745cf68b6cd5033cdc3b",
       "sheets": [
         "字段来源追溯",
         "合同付款校验"
       ],
-      "size_bytes": 8579
+      "size_bytes": 12620
     },
     "可行性研究报告_V1.0.docx": {
-      "document_version_id": "683fde7d-7f07-4234-a574-9766f7f50da6",
-      "sha256": "f77ccf7a94d3a4fe7b5062c7071c46a8d3d932741016a2b58d7136c10aefeda2",
-      "size_bytes": 39279,
+      "document_version_id": "07abbac9-fa49-4d68-9045-242a20355513",
+      "sha256": "de0724de7d3a825ea608fd450e4b80b846770fa66e5a5a4d6719547054f88e75",
+      "size_bytes": 40189,
       "stage": "feasibility",
-      "template_id": "ed7f1cf0-45e5-41b5-8dd2-201890fca657",
+      "template_id": "bb5efb27-66d8-426c-8de6-e3e6d876cd65",
       "template_version": 1
     },
     "可行性研究报告_V1.0.pdf": {
-      "document_version_id": "683fde7d-7f07-4234-a574-9766f7f50da6",
-      "sha256": "101922dd09ae3534ceac9def8a734e3bff0c49c2e31e38ef2b98e9fb49e37d71",
-      "size_bytes": 53612,
+      "document_version_id": "07abbac9-fa49-4d68-9045-242a20355513",
+      "sha256": "dca91a0c42d980c592bb447abb3d9e319801e6910cb981099d94f38396aa44b2",
+      "size_bytes": 65480,
       "stage": "feasibility",
-      "template_id": "ed7f1cf0-45e5-41b5-8dd2-201890fca657",
+      "template_id": "bb5efb27-66d8-426c-8de6-e3e6d876cd65",
       "template_version": 1
     },
     "合同签约准备版_V1.0.docx": {
-      "document_version_id": "f3a68c96-76cf-45fa-a2fa-ef0a032d31c2",
-      "sha256": "3f71a09d27659398812602e0dac897d1c270ca2c42ed56465d4ad26321ba5ba6",
-      "size_bytes": 40092,
+      "document_version_id": "ba078121-1741-4fc0-a1cc-d94773d1a583",
+      "sha256": "ab783beeb814cc5cb7a3b8d922c34e93df3bedf021b16775a0d3cc626effa8c2",
+      "size_bytes": 40595,
       "stage": "contract",
-      "template_id": "0894ba3e-4530-40df-80cb-b57a79bf2b10",
+      "template_id": "4ba4c02c-010d-478a-9339-b9584e7d900f",
       "template_version": 1
     },
     "合同签约准备版_V1.0.pdf": {
-      "document_version_id": "f3a68c96-76cf-45fa-a2fa-ef0a032d31c2",
-      "sha256": "93f67c05e31f9ddfdd5c4a19e323af63cc8145be45b36a08652c035c5c13fde2",
-      "size_bytes": 119950,
+      "document_version_id": "ba078121-1741-4fc0-a1cc-d94773d1a583",
+      "sha256": "8afd6aa7fa4e63666f30229c81332bf38a561d95862ae72da6d04b7eeeb4562f",
+      "size_bytes": 88070,
       "stage": "contract",
-      "template_id": "0894ba3e-4530-40df-80cb-b57a79bf2b10",
+      "template_id": "4ba4c02c-010d-478a-9339-b9584e7d900f",
       "template_version": 1
     },
     "合同预草案_V0.1.docx": {
-      "document_version_id": "f3a68c96-76cf-45fa-a2fa-ef0a032d31c2",
-      "sha256": "fb80e0ed1878956fe5de03eae765b14082586f95b1bf1a6522a142cf6d559a81",
-      "size_bytes": 40082,
+      "document_version_id": "ba078121-1741-4fc0-a1cc-d94773d1a583",
+      "sha256": "2b6b27425dcd858f7300136893813515ba328b1f039948b9843abaf3fcd86b37",
+      "size_bytes": 40621,
       "stage": "contract",
       "status_at_export": "draft",
-      "template_id": "0894ba3e-4530-40df-80cb-b57a79bf2b10",
+      "template_id": "4ba4c02c-010d-478a-9339-b9584e7d900f",
       "template_version": 1
     },
     "招标文件_V1.0.docx": {
-      "document_version_id": "5f58a74c-4cf3-4260-881b-2085125f49b0",
-      "sha256": "3acb09b11864cd7aee0c70d7f13046381dd701508c6dff612a5d849873878905",
-      "size_bytes": 39170,
+      "document_version_id": "e865d9c1-da60-4121-99c6-47127288d08e",
+      "sha256": "4e8b225538dd3eda0b02f2456e6abdcea94d735fe65ec6682981af097a730c12",
+      "size_bytes": 60560,
       "stage": "tender",
-      "template_id": "1590bcd8-d3a7-4c20-95a4-021a5dfca655",
+      "template_id": "57ba4375-4e86-4bd1-9641-ceeb0ce00f05",
       "template_version": 1
     },
     "招标文件_V1.0.pdf": {
-      "document_version_id": "5f58a74c-4cf3-4260-881b-2085125f49b0",
-      "sha256": "c3e7b7a98e455d7b5e76e79e58bd8dc4a92f353b9ed1c8f2ce1d53fa3bdb881e",
-      "size_bytes": 46806,
+      "document_version_id": "e865d9c1-da60-4121-99c6-47127288d08e",
+      "sha256": "028224a59236adfe55291b5bd5b340e45a9223a5280d7d764a365c6c429a693f",
+      "size_bytes": 468786,
       "stage": "tender",
-      "template_id": "1590bcd8-d3a7-4c20-95a4-021a5dfca655",
+      "template_id": "57ba4375-4e86-4bd1-9641-ceeb0ce00f05",
       "template_version": 1
     },
     "项目建议书_V1.0.docx": {
-      "document_version_id": "0f9a9fa7-203c-40ac-af01-1b3776bcb761",
-      "sha256": "6be604979585c5f8765c583ad06c78d3d9c73516886863abab9f383dfbbecf3e",
-      "size_bytes": 39159,
+      "document_version_id": "30808515-de6d-4a65-aee1-8cd9b19cc550",
+      "sha256": "252d9f53a25ec9aa8d92bc09b1c046c23642d9666e29c14b786a995b3cecea17",
+      "size_bytes": 39897,
       "stage": "requirement",
-      "template_id": "e8429a2b-f999-4400-ae29-22c9a8abd72d",
+      "template_id": "ba04faa0-c2f0-401e-b27c-4914ea59e558",
       "template_version": 1
     },
     "项目建议书_V1.0.pdf": {
-      "document_version_id": "0f9a9fa7-203c-40ac-af01-1b3776bcb761",
-      "sha256": "824c18771a36e855c8b0fe844e417e41c9b062f3237e431db2f614a91e7e0142",
-      "size_bytes": 45908,
+      "document_version_id": "30808515-de6d-4a65-aee1-8cd9b19cc550",
+      "sha256": "853d259fc802a5914911f980cc9c3aacffb4b59f911b65eb639d762c41df32e8",
+      "size_bytes": 52479,
       "stage": "requirement",
-      "template_id": "e8429a2b-f999-4400-ae29-22c9a8abd72d",
+      "template_id": "ba04faa0-c2f0-401e-b27c-4914ea59e558",
       "template_version": 1
     }
   },

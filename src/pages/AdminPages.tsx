@@ -246,7 +246,7 @@ export function FieldDictionaryPage() {
   return (
     <>
       <PageHeader
-        title="字段字典"
+        title="动态字段提取"
         sub="统一维护项目文件链路中的标准字段、来源政策和校验规则。"
         action={
           <Button onClick={() => setNewOpen(true)}>

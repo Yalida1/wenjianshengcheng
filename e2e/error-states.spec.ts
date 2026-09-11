@@ -9,7 +9,7 @@ test("上传签名错误在界面显示统一错误", async ({ page }) => {
     name: "错误状态验证项目",
     project_type: "government_investment",
   });
-  await page.goto(`/projects/${project.id}/stages/requirement/files`);
+  await page.goto(`/projects/${project.id}/stages/tender/files`);
   await page.locator('input[type="file"]').setInputFiles(path.resolve("e2e/fixtures/fake.pdf"));
   await page.getByRole("button", { name: "上传并解析" }).click();
   await expect(page.getByText("文件内容与扩展名不一致")).toBeVisible();

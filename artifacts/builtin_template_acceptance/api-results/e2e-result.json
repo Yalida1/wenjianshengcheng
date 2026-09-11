@@ -1,0 +1,14 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "test",
+    "e2e/builtin-template-acceptance.spec.ts",
+    "e2e/routes-responsive.spec.ts",
+    "--reporter=line"
+  ],
+  "exit_code": 0,
+  "log": "artifacts/builtin_template_acceptance/logs/playwright-e2e.log",
+  "status": "passed"
+}

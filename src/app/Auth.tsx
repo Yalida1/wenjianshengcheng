@@ -100,7 +100,7 @@ export function LoginPage() {
           <div className="mb-16 text-sm font-semibold tracking-[0.2em] text-blue-200">
             项目文件链式生成平台
           </div>
-          <h1 className="text-3xl font-semibold leading-tight">从项目建议书到合同的受控文件链</h1>
+          <h1 className="text-3xl font-semibold leading-tight">从需求到合同的受控文件链</h1>
           <p className="mt-6 max-w-md leading-7 text-blue-100">
             字段来源、人工确认、模板版本、生成记录和定稿门禁在同一项目空间内留痕。
           </p>

@@ -449,18 +449,18 @@ export function RequirementFieldConfirmationPage({ navigate }: { navigate: (p: P
             <div>
               <h1 className="text-xl font-semibold text-slate-800">项目建议书字段确认</h1>
               <p className="mt-1 text-[13px] text-slate-500">
-                {pending > 0 ? `${pending} 个字段待确认` : "所有字段已确认，可进入模板选择"}
+                {pending > 0 ? `${pending} 个字段待确认` : "所有字段已确认，可进入文档生成"}
               </p>
             </div>
             <button
               onClick={() => {
                 advanceStage("requirement", "fields_confirmed");
-                navigate("proposal-template-selection");
+                navigate("proposal-generation-setup");
               }}
               disabled={pending > 0}
               className="h-9 rounded-lg bg-[#2E5495] px-5 text-sm font-medium text-white hover:bg-[#24457C] disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
             >
-              进入模板选择 →
+              进入文档生成 →
             </button>
           </div>
         </>
@@ -497,7 +497,7 @@ export function RequirementFieldConfirmationPage({ navigate }: { navigate: (p: P
         </div>
         {pending === 0 && (
           <div className="mt-4 rounded-xl border border-[#C3E8D5] bg-[#ECF8F2] p-4 text-[13px] text-[#116B46]">
-            所有字段已确认。点击右上角"进入模板选择"继续。
+            所有字段已确认。点击右上角"进入文档生成"继续。
           </div>
         )}
       </div>

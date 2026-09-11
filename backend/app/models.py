@@ -137,6 +137,11 @@ class File(TenantRecordMixin, Base):
     size_bytes: Mapped[int] = mapped_column(Integer)
     latest_version: Mapped[int] = mapped_column(Integer, default=1)
     status: Mapped[str] = mapped_column(String(30), default="uploaded")
+    auto_generate_draft: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    auto_generation_job_id: Mapped[str | None] = mapped_column(
+        ForeignKey("generation_jobs.id", ondelete="SET NULL"), nullable=True
+    )
+    auto_generation_error: Mapped[str | None] = mapped_column(Text)
 
 
 class FileVersion(TenantRecordMixin, Base):
@@ -204,6 +209,8 @@ class FieldDefinition(TenantRecordMixin, Base):
     unit: Mapped[str | None] = mapped_column(String(40))
     criticality: Mapped[str] = mapped_column(String(20), default="P2")
     required: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_base: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     rules: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
 
 
@@ -315,10 +322,17 @@ class DocumentFormatProfile(TenantRecordMixin, Base):
 
 class TemplateSection(TenantRecordMixin, Base):
     __tablename__ = "template_sections"
+    __table_args__ = (
+        UniqueConstraint("template_version_id", "key", name="uq_template_sections_version_key"),
+    )
     template_version_id: Mapped[str] = mapped_column(ForeignKey("template_versions.id"))
     sequence: Mapped[int] = mapped_column(Integer)
     key: Mapped[str] = mapped_column(String(120))
     title: Mapped[str] = mapped_column(String(300))
+    parent_id: Mapped[str | None] = mapped_column(
+        ForeignKey("template_sections.id", ondelete="CASCADE"), nullable=True
+    )
+    level: Mapped[int] = mapped_column(Integer, default=1)
     section_type: Mapped[str] = mapped_column(String(40), default="editable")
     required: Mapped[bool] = mapped_column(Boolean, default=True)
     content: Mapped[str | None] = mapped_column(Text)
@@ -351,6 +365,261 @@ class TemplateExtractionJob(TenantRecordMixin, Base):
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class ProcurementAnalysisRun(TenantRecordMixin, Base):
+    __tablename__ = "procurement_analysis_runs"
+    project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), index=True)
+    source_kind: Mapped[str] = mapped_column(String(40))
+    source_version_id: Mapped[str] = mapped_column(String(36), index=True)
+    source_sha256: Mapped[str] = mapped_column(String(64), index=True)
+    status: Mapped[str] = mapped_column(String(30), default="queued")
+    provider_name: Mapped[str] = mapped_column(String(80))
+    model_name: Mapped[str] = mapped_column(String(120))
+    prompt_version: Mapped[str] = mapped_column(String(80))
+    task_id: Mapped[str | None] = mapped_column(String(80))
+    coverage_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    result_sha256: Mapped[str | None] = mapped_column(String(64))
+    error: Mapped[str | None] = mapped_column(Text)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ProcurementAnalysisCheckpoint(TenantRecordMixin, Base):
+    __tablename__ = "procurement_analysis_checkpoints"
+    __table_args__ = (UniqueConstraint("run_id", "phase", "chunk_index"),)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_analysis_runs.id", ondelete="CASCADE"), index=True
+    )
+    phase: Mapped[str] = mapped_column(String(30))
+    chunk_index: Mapped[int] = mapped_column(Integer)
+    input_sha256: Mapped[str] = mapped_column(String(64))
+    first_sequence: Mapped[int | None] = mapped_column(Integer)
+    last_sequence: Mapped[int | None] = mapped_column(Integer)
+    block_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    status: Mapped[str] = mapped_column(String(30), default="queued")
+    attempt: Mapped[int] = mapped_column(Integer, default=0)
+    result_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    result_sha256: Mapped[str | None] = mapped_column(String(64))
+    error: Mapped[str | None] = mapped_column(Text)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ProcurementPlan(TenantRecordMixin, Base):
+    __tablename__ = "procurement_plans"
+    __table_args__ = (UniqueConstraint("project_id", "version", "option_key"),)
+    project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), index=True)
+    analysis_run_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_analysis_runs.id", ondelete="CASCADE"), index=True
+    )
+    source_kind: Mapped[str] = mapped_column(String(40))
+    source_version_id: Mapped[str] = mapped_column(String(36), index=True)
+    source_sha256: Mapped[str] = mapped_column(String(64), index=True)
+    version: Mapped[int] = mapped_column(Integer)
+    option_key: Mapped[str] = mapped_column(String(80), default="recommended")
+    name: Mapped[str] = mapped_column(String(300))
+    status: Mapped[str] = mapped_column(String(30), default="draft")
+    is_recommended: Mapped[bool] = mapped_column(Boolean, default=False)
+    recommended_document_count: Mapped[int | None] = mapped_column(Integer)
+    confirmed_document_count: Mapped[int | None] = mapped_column(Integer)
+    procurement_package_count: Mapped[int] = mapped_column(Integer, default=0)
+    other_procurement_document_count: Mapped[int] = mapped_column(Integer, default=0)
+    analysis_summary: Mapped[str | None] = mapped_column(Text)
+    confirmation_blocked: Mapped[bool] = mapped_column(Boolean, default=True)
+    draft_generation_allowed: Mapped[bool] = mapped_column(Boolean, default=False)
+    finalization_allowed: Mapped[bool] = mapped_column(Boolean, default=False)
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    confirmed_by: Mapped[str | None] = mapped_column(ForeignKey("users.id"))
+
+
+class ProcurementContentItem(TenantRecordMixin, Base):
+    __tablename__ = "procurement_content_items"
+    __table_args__ = (UniqueConstraint("plan_id", "item_key"),)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    item_key: Mapped[str] = mapped_column(String(120))
+    name: Mapped[str] = mapped_column(String(300))
+    description: Mapped[str | None] = mapped_column(Text)
+    scope_status: Mapped[str] = mapped_column(String(40), default="unknown")
+    procurement_method: Mapped[str | None] = mapped_column(String(80))
+    deliverables: Mapped[list[object]] = mapped_column(JSON, default=list)
+    phase: Mapped[str | None] = mapped_column(String(120))
+    evidence_status: Mapped[str] = mapped_column(String(40), default="missing")
+
+
+class ProcurementPackage(TenantRecordMixin, Base):
+    __tablename__ = "procurement_packages"
+    __table_args__ = (UniqueConstraint("plan_id", "code"),)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    code: Mapped[str] = mapped_column(String(80))
+    name: Mapped[str] = mapped_column(String(300))
+    procurement_category: Mapped[str] = mapped_column(String(120), default="other")
+    business_subcategory: Mapped[str | None] = mapped_column(String(120))
+    procurement_method: Mapped[str] = mapped_column(String(80), default="unknown")
+    scope: Mapped[str] = mapped_column(Text)
+    exclusions: Mapped[str | None] = mapped_column(Text)
+    deliverables: Mapped[list[object]] = mapped_column(JSON, default=list)
+    implementation_period: Mapped[str | None] = mapped_column(String(160))
+    estimated_amount: Mapped[Decimal | None] = mapped_column(Numeric(20, 4))
+    confirmed_budget: Mapped[Decimal | None] = mapped_column(Numeric(20, 4))
+    maximum_price: Mapped[Decimal | None] = mapped_column(Numeric(20, 4))
+    currency: Mapped[str] = mapped_column(String(12), default="CNY")
+    original_unit: Mapped[str | None] = mapped_column(String(40))
+    tax_included: Mapped[bool | None] = mapped_column(Boolean)
+    budget_period: Mapped[str | None] = mapped_column(String(120))
+    budget_status: Mapped[str] = mapped_column(String(40), default="missing")
+    budget_basis: Mapped[str | None] = mapped_column(Text)
+    evidence_status: Mapped[str] = mapped_column(String(40), default="missing")
+
+
+class ProcurementPackageContent(TenantRecordMixin, Base):
+    __tablename__ = "procurement_package_contents"
+    __table_args__ = (UniqueConstraint("package_id", "content_item_id"),)
+    package_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_packages.id", ondelete="CASCADE"), index=True
+    )
+    content_item_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_content_items.id", ondelete="CASCADE"), index=True
+    )
+    allocation_scope: Mapped[str | None] = mapped_column(Text)
+    split_basis: Mapped[str | None] = mapped_column(Text)
+
+
+class ProcurementBudgetItem(TenantRecordMixin, Base):
+    __tablename__ = "procurement_budget_items"
+    __table_args__ = (UniqueConstraint("plan_id", "item_key"),)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    item_key: Mapped[str] = mapped_column(String(120))
+    name: Mapped[str] = mapped_column(String(300))
+    cost_type: Mapped[str] = mapped_column(String(80), default="unclassified")
+    amount: Mapped[Decimal | None] = mapped_column(Numeric(20, 4))
+    currency: Mapped[str] = mapped_column(String(12), default="CNY")
+    original_value: Mapped[str | None] = mapped_column(String(200))
+    original_unit: Mapped[str | None] = mapped_column(String(40))
+    tax_included: Mapped[bool | None] = mapped_column(Boolean)
+    budget_period: Mapped[str | None] = mapped_column(String(120))
+    allocation_status: Mapped[str] = mapped_column(String(40), default="unallocated")
+
+
+class ProcurementBudgetAllocation(TenantRecordMixin, Base):
+    __tablename__ = "procurement_budget_allocations"
+    __table_args__ = (UniqueConstraint("budget_item_id", "package_id"),)
+    budget_item_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_budget_items.id", ondelete="CASCADE"), index=True
+    )
+    package_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_packages.id", ondelete="CASCADE"), index=True
+    )
+    allocated_amount: Mapped[Decimal] = mapped_column(Numeric(20, 4))
+    allocation_basis: Mapped[str] = mapped_column(Text)
+
+
+class TenderDocumentGroup(TenantRecordMixin, Base):
+    __tablename__ = "tender_document_groups"
+    __table_args__ = (UniqueConstraint("plan_id", "code"),)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    code: Mapped[str] = mapped_column(String(80))
+    name: Mapped[str] = mapped_column(String(500))
+    procurement_category: Mapped[str] = mapped_column(String(120), default="other")
+    business_subcategory: Mapped[str | None] = mapped_column(String(120))
+    procurement_method: Mapped[str] = mapped_column(String(80), default="public_tender")
+    organization_method: Mapped[str | None] = mapped_column(String(120))
+    scope: Mapped[str] = mapped_column(Text)
+    exclusions: Mapped[str | None] = mapped_column(Text)
+    deliverables: Mapped[list[object]] = mapped_column(JSON, default=list)
+    implementation_period: Mapped[str | None] = mapped_column(String(160))
+    rationale: Mapped[str] = mapped_column(Text)
+    template_id: Mapped[str | None] = mapped_column(ForeignKey("templates.id"))
+    template_version: Mapped[int | None] = mapped_column(Integer)
+    template_match_basis: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(30), default="active")
+
+
+class TenderDocumentGroupPackage(TenantRecordMixin, Base):
+    __tablename__ = "tender_document_group_packages"
+    __table_args__ = (
+        UniqueConstraint("document_group_id", "package_id"),
+        UniqueConstraint("package_id"),
+    )
+    document_group_id: Mapped[str] = mapped_column(
+        ForeignKey("tender_document_groups.id", ondelete="CASCADE"), index=True
+    )
+    package_id: Mapped[str] = mapped_column(
+        ForeignKey("procurement_packages.id", ondelete="CASCADE"), index=True
+    )
+
+
+class ProcurementEvidence(TenantRecordMixin, Base):
+    __tablename__ = "procurement_evidence"
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    entity_type: Mapped[str] = mapped_column(String(60))
+    entity_id: Mapped[str | None] = mapped_column(String(36), index=True)
+    field_key: Mapped[str] = mapped_column(String(120))
+    source_version_id: Mapped[str] = mapped_column(String(36), index=True)
+    document_block_id: Mapped[str | None] = mapped_column(String(36))
+    page_number: Mapped[int | None] = mapped_column(Integer)
+    section_path: Mapped[str | None] = mapped_column(String(500))
+    locator: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    excerpt: Mapped[str | None] = mapped_column(Text)
+    extracted_value: Mapped[object | None] = mapped_column(JSON)
+    normalized_value: Mapped[object | None] = mapped_column(JSON)
+    evidence_type: Mapped[str] = mapped_column(String(40))
+    status: Mapped[str] = mapped_column(String(40), default="pending_review")
+
+
+class ProcurementIssue(TenantRecordMixin, Base):
+    __tablename__ = "procurement_issues"
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    entity_type: Mapped[str] = mapped_column(String(60), default="plan")
+    entity_id: Mapped[str | None] = mapped_column(String(36))
+    code: Mapped[str] = mapped_column(String(120))
+    severity: Mapped[str] = mapped_column(String(20), default="P1")
+    category: Mapped[str] = mapped_column(String(80), default="missing")
+    status: Mapped[str] = mapped_column(String(30), default="open")
+    title: Mapped[str] = mapped_column(String(300))
+    detail: Mapped[str] = mapped_column(Text)
+    impact: Mapped[str] = mapped_column(Text)
+    resolution_guidance: Mapped[str | None] = mapped_column(Text)
+    resolution: Mapped[str | None] = mapped_column(Text)
+
+
+class ProcurementConfirmation(TenantRecordMixin, Base):
+    __tablename__ = "procurement_confirmations"
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id", ondelete="CASCADE"), index=True)
+    confirmed_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    confirmed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    plan_revision: Mapped[int] = mapped_column(Integer)
+    snapshot_sha256: Mapped[str] = mapped_column(String(64), index=True)
+    snapshot_json: Mapped[dict[str, object]] = mapped_column(JSON)
+    decision_note: Mapped[str] = mapped_column(Text)
+
+
+class ProcurementRuleSet(TenantRecordMixin, Base):
+    __tablename__ = "procurement_rule_sets"
+    __table_args__ = (UniqueConstraint("organization_id", "key", "version"),)
+    key: Mapped[str] = mapped_column(String(120))
+    name: Mapped[str] = mapped_column(String(300))
+    version: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(30), default="draft")
+    applicable_subject: Mapped[str | None] = mapped_column(String(160))
+    region: Mapped[str | None] = mapped_column(String(160))
+    funding_nature: Mapped[str | None] = mapped_column(String(160))
+    source_name: Mapped[str] = mapped_column(String(500))
+    source_url: Mapped[str | None] = mapped_column(String(1000))
+    effective_date: Mapped[date | None] = mapped_column(Date)
+    expiry_date: Mapped[date | None] = mapped_column(Date)
+    rules_json: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+
+
+class ProcurementGenerationBatch(TenantRecordMixin, Base):
+    __tablename__ = "procurement_generation_batches"
+    project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), index=True)
+    plan_id: Mapped[str] = mapped_column(ForeignKey("procurement_plans.id"), index=True)
+    status: Mapped[str] = mapped_column(String(30), default="queued")
+    idempotency_key: Mapped[str] = mapped_column(String(120), unique=True)
+    total_count: Mapped[int] = mapped_column(Integer, default=0)
+    succeeded_count: Mapped[int] = mapped_column(Integer, default=0)
+    failed_count: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class GenerationJob(TenantRecordMixin, Base):
     __tablename__ = "generation_jobs"
     project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"))
@@ -369,6 +638,11 @@ class GenerationJob(TenantRecordMixin, Base):
     prompt_version: Mapped[str] = mapped_column(String(80))
     generation_provider: Mapped[str] = mapped_column(String(80))
     generation_model: Mapped[str] = mapped_column(String(120))
+    procurement_plan_id: Mapped[str | None] = mapped_column(ForeignKey("procurement_plans.id"))
+    procurement_document_group_id: Mapped[str | None] = mapped_column(ForeignKey("tender_document_groups.id"))
+    procurement_batch_id: Mapped[str | None] = mapped_column(ForeignKey("procurement_generation_batches.id"))
+    procurement_snapshot: Mapped[dict[str, object] | None] = mapped_column(JSON)
+    template_applicability_confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     task_id: Mapped[str | None] = mapped_column(String(80))
     attempt: Mapped[int] = mapped_column(Integer, default=0)
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -401,6 +675,9 @@ class Document(TenantRecordMixin, Base):
     title: Mapped[str] = mapped_column(String(500))
     status: Mapped[str] = mapped_column(String(30), default="draft")
     current_version: Mapped[int] = mapped_column(Integer, default=1)
+    procurement_plan_id: Mapped[str | None] = mapped_column(ForeignKey("procurement_plans.id"))
+    procurement_document_group_id: Mapped[str | None] = mapped_column(ForeignKey("tender_document_groups.id"))
+    procurement_package_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
 
 
 class DocumentVersion(TenantRecordMixin, Base):
@@ -418,10 +695,17 @@ class DocumentVersion(TenantRecordMixin, Base):
 
 class DocumentSection(TenantRecordMixin, Base):
     __tablename__ = "document_sections"
+    __table_args__ = (
+        UniqueConstraint("document_version_id", "key", name="uq_document_sections_version_key"),
+    )
     document_version_id: Mapped[str] = mapped_column(ForeignKey("document_versions.id"))
     sequence: Mapped[int] = mapped_column(Integer)
     key: Mapped[str] = mapped_column(String(120))
     title: Mapped[str] = mapped_column(String(500))
+    parent_id: Mapped[str | None] = mapped_column(
+        ForeignKey("document_sections.id", ondelete="CASCADE"), nullable=True
+    )
+    level: Mapped[int] = mapped_column(Integer, default=1)
 
 
 class DocumentContentBlock(TenantRecordMixin, Base):
@@ -508,6 +792,7 @@ class ComparisonItem(TenantRecordMixin, Base):
 class ExportJob(TenantRecordMixin, Base):
     __tablename__ = "export_jobs"
     document_version_id: Mapped[str] = mapped_column(ForeignKey("document_versions.id"))
+    document_revision: Mapped[int] = mapped_column(Integer, default=1)
     output_format: Mapped[str] = mapped_column(String(20))
     status: Mapped[str] = mapped_column(String(30), default="queued")
     idempotency_key: Mapped[str] = mapped_column(String(120), unique=True)

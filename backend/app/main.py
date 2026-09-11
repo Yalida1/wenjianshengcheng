@@ -17,6 +17,7 @@ from .api import router
 from .config import get_settings
 from .db import SessionLocal
 from .errors import error_body, register_exception_handlers
+from .models import AuditLog, User
 from .schemas import ErrorEnvelope
 from .security import CSRF_COOKIE, CSRF_HEADER
 
@@ -78,6 +79,35 @@ def create_app() -> FastAPI:
         except Exception:
             logger.exception("unhandled_request_error", request_id=request_id, path=request.url.path)
             raise
+        if request.method not in SAFE_METHODS and 400 <= response.status_code < 500:
+            actor = getattr(request.state, "user", None)
+            if isinstance(actor, User):
+                try:
+                    with SessionLocal() as audit_db:
+                        audit_db.add(
+                            AuditLog(
+                                organization_id=actor.organization_id,
+                                actor_user_id=actor.id,
+                                action="request.rejected",
+                                object_type="http_request",
+                                request_id=request_id,
+                                ip_address=request.client.host if request.client else None,
+                                metadata_json={
+                                    "method": request.method,
+                                    "path": request.url.path,
+                                    "status": response.status_code,
+                                },
+                                created_by=actor.id,
+                                updated_by=actor.id,
+                            )
+                        )
+                        audit_db.commit()
+                except Exception:  # noqa: BLE001 - rejection response must still be returned
+                    logger.exception(
+                        "rejected_request_audit_failed",
+                        request_id=request_id,
+                        path=request.url.path,
+                    )
         response.headers["X-Request-ID"] = request_id
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"

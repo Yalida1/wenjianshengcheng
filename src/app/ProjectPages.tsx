@@ -9,20 +9,18 @@ import { ErrorNotice, FullPageMessage } from "./Auth";
 import { Card, PageHeader, StatusBadge, statusLabel } from "./Shell";
 
 const projectSchema = z.object({
-  code: z
-    .string()
-    .min(2, "项目编号至少 2 个字符")
-    .regex(/^[A-Za-z0-9_-]+$/, "仅允许字母、数字、横线和下划线"),
   name: z.string().min(2, "请输入项目名称").max(300),
   project_type: z.enum(["government_investment", "enterprise_investment"]),
-  description: z.string().max(4000).optional(),
 });
 type ProjectForm = z.infer<typeof projectSchema>;
+
+function isTemporaryProjectCode(code: string | null | undefined): boolean {
+  return Boolean(code && /^TMP-\d+(?:-\d+)?$/.test(code));
+}
 
 export function ProjectsPage() {
   const [creating, setCreating] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-  const [confirmationCode, setConfirmationCode] = useState("");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const projects = useQuery({
@@ -39,9 +37,7 @@ export function ProjectsPage() {
     resolver: zodResolver(projectSchema),
     defaultValues: {
       project_type: "government_investment",
-      code: "",
       name: "",
-      description: "",
     },
   });
   const createProject = useMutation({
@@ -69,7 +65,6 @@ export function ProjectsPage() {
       queryClient.removeQueries({ queryKey: ["stages", variables.project.id] });
       void queryClient.invalidateQueries({ queryKey: ["projects"] });
       setProjectToDelete(null);
-      setConfirmationCode("");
     },
   });
 
@@ -77,14 +72,13 @@ export function ProjectsPage() {
     if (deleteProject.isPending) return;
     deleteProject.reset();
     setProjectToDelete(null);
-    setConfirmationCode("");
   };
 
   return (
     <>
       <PageHeader
         title="项目空间"
-        description="每个项目沿项目建议书、可研报告、招标文件、合同四个阶段推进。"
+        description="每个项目沿项目建议书、可研报告、招标文件和合同主链路推进。"
         actions={
           <button className="primary-button" onClick={() => setCreating((value) => !value)}>
             新建项目
@@ -97,31 +91,23 @@ export function ProjectsPage() {
             className="grid gap-4 md:grid-cols-2"
             onSubmit={form.handleSubmit((values) => createProject.mutate(values))}
           >
-            <label className="form-label">
-              项目编号
-              <input className="form-input mt-2" {...form.register("code")} />
-              {form.formState.errors.code && (
-                <span className="field-error">{form.formState.errors.code.message}</span>
-              )}
-            </label>
-            <label className="form-label">
+            <label className="form-label md:col-span-2">
               项目名称
               <input className="form-input mt-2" {...form.register("name")} />
               {form.formState.errors.name && (
                 <span className="field-error">{form.formState.errors.name.message}</span>
               )}
             </label>
-            <label className="form-label">
+            <label className="form-label md:col-span-2">
               项目类型
               <select className="form-input mt-2" {...form.register("project_type")}>
                 <option value="government_investment">政府投资项目</option>
                 <option value="enterprise_investment">企业投资项目</option>
               </select>
             </label>
-            <label className="form-label">
-              项目说明
-              <input className="form-input mt-2" {...form.register("description")} />
-            </label>
+            <p className="md:col-span-2 text-sm leading-6 text-slate-500">
+              项目编号与项目说明无需手工填写；上传可研或其他编写依据材料并完成解析后，将自动从材料中补齐。
+            </p>
             {createProject.error && (
               <div className="md:col-span-2">
                 <ErrorNotice error={createProject.error} />
@@ -151,14 +137,16 @@ export function ProjectsPage() {
             <div className="flex items-start justify-between gap-4">
               <Link to={`/projects/${project.id}`} className="min-w-0 hover:text-blue-700">
                 <div>
-                  <div className="text-xs font-medium text-blue-700">{project.code}</div>
+                  <div className="text-xs font-medium text-blue-700">
+                    {isTemporaryProjectCode(project.code) ? "待从材料解析编号" : project.code}
+                  </div>
                   <h3 className="mt-2 text-lg font-semibold text-slate-900">{project.name}</h3>
                 </div>
               </Link>
               <StatusBadge status={project.status} />
             </div>
             <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-slate-500">
-              {project.description || "尚未填写项目说明"}
+              {project.description || "尚未填写项目说明（上传依据材料解析后可自动补齐）"}
             </p>
             <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
               <span className="text-xs text-slate-400">
@@ -173,7 +161,6 @@ export function ProjectsPage() {
                   type="button"
                   onClick={() => {
                     deleteProject.reset();
-                    setConfirmationCode("");
                     setProjectToDelete(project);
                   }}
                 >
@@ -207,27 +194,16 @@ export function ProjectsPage() {
                 此操作将永久删除项目、上传文件、解析结果、字段证据、生成记录和定稿文件，删除后无法恢复。
               </p>
             </div>
-            <form
-              className="p-6"
-              onSubmit={(event) => {
-                event.preventDefault();
-                deleteProject.mutate({ project: projectToDelete, code: confirmationCode });
-              }}
-            >
+            <div className="p-6">
               <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                 <div className="font-semibold">{projectToDelete.name}</div>
-                <div className="mt-1">项目编号：{projectToDelete.code}</div>
+                <div className="mt-1">
+                  项目编号：
+                  {isTemporaryProjectCode(projectToDelete.code)
+                    ? `${projectToDelete.code}（临时编号）`
+                    : projectToDelete.code}
+                </div>
               </div>
-              <label className="form-label mt-5 block" htmlFor="delete-project-code">
-                请输入项目编号“{projectToDelete.code}”确认删除
-                <input
-                  autoComplete="off"
-                  className="form-input mt-2"
-                  id="delete-project-code"
-                  value={confirmationCode}
-                  onChange={(event) => setConfirmationCode(event.target.value)}
-                />
-              </label>
               {deleteProject.error && (
                 <div className="mt-4">
                   <ErrorNotice error={deleteProject.error} />
@@ -244,13 +220,19 @@ export function ProjectsPage() {
                 </button>
                 <button
                   className="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={deleteProject.isPending || confirmationCode !== projectToDelete.code}
-                  type="submit"
+                  disabled={deleteProject.isPending}
+                  type="button"
+                  onClick={() =>
+                    deleteProject.mutate({
+                      project: projectToDelete,
+                      code: projectToDelete.code,
+                    })
+                  }
                 >
-                  {deleteProject.isPending ? "正在删除…" : "永久删除"}
+                  {deleteProject.isPending ? "正在删除…" : "确认删除"}
                 </button>
               </div>
-            </form>
+            </div>
           </section>
         </div>
       )}
@@ -267,6 +249,9 @@ const STAGE_LABELS: Record<string, { name: string; detail: string }> = {
   tender: { name: "招标文件", detail: "采购需求、投标人须知和评标办法章节" },
   contract: { name: "合同", detail: "合同主体、范围、金额、期限和付款安排" },
 };
+
+/** 项目概览仅展示招标与合同；项目建议书/可研卡片暂隐藏。 */
+const VISIBLE_STAGES = ["tender", "contract"] as const;
 
 export function ProjectOverviewPage() {
   const { projectId = "" } = useParams();
@@ -297,7 +282,7 @@ export function ProjectOverviewPage() {
     <>
       <PageHeader
         title={project.data?.name ?? "项目"}
-        description={`${project.data?.code} · 四阶段文件链`}
+        description={`${isTemporaryProjectCode(project.data?.code) ? "编号待从材料解析" : project.data?.code} · 招标与合同主链路`}
         actions={
           <Link className="secondary-button" to="/projects">
             返回项目列表
@@ -313,44 +298,46 @@ export function ProjectOverviewPage() {
         <Metric label="当前修订" value={`R${project.data?.revision ?? 1}`} />
       </div>
       <div className="grid gap-5 xl:grid-cols-2">
-        {stages.data?.map((stage: Stage, index: number) => {
-          const info = STAGE_LABELS[stage.stage] ?? {
-            name: stage.stage,
-            detail: "",
-          };
-          return (
-            <Card key={stage.id}>
-              <div className="flex items-start justify-between">
-                <div className="flex gap-4">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 font-semibold text-blue-700">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">{info.name}</h3>
-                    <p className="mt-1 text-sm text-slate-500">{info.detail}</p>
+        {stages.data
+          ?.filter((stage: Stage) => (VISIBLE_STAGES as readonly string[]).includes(stage.stage))
+          .map((stage: Stage, index: number) => {
+            const info = STAGE_LABELS[stage.stage] ?? {
+              name: stage.stage,
+              detail: "",
+            };
+            return (
+              <Card key={stage.id}>
+                <div className="flex items-start justify-between">
+                  <div className="flex gap-4">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 font-semibold text-blue-700">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <h3 className="font-semibold text-slate-900">{info.name}</h3>
+                      <p className="mt-1 text-sm text-slate-500">{info.detail}</p>
+                    </div>
                   </div>
+                  <StatusBadge status={stage.status} />
                 </div>
-                <StatusBadge status={stage.status} />
-              </div>
-              {stage.stale_reason && (
-                <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                  {stage.stale_reason}
-                </div>
-              )}
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Link
-                  className="primary-button"
-                  to={`/projects/${projectId}/stages/${stage.stage}/source`}
-                >
-                  进入阶段
-                </Link>
-                {stage.finalized_document_version_id && (
-                  <span className="secondary-button cursor-default">已有定稿版本</span>
+                {stage.stale_reason && (
+                  <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                    {stage.stale_reason}
+                  </div>
                 )}
-              </div>
-            </Card>
-          );
-        })}
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <Link
+                    className="primary-button"
+                    to={`/projects/${projectId}/stages/${stage.stage}/source`}
+                  >
+                    进入阶段
+                  </Link>
+                  {stage.finalized_document_version_id && (
+                    <span className="secondary-button cursor-default">已有定稿版本</span>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
       </div>
     </>
   );

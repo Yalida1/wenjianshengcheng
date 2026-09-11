@@ -37,3 +37,9 @@ tmp/
 playwright-report/
 test-results/
 .codex-git-checkpoint/
+
+# Local debug / scratch outputs (do not publish)
+artifacts/_*
+artifacts/_e2e_fail/
+artifacts/_e2e_fail2/
+backend/tests/_debug_injection.py

@@ -15,10 +15,15 @@ RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.l
     && groupadd --system docchain \
     && useradd --system --gid docchain --create-home --home-dir /home/docchain docchain
 
+ENV PIP_DEFAULT_TIMEOUT=120 \
+    PIP_RETRIES=8
+
 WORKDIR /app
 COPY pyproject.toml alembic.ini ./
-COPY backend ./backend
+COPY backend/app/__init__.py backend/app/__init__.py
 RUN pip install --no-cache-dir .
+
+COPY backend ./backend
 
 COPY scripts/docker-entrypoint.sh /usr/local/bin/docchain-entrypoint
 RUN chmod +x /usr/local/bin/docchain-entrypoint \

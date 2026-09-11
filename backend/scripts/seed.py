@@ -9,11 +9,13 @@ from sqlalchemy import func, select
 
 from backend.app.config import get_settings
 from backend.app.db import SessionLocal
+from backend.app.field_catalog import BASE_FIELD_DEFINITIONS, default_rules_for_field, merge_missing_aliases
 from backend.app.models import (
     DocumentFormatProfile,
     FieldDefinition,
     Organization,
     Permission,
+    ProcurementRuleSet,
     Role,
     RolePermission,
     Template,
@@ -24,7 +26,9 @@ from backend.app.models import (
     UserRole,
 )
 from backend.app.security import hash_password, verify_password
+from backend.app.services.feasibility_rules import BUILTIN_FEASIBILITY_RULES, FEASIBILITY_RULES_VERSION
 from backend.app.services.providers import SECTION_PLANS
+from backend.app.services.section_tree import section_nodes_from_pairs
 from backend.app.services.storage import get_storage, sha256_bytes
 from backend.app.services.templates import (
     DEMO_TEMPLATE_CONTENT_TYPE,
@@ -35,7 +39,7 @@ from backend.app.template_catalog import (
     BUILTIN_TEMPLATE_CATALOG,
     PLATFORM_REFERENCE_TEMPLATE,
     TEMPLATE_SOURCE_LABELS,
-    section_plan_for,
+    section_plan_items_for,
 )
 
 PERMISSIONS = {
@@ -77,42 +81,7 @@ DEMO_TEMPLATES = {
     "tender": "通用采购招标文件参考模板",
     "contract": "通用采购合同参考模板",
 }
-FIELD_DEFINITIONS = {
-    "requirement": [
-        ("project_name", "项目名称", "string", None, "P0", True),
-        ("project_owner", "项目单位", "string", None, "P0", True),
-        ("construction_scope", "建设范围", "text", None, "P0", True),
-        ("project_period", "项目总建设周期", "duration", "月", "P0", True),
-    ],
-    "feasibility": [
-        ("project_name", "项目名称", "string", None, "P0", True),
-        ("total_investment", "可研总投资", "money", "元", "P0", True),
-        ("construction_scope", "项目全部建设范围", "text", None, "P0", True),
-        ("project_period", "项目总建设周期", "duration", "月", "P0", True),
-    ],
-    "tender": [
-        ("project_name", "项目名称", "string", None, "P0", True),
-        ("procurement_budget", "招标预算", "money", "元", "P0", True),
-        ("maximum_price", "最高限价", "money", "元", "P0", True),
-        ("procurement_scope", "采购范围", "text", None, "P0", True),
-    ],
-    "contract": [
-        ("party_a", "甲方完整主体", "string", None, "P0", True),
-        ("party_b", "乙方完整主体", "string", None, "P0", True),
-        ("contract_subject", "合同标的", "text", None, "P0", True),
-        ("contract_scope", "本合同范围", "text", None, "P0", True),
-        ("final_contract_amount", "最终合同金额", "money", "元", "P0", True),
-        ("tax_rate", "税率", "percentage", "%", "P0", True),
-        ("tax_inclusion", "含税方式", "string", None, "P0", True),
-        ("contract_duration", "履行期限", "duration", None, "P0", True),
-        ("delivery_location", "交付地点", "string", None, "P0", True),
-        ("payment_plan", "付款计划", "payment_plan", None, "P0", True),
-        ("acceptance", "验收约定", "text", None, "P0", True),
-        ("warranty", "质保约定", "text", None, "P0", True),
-        ("breach", "违约责任", "text", None, "P0", True),
-        ("effective_conditions", "生效条件", "text", None, "P0", True),
-    ],
-}
+FIELD_DEFINITIONS = BASE_FIELD_DEFINITIONS
 
 
 def _is_legacy_demo_source(storage_key: str | None) -> bool:
@@ -135,9 +104,11 @@ def _is_legacy_demo_source(storage_key: str | None) -> bool:
 def seed() -> None:
     settings = get_settings()
     with SessionLocal() as db:
-        organization = db.scalar(select(Organization).where(Organization.name == "Demo 组织"))
+        organization = db.scalar(
+            select(Organization).where(Organization.name == settings.demo_organization_name)
+        )
         if organization is None:
-            organization = Organization(name="Demo 组织")
+            organization = Organization(name=settings.demo_organization_name)
             db.add(organization)
             db.flush()
 
@@ -318,30 +289,55 @@ def seed() -> None:
                 stored_template_content = storage.get(template_key)
                 template_version.storage_key = template_key
                 template_version.sha256 = sha256_bytes(stored_template_content)
-            section_plan = section_plan_for(spec, SECTION_PLANS[spec.stage])
-            for sequence, (key, title) in enumerate(section_plan, 1):
+            section_items = section_plan_items_for(
+                spec, section_nodes_from_pairs(SECTION_PLANS[spec.stage])
+            )
+            key_to_section: dict[str, TemplateSection] = {}
+            for item in section_items:
                 section = db.scalar(
                     select(TemplateSection).where(
                         TemplateSection.template_version_id == template_version.id,
-                        TemplateSection.key == key,
+                        TemplateSection.key == item.key,
                     )
                 )
+                parent = key_to_section.get(item.parent_key) if item.parent_key else None
                 if section is None:
-                    db.add(
-                        TemplateSection(
-                            organization_id=organization.id,
-                            template_version_id=template_version.id,
-                            sequence=sequence,
-                            key=key,
-                            title=title,
-                            section_type="editable",
-                            required=True,
-                            content=None,
-                        )
+                    section = TemplateSection(
+                        organization_id=organization.id,
+                        template_version_id=template_version.id,
+                        sequence=item.sequence,
+                        key=item.key,
+                        title=item.title,
+                        parent_id=parent.id if parent else None,
+                        level=item.level,
+                        section_type="editable",
+                        required=True,
+                        content=None,
                     )
+                    db.add(section)
+                    db.flush()
+                else:
+                    section.sequence = item.sequence
+                    section.title = item.title
+                    section.parent_id = parent.id if parent else None
+                    section.level = item.level
+                key_to_section[item.key] = section
+            from backend.app.tender_field_profiles import profile_fields, resolve_profile_name
+
+            allowed_variable_keys: set[str] | None = None
+            if spec.stage == "tender":
+                profile_name = resolve_profile_name(
+                    procurement_category=spec.procurement_type,
+                    group_name=spec.name,
+                )
+                allowed_variable_keys = {item.field_key for item in profile_fields(profile_name)}
             for key, _label, _data_type, _unit, _criticality, required in FIELD_DEFINITIONS[
                 spec.stage
             ]:
+                # Avoid registering the entire tender catalog on every template; that made
+                # applicable-field resolution treat every file as needing all ~37 fields.
+                if allowed_variable_keys is not None and key not in allowed_variable_keys:
+                    continue
                 variable = db.scalar(
                     select(TemplateVariable).where(
                         TemplateVariable.template_version_id == template_version.id,
@@ -405,8 +401,50 @@ def seed() -> None:
                             unit=unit,
                             criticality=criticality,
                             required=required,
+                            is_base=True,
+                            is_active=True,
+                            rules=default_rules_for_field(key, label),
                         )
                     )
+                else:
+                    exists.is_base = True
+                    exists.rules = merge_missing_aliases(exists.rules, key, exists.field_label or label)
+
+        builtin_key = "feasibility-procurement-core"
+        existing_rule = db.scalar(
+            select(ProcurementRuleSet).where(
+                ProcurementRuleSet.organization_id == organization.id,
+                ProcurementRuleSet.key == builtin_key,
+                ProcurementRuleSet.status == "published",
+            )
+        )
+        admin_user = db.scalar(select(User).where(User.organization_id == organization.id).limit(1))
+        actor_id = admin_user.id if admin_user else None
+        if existing_rule is None:
+            db.add(
+                ProcurementRuleSet(
+                    organization_id=organization.id,
+                    key=builtin_key,
+                    name="可研采购划分核心规则",
+                    version=1,
+                    status="published",
+                    applicable_subject=None,
+                    region=None,
+                    funding_nature=None,
+                    source_name="平台内置 feasibility-procurement-v1",
+                    source_url=None,
+                    effective_date=None,
+                    expiry_date=None,
+                    rules_json=BUILTIN_FEASIBILITY_RULES,
+                    created_by=actor_id,
+                    updated_by=actor_id,
+                )
+            )
+        elif (existing_rule.rules_json or {}).get("version") != FEASIBILITY_RULES_VERSION:
+            existing_rule.rules_json = BUILTIN_FEASIBILITY_RULES
+            existing_rule.revision += 1
+            existing_rule.updated_by = actor_id
+
         db.commit()
         print(f"Seed complete: {admin_account} and builtin template catalog are ready")
 

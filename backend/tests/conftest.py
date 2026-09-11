@@ -28,14 +28,48 @@ from backend.app.main import app  # noqa: E402
 from backend.scripts.seed import seed  # noqa: E402
 
 
+_PURE_UNIT_NODE_MARKERS = (
+    "test_field_extraction_scoped",
+    "test_rule_channel_package_id",
+    "test_ensure_default_grouping_unit",
+    "test_dual_channel_parse",
+)
+
+
+def _test_needs_database(request: pytest.FixtureRequest) -> bool:
+    """Skip SQLite reset for pure unit tests that never request client fixtures."""
+
+    nodeid = request.node.nodeid
+    if any(marker in nodeid for marker in _PURE_UNIT_NODE_MARKERS):
+        return False
+    fixturenames = set(getattr(request.node, "fixturenames", ()))
+    if fixturenames & {"client", "authenticated_client"}:
+        return True
+    # Module-level pure helpers (no fixtures) — avoid drop_all races on shared SQLite.
+    return bool(fixturenames & {"clean_database"})
+
+
 @pytest.fixture(autouse=True)
-def clean_database() -> Generator[None, None, None]:
+def clean_database(request: pytest.FixtureRequest) -> Generator[None, None, None]:
+    if not _test_needs_database(request):
+        yield
+        return
     _login_attempts.clear()
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
+    with engine.begin() as connection:
+        if connection.dialect.name == "sqlite":
+            connection.exec_driver_sql("PRAGMA foreign_keys=OFF")
+        Base.metadata.drop_all(bind=connection)
+        if connection.dialect.name == "sqlite":
+            connection.exec_driver_sql("PRAGMA foreign_keys=ON")
+        Base.metadata.create_all(bind=connection)
     seed()
     yield
-    Base.metadata.drop_all(bind=engine)
+    with engine.begin() as connection:
+        if connection.dialect.name == "sqlite":
+            connection.exec_driver_sql("PRAGMA foreign_keys=OFF")
+        Base.metadata.drop_all(bind=connection)
+        if connection.dialect.name == "sqlite":
+            connection.exec_driver_sql("PRAGMA foreign_keys=ON")
 
 
 @pytest.fixture

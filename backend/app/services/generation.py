@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from ..errors import APIError
 from ..models import (
     Document,
+    DocumentBlock,
     DocumentContentBlock,
     DocumentSection,
     DocumentVersion,
@@ -24,15 +25,16 @@ from ..models import (
     TemplateSection,
     TemplateVersion,
 )
-from .providers import PROMPT_VERSION, SECTION_PLANS, ProviderContext, get_provider
+from .providers import PENDING_MARKER, PROMPT_VERSION, SECTION_PLANS, ProviderContext, get_provider
+from .section_tree import SectionPlanItem, flatten_section_nodes, section_nodes_from_pairs
 from .storage import get_storage
+from .tender_document import TenderBlockSpec, tender_blocks_for_section, tender_notice_title
 
 FORMAL_FIELD_STATUSES = {"user_confirmed", "system_authoritative", "template_default"}
+DRAFT_CANDIDATE_STATUSES = {"extracted", "ai_suggested", "reference_only"}
 
 
-def _template_section_plan(
-    db: Session, template_version_id: str, stage: str
-) -> list[tuple[str, str]]:
+def _template_section_plan(db: Session, template_version_id: str, stage: str) -> list[SectionPlanItem]:
     sections = list(
         db.scalars(
             select(TemplateSection)
@@ -41,18 +43,165 @@ def _template_section_plan(
         )
     )
     if not sections:
-        return SECTION_PLANS[stage]
-    return [(section.key, section.title) for section in sections]
-
-
-def field_snapshot(fields: list[FieldValue]) -> tuple[str, dict[str, object]]:
-    values = {
-        field.field_key: field.normalized_value if field.normalized_value is not None else field.value
-        for field in fields
-        if field.status in FORMAL_FIELD_STATUSES
+        return flatten_section_nodes(section_nodes_from_pairs(SECTION_PLANS[stage]))
+    id_to_key = {section.id: section.key for section in sections}
+    children_keys = {
+        id_to_key[section.parent_id]
+        for section in sections
+        if section.parent_id and section.parent_id in id_to_key
     }
+    return [
+        SectionPlanItem(
+            key=section.key,
+            title=section.title,
+            level=max(1, min(3, int(getattr(section, "level", 1) or 1))),
+            parent_key=id_to_key.get(section.parent_id) if section.parent_id else None,
+            sequence=section.sequence,
+            has_children=section.key in children_keys,
+        )
+        for section in sections
+    ]
+
+
+def _expanded_section_keys(
+    section_plan: list[SectionPlanItem],
+    requested_keys: list[str] | None,
+    *,
+    include_descendants: bool = True,
+) -> set[str]:
+    all_keys = {item.key for item in section_plan}
+    if requested_keys is None:
+        return all_keys
+    requested = set(requested_keys)
+    unknown = sorted(requested - all_keys)
+    if unknown:
+        raise APIError(422, "generation_section_invalid", f"所选章节不存在：{', '.join(unknown)}")
+    if not include_descendants:
+        return requested
+    selected = set(requested)
+    changed = True
+    while changed:
+        changed = False
+        for item in section_plan:
+            if item.parent_key in selected and item.key not in selected:
+                selected.add(item.key)
+                changed = True
+    return selected
+
+
+def _draft_candidate_value(value: object) -> str:
+    if isinstance(value, (dict, list)):
+        rendered = json.dumps(value, ensure_ascii=False)
+    else:
+        rendered = str(value)
+    return f"{PENDING_MARKER}{rendered}"
+
+
+def field_values_by_key(
+    fields: list[FieldValue], procurement_document_group_id: str | None = None
+) -> dict[str, FieldValue]:
+    """Resolve field values for a document group.
+
+    Package-scoped keys never fall back to stage-shared unscoped values.
+    Explicitly shared keys may fall back to unscoped stage candidates.
+    """
+
+    from ..field_catalog import PACKAGE_SCOPED_FIELD_KEYS, SHARED_FIELD_KEYS
+
+    resolved: dict[str, FieldValue] = {}
+    scoped_prefix = f"doc::{procurement_document_group_id}::" if procurement_document_group_id else None
+    unscoped: dict[str, FieldValue] = {}
+    for field in fields:
+        if field.field_key.startswith("doc::"):
+            continue
+        unscoped[field.field_key] = field
+    if scoped_prefix:
+        for field in fields:
+            if field.field_key.startswith(scoped_prefix):
+                resolved[field.field_key.removeprefix(scoped_prefix)] = field
+    for field_key, field in unscoped.items():
+        if field_key in resolved:
+            continue
+        if field_key in PACKAGE_SCOPED_FIELD_KEYS:
+            # No cross-package / stage fallback for scoped commercial fields.
+            continue
+        if procurement_document_group_id and field_key not in SHARED_FIELD_KEYS:
+            # When resolving for a specific group, only shared keys fall back.
+            continue
+        resolved[field_key] = field
+    if not procurement_document_group_id:
+        resolved.update(unscoped)
+    return resolved
+
+
+def field_snapshot(
+    fields: list[FieldValue],
+    *,
+    include_candidates: bool = False,
+    procurement_document_group_id: str | None = None,
+) -> tuple[str, dict[str, object]]:
+    values: dict[str, object] = {}
+    for field_key, field in field_values_by_key(fields, procurement_document_group_id).items():
+        value = field.normalized_value if field.normalized_value is not None else field.value
+        if value in (None, "", [], {}):
+            continue
+        if field.status in FORMAL_FIELD_STATUSES:
+            values[field_key] = value
+        elif include_candidates and field.status in DRAFT_CANDIDATE_STATUSES:
+            values[field_key] = _draft_candidate_value(value)
     encoded = json.dumps(values, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(encoded.encode()).hexdigest(), values
+
+
+def procurement_locked_values(
+    values: dict[str, object], stage: str, procurement_snapshot: dict[str, object] | None
+) -> tuple[str, dict[str, object]]:
+    merged = dict(values)
+    if procurement_snapshot:
+        scope = procurement_snapshot.get("scope")
+        if scope:
+            merged["procurement_scope" if stage == "tender" else "contract_scope"] = scope
+        if stage == "tender":
+            confirmed_budget = procurement_snapshot.get("confirmed_budget")
+            maximum_price = procurement_snapshot.get("maximum_price")
+            if confirmed_budget is not None:
+                merged["procurement_budget"] = confirmed_budget
+            if maximum_price is not None:
+                merged["maximum_price"] = maximum_price
+    encoded = json.dumps(merged, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode()).hexdigest(), merged
+
+
+def _dict_value(value: object) -> dict[str, object]:
+    return value if isinstance(value, dict) else {}
+
+
+def _list_value(value: object) -> list[object]:
+    return value if isinstance(value, list) else []
+
+
+def _source_context(db: Session, job: GenerationJob) -> list[str]:
+    if job.source_kind != "uploaded_file" or not job.source_version_id:
+        return []
+    blocks = list(
+        db.scalars(
+            select(DocumentBlock)
+            .where(DocumentBlock.file_version_id == job.source_version_id)
+            .order_by(DocumentBlock.sequence)
+        )
+    )
+    keywords = ("建设内容", "建设范围", "功能", "技术", "系统", "服务", "需求", "成果")
+    forbidden_money = ("总投资", "建设投资", "预算", "最高限价", "合同金额", "资金")
+    ranked: list[tuple[int, int, str]] = []
+    for block in blocks:
+        text = " ".join(block.text.split())
+        if len(text) < 12 or any(marker in text for marker in forbidden_money):
+            continue
+        score = sum(1 for keyword in keywords if keyword in text)
+        if score:
+            ranked.append((-score, block.sequence, text[:500]))
+    ranked.sort()
+    return [text for _score, _sequence, text in ranked[:10]]
 
 
 def document_version_sha256(db: Session, version: DocumentVersion) -> str:
@@ -76,6 +225,8 @@ def document_version_sha256(db: Session, version: DocumentVersion) -> str:
             {
                 "key": section.key,
                 "title": section.title,
+                "level": getattr(section, "level", 1),
+                "parent_id": section.parent_id,
                 "blocks": [block.content for block in blocks],
             }
         )
@@ -120,10 +271,23 @@ def build_generation_job(
     template_version: int,
     idempotency_key: str,
     user_id: str,
+    include_candidates: bool = False,
+    selected_section_keys: list[str] | None = None,
+    include_descendants: bool = True,
+    procurement_plan_id: str | None = None,
+    procurement_document_group_id: str | None = None,
+    procurement_batch_id: str | None = None,
+    procurement_snapshot: dict[str, object] | None = None,
+    template_applicability_confirmed: bool = False,
 ) -> GenerationJob:
     existing = db.scalar(select(GenerationJob).where(GenerationJob.idempotency_key == idempotency_key))
     if existing:
-        if existing.project_id != project.id or existing.stage != stage:
+        if (
+            existing.project_id != project.id
+            or existing.stage != stage
+            or existing.procurement_plan_id != procurement_plan_id
+            or existing.procurement_document_group_id != procurement_document_group_id
+        ):
             raise APIError(409, "idempotency_conflict", "幂等键已用于其他生成请求")
         return existing
     fields = list(
@@ -135,7 +299,12 @@ def build_generation_job(
             )
         )
     )
-    snapshot_sha256, snapshot_values = field_snapshot(fields)
+    snapshot_sha256, snapshot_values = field_snapshot(
+        fields,
+        include_candidates=include_candidates,
+        procurement_document_group_id=procurement_document_group_id,
+    )
+    snapshot_sha256, snapshot_values = procurement_locked_values(snapshot_values, stage, procurement_snapshot)
     snapshot = FieldSnapshot(
         organization_id=project.organization_id,
         project_id=project.id,
@@ -158,6 +327,9 @@ def build_generation_job(
     if locked_template is None or not locked_template.storage_key:
         raise APIError(422, "template_source_missing", "模板没有可用的 DOCX 正式源")
     section_plan = _template_section_plan(db, locked_template.id, stage)
+    selected_keys = _expanded_section_keys(
+        section_plan, selected_section_keys, include_descendants=include_descendants
+    )
     template_content = get_storage().get(locked_template.storage_key)
     template_sha256 = hashlib.sha256(template_content).hexdigest()
     if locked_template.sha256 and locked_template.sha256 != template_sha256:
@@ -180,6 +352,11 @@ def build_generation_job(
         prompt_version=PROMPT_VERSION,
         generation_provider=provider.name,
         generation_model=provider.model,
+        procurement_plan_id=procurement_plan_id,
+        procurement_document_group_id=procurement_document_group_id,
+        procurement_batch_id=procurement_batch_id,
+        procurement_snapshot=procurement_snapshot,
+        template_applicability_confirmed=template_applicability_confirmed,
         created_by=user_id,
         updated_by=user_id,
     )
@@ -191,19 +368,22 @@ def build_generation_job(
             generation_job_id=job.id,
             sequence=1,
             event_type="queued",
-            payload={"field_snapshot_sha256": snapshot_sha256},
+            payload={
+                "field_snapshot_sha256": snapshot_sha256,
+                "selected_section_keys": [item.key for item in section_plan if item.key in selected_keys],
+            },
             created_by=user_id,
             updated_by=user_id,
         )
     )
-    for sequence, (key, _title) in enumerate(section_plan, 1):
+    for sequence, item in enumerate(section_plan, 1):
         db.add(
             GenerationJobStep(
                 organization_id=project.organization_id,
                 generation_job_id=job.id,
-                step_key=key,
+                step_key=item.key,
                 sequence=sequence,
-                status="pending",
+                status="pending" if item.key in selected_keys else "skipped",
                 created_by=user_id,
                 updated_by=user_id,
             )
@@ -237,9 +417,33 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             )
         )
     )
-    snapshot_sha256, values = field_snapshot(fields)
     snapshot = db.get(FieldSnapshot, job.field_snapshot_id)
-    if snapshot is None or snapshot.sha256 != snapshot_sha256:
+    formal_sha256, formal_values = field_snapshot(
+        fields, procurement_document_group_id=job.procurement_document_group_id
+    )
+    candidate_sha256, candidate_values = field_snapshot(
+        fields,
+        include_candidates=True,
+        procurement_document_group_id=job.procurement_document_group_id,
+    )
+    formal_sha256, formal_values = procurement_locked_values(
+        formal_values, job.stage, job.procurement_snapshot
+    )
+    candidate_sha256, candidate_values = procurement_locked_values(
+        candidate_values, job.stage, job.procurement_snapshot
+    )
+    if snapshot is None:
+        job.status = "stale"
+        raise RuntimeError("Field snapshot no longer exists")
+    if snapshot.sha256 == formal_sha256:
+        snapshot_sha256, values, snapshot_mode = formal_sha256, formal_values, "formal"
+    elif snapshot.sha256 == candidate_sha256:
+        snapshot_sha256, values, snapshot_mode = (
+            candidate_sha256,
+            candidate_values,
+            "candidate_draft",
+        )
+    else:
         job.status = "stale"
         raise RuntimeError("Field snapshot changed after job creation")
     project_stage = db.scalar(
@@ -276,12 +480,40 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
         job.status = "failed"
         raise RuntimeError("Locked template source is missing")
     section_plan = _template_section_plan(db, locked_template.id, job.stage)
+    template_record = db.get(Template, job.template_id)
+    if template_record is None:
+        job.status = "failed"
+        raise RuntimeError("Locked template metadata is missing")
+    template_sections = {
+        item.key: item
+        for item in db.scalars(
+            select(TemplateSection).where(TemplateSection.template_version_id == locked_template.id)
+        )
+    }
+    steps = {
+        step.step_key: step
+        for step in db.scalars(select(GenerationJobStep).where(GenerationJobStep.generation_job_id == job.id))
+    }
+    selected_keys = {
+        item.key
+        for item in section_plan
+        if steps.get(item.key) is not None and steps[item.key].status != "skipped"
+    }
+    if not selected_keys:
+        job.status = "failed"
+        raise RuntimeError("Generation job has no selected sections")
+    generation_plan = [item for item in section_plan if item.key in selected_keys]
     current_template_sha = hashlib.sha256(get_storage().get(locked_template.storage_key)).hexdigest()
     if current_template_sha != job.template_sha256:
         job.status = "stale"
         raise RuntimeError("Locked template changed after job creation")
     job.status = "running"
     job.attempt += 1
+    for step_key in selected_keys:
+        step = steps.get(step_key)
+        if step is not None:
+            step.status = "running"
+            step.error = None
     db.add(
         GenerationEvent(
             organization_id=project.organization_id,
@@ -293,27 +525,69 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             updated_by=job.updated_by,
         )
     )
-    db.flush()
+    # The provider call can take minutes. Commit the task checkpoint before it starts so
+    # polling clients see the real running state instead of a queued job until completion.
+    db.commit()
     provider = get_provider()
+    procurement_snapshot = job.procurement_snapshot or {}
+    procurement_group = _dict_value(procurement_snapshot.get("document_group"))
+    procurement_packages = [_dict_value(item) for item in _list_value(procurement_snapshot.get("packages"))]
+    procurement_evidence_ids = [str(item) for item in _list_value(procurement_snapshot.get("evidence_ids"))]
     draft = provider.generate(
         ProviderContext(
             stage=job.stage,
             project_name=project.name,
             fields=values,
-            section_plan=section_plan,
+            section_plan=generation_plan,
+            source_context=(
+                [
+                    str(procurement_snapshot.get("scope", "")),
+                    str(procurement_group.get("rationale", "")),
+                ]
+                if job.procurement_snapshot
+                else _source_context(db, job)
+            ),
         )
     )
-    document = db.scalar(
-        select(Document).where(Document.project_id == project.id, Document.stage == job.stage)
+    draft_by_key = {section.key: section for section in draft.sections if section.key in selected_keys}
+    missing_drafts = sorted(selected_keys - set(draft_by_key))
+    if missing_drafts:
+        job.status = "failed"
+        raise RuntimeError(f"Provider did not return selected sections: {', '.join(missing_drafts)}")
+    candidate_documents = list(
+        db.scalars(select(Document).where(Document.project_id == project.id, Document.stage == job.stage))
+    )
+    snapshot_package_ids = sorted(str(item) for item in _list_value(procurement_snapshot.get("package_ids")))
+    document = next(
+        (
+            item
+            for item in candidate_documents
+            if item.procurement_document_group_id == job.procurement_document_group_id
+            and sorted(item.procurement_package_ids or []) == snapshot_package_ids
+        ),
+        None,
+    )
+    contract_package_names = "、".join(str(item.get("name")) for item in procurement_packages)
+    document_title = (
+        str(procurement_group.get("name"))
+        if job.stage == "tender" and job.procurement_snapshot
+        else (
+            f"{project.name}{contract_package_names}合同草稿"
+            if job.stage == "contract" and job.procurement_snapshot
+            else f"{project.name} {stage_label(job.stage)}"
+        )
     )
     if document is None:
         document = Document(
             organization_id=project.organization_id,
             project_id=project.id,
             stage=job.stage,
-            title=f"{project.name} {stage_label(job.stage)}",
+            title=document_title,
             status="draft",
             current_version=1,
+            procurement_plan_id=job.procurement_plan_id,
+            procurement_document_group_id=job.procurement_document_group_id,
+            procurement_package_ids=snapshot_package_ids,
             created_by=job.created_by,
             updated_by=job.updated_by,
         )
@@ -321,6 +595,7 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
         db.flush()
         version_number = 1
         parent_id = None
+        parent_blocks_by_key: dict[str, list[DocumentContentBlock]] = {}
     else:
         version_number = document.current_version + 1
         parent = db.scalar(
@@ -330,6 +605,23 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             )
         )
         parent_id = parent.id if parent else None
+        parent_blocks_by_key = {}
+        if parent is not None:
+            parent_sections = list(
+                db.scalars(
+                    select(DocumentSection)
+                    .where(DocumentSection.document_version_id == parent.id)
+                    .order_by(DocumentSection.sequence)
+                )
+            )
+            for parent_section in parent_sections:
+                parent_blocks_by_key[parent_section.key] = list(
+                    db.scalars(
+                        select(DocumentContentBlock)
+                        .where(DocumentContentBlock.document_section_id == parent_section.id)
+                        .order_by(DocumentContentBlock.sequence)
+                    )
+                )
         document.current_version = version_number
     version = DocumentVersion(
         organization_id=project.organization_id,
@@ -342,6 +634,7 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             "generation_job_id": job.id,
             "field_snapshot_id": snapshot.id,
             "field_snapshot_sha256": snapshot_sha256,
+            "field_snapshot_mode": snapshot_mode,
             "source_kind": job.source_kind,
             "source_version_id": job.source_version_id,
             "source_version": job.source_file_version,
@@ -349,50 +642,145 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             "template_id": job.template_id,
             "template_version": job.template_version,
             "template_sha256": job.template_sha256,
+            "template_name": template_record.name,
+            "template_source_kind": template_record.source_kind,
+            "template_issuing_authority": template_record.issuing_authority,
+            "template_document_number": template_record.document_number,
+            "template_applicability": template_record.applicability,
+            "template_strict_compliance": bool(
+                template_record.source_kind in {"national_official_text", "other_official_template"}
+                and locked_template.format_profile.get("standard") == "customer_template"
+            ),
+            "template_applicability_confirmed": job.template_applicability_confirmed,
+            "format_profile": locked_template.format_profile,
             "prompt_version": job.prompt_version,
             "generation_provider": job.generation_provider,
             "generation_model": job.generation_model,
+            "selected_section_keys": [item.key for item in section_plan if item.key in selected_keys],
+            "outline_complete": True,
+            "procurement_plan_id": job.procurement_plan_id,
+            "procurement_document_group_id": job.procurement_document_group_id,
+            "procurement_package_ids": snapshot_package_ids,
+            "procurement_snapshot": job.procurement_snapshot,
         },
         created_by=job.created_by,
         updated_by=job.updated_by,
     )
     db.add(version)
     db.flush()
-    steps = {
-        step.step_key: step
-        for step in db.scalars(select(GenerationJobStep).where(GenerationJobStep.generation_job_id == job.id))
-    }
-    for sequence, section_draft in enumerate(draft.sections, 1):
+    key_to_section_id: dict[str, str] = {}
+    retained_keys: list[str] = []
+    for sequence, plan_item in enumerate(section_plan, 1):
+        section_draft = draft_by_key.get(plan_item.key)
+        parent_key = section_draft.parent_key if section_draft else plan_item.parent_key
+        if parent_key is None:
+            parent_key = plan_item.parent_key
+        section_title = section_draft.title if section_draft else plan_item.title
+        if job.stage == "tender" and plan_item.key in {"announcement", "procurement_announcement"}:
+            section_title = tender_notice_title(values.get("tender_method"))
+            if plan_item.key == "procurement_announcement" and section_title == "招标公告":
+                section_title = "采购公告"
         section = DocumentSection(
             organization_id=project.organization_id,
             document_version_id=version.id,
             sequence=sequence,
-            key=section_draft.key,
-            title=section_draft.title,
+            key=plan_item.key,
+            title=section_title,
+            parent_id=key_to_section_id.get(parent_key) if parent_key else None,
+            level=max(
+                1,
+                min(3, int(section_draft.level if section_draft else plan_item.level)),
+            ),
             created_by=job.created_by,
             updated_by=job.updated_by,
         )
         db.add(section)
         db.flush()
-        for block_sequence, paragraph in enumerate(section_draft.paragraphs, 1):
-            db.add(
-                DocumentContentBlock(
-                    organization_id=project.organization_id,
-                    document_section_id=section.id,
-                    sequence=block_sequence,
-                    block_type="paragraph",
-                    content={"text": paragraph},
-                    source_kind="ai_generated",
-                    field_refs=section_draft.field_refs,
-                    evidence_refs=[],
-                    reviewed=False,
-                    created_by=job.created_by,
-                    updated_by=job.updated_by,
+        key_to_section_id[section.key] = section.id
+        if section_draft is not None:
+            template_section = template_sections.get(plan_item.key)
+            block_specs: list[TenderBlockSpec]
+            if (
+                template_section is not None
+                and template_section.section_type == "fixed_template"
+                and template_section.content
+            ):
+                block_specs = [
+                    TenderBlockSpec(
+                        block_type="fixed_template",
+                        content={"text": template_section.content},
+                        source_kind="fixed_template",
+                        reviewed=True,
+                    )
+                ]
+            elif job.stage == "tender":
+                block_specs = tender_blocks_for_section(
+                    plan_item.key,
+                    values,
+                    source_context=(
+                        [
+                            str(procurement_snapshot.get("scope", "")),
+                            str(procurement_group.get("rationale", "")),
+                        ]
+                        if job.procurement_snapshot
+                        else _source_context(db, job)
+                    ),
                 )
-            )
-        if section_draft.key in steps:
-            steps[section_draft.key].status = "succeeded"
-            steps[section_draft.key].output = {"document_section_id": section.id}
+            else:
+                block_specs = [
+                    TenderBlockSpec(
+                        block_type="paragraph",
+                        content={"text": paragraph},
+                        source_kind="ai_generated",
+                        field_refs=tuple(section_draft.field_refs),
+                    )
+                    for paragraph in section_draft.paragraphs
+                ]
+            for block_sequence, block_spec in enumerate(block_specs, 1):
+                db.add(
+                    DocumentContentBlock(
+                        organization_id=project.organization_id,
+                        document_section_id=section.id,
+                        sequence=block_sequence,
+                        block_type=block_spec.block_type,
+                        content=block_spec.content,
+                        source_kind=block_spec.source_kind,
+                        field_refs=list(block_spec.field_refs),
+                        evidence_refs=procurement_evidence_ids,
+                        reviewed=block_spec.reviewed,
+                        created_by=job.created_by,
+                        updated_by=job.updated_by,
+                    )
+                )
+        else:
+            previous_blocks = parent_blocks_by_key.get(plan_item.key, [])
+            if previous_blocks:
+                retained_keys.append(plan_item.key)
+            for previous in previous_blocks:
+                db.add(
+                    DocumentContentBlock(
+                        organization_id=project.organization_id,
+                        document_section_id=section.id,
+                        sequence=previous.sequence,
+                        block_type=previous.block_type,
+                        content=previous.content,
+                        source_kind=previous.source_kind,
+                        field_refs=previous.field_refs,
+                        evidence_refs=previous.evidence_refs,
+                        reviewed=previous.reviewed,
+                        created_by=job.created_by,
+                        updated_by=job.updated_by,
+                    )
+                )
+        step = steps.get(plan_item.key)
+        if step is not None:
+            if section_draft is not None:
+                step.status = "succeeded"
+            step.output = {
+                "document_section_id": section.id,
+                "generated": section_draft is not None,
+                "retained": plan_item.key in retained_keys,
+            }
     job.status = "succeeded"
     db.add(
         GenerationEvent(
@@ -400,7 +788,11 @@ def execute_generation_job(db: Session, job_id: str) -> DocumentVersion:
             generation_job_id=job.id,
             sequence=3,
             event_type="succeeded",
-            payload={"document_version_id": version.id},
+            payload={
+                "document_version_id": version.id,
+                "generated_section_keys": [item.key for item in section_plan if item.key in selected_keys],
+                "retained_section_keys": retained_keys,
+            },
             created_by=job.created_by,
             updated_by=job.updated_by,
         )

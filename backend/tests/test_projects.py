@@ -33,6 +33,35 @@ def test_project_creation_creates_four_stages(authenticated_client: TestClient) 
     }
 
 
+def test_project_creation_without_code_assigns_temporary_code(
+    authenticated_client: TestClient,
+) -> None:
+    created = authenticated_client.post(
+        "/api/v1/projects",
+        json={"name": "仅名称新建项目", "project_type": "enterprise_investment"},
+    )
+    assert created.status_code == 201, created.text
+    project = created.json()
+    assert project["name"] == "仅名称新建项目"
+    assert project["description"] is None
+    assert project["code"].startswith("TMP-")
+    assert project["project_type"] == "enterprise_investment"
+
+
+def test_project_patch_can_update_code(authenticated_client: TestClient) -> None:
+    project = authenticated_client.post(
+        "/api/v1/projects",
+        json={"name": "待回填编号项目"},
+    ).json()
+    updated = authenticated_client.patch(
+        f"/api/v1/projects/{project['id']}",
+        json={"code": "XM-2026-0099", "revision": project["revision"]},
+    )
+    assert updated.status_code == 200, updated.text
+    assert updated.json()["code"] == "XM-2026-0099"
+    assert updated.json()["revision"] == project["revision"] + 1
+
+
 def test_revision_conflict_returns_409(authenticated_client: TestClient) -> None:
     project = authenticated_client.post(
         "/api/v1/projects",

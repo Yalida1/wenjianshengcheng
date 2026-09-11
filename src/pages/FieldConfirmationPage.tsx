@@ -2172,14 +2172,14 @@ function FieldConfirmationFooter({
         <div className="mb-3 flex items-center gap-2 text-[13px] text-[#A8323C]">
           <Icon name="alert" size={14} />
           <span>
-            还有 <strong>{p0Count}</strong> 个阻断字段未完成确认，无法进入模板选择。
+            还有 <strong>{p0Count}</strong> 个阻断字段未完成确认，无法进入文档生成。
           </span>
         </div>
       )}
       {canProceed && !readOnly && (
         <div className="mb-3 flex items-center gap-2 text-[13px] text-[#116B46]">
           <Icon name="check-circle" size={14} />
-          <span>招标文件关键字段已完成确认，可以进入模板选择。</span>
+          <span>招标文件关键字段已完成确认，可以进入文档生成。</span>
         </div>
       )}
       <div className="flex items-center justify-between gap-4">
@@ -2202,10 +2202,10 @@ function FieldConfirmationFooter({
               </button>
               {canProceed ? (
                 <button
-                  onClick={() => navigate("template-selection")}
+                  onClick={() => navigate("generation-setup")}
                   className="h-10 rounded-lg bg-[#2E5495] px-5 text-sm font-medium text-white hover:bg-[#24457C]"
                 >
-                  保存并进入模板选择
+                  保存并进入文档生成
                 </button>
               ) : (
                 <div className="group relative">
@@ -2213,7 +2213,7 @@ function FieldConfirmationFooter({
                     disabled
                     className="h-10 cursor-not-allowed rounded-lg bg-slate-200 px-5 text-sm font-medium text-slate-400"
                   >
-                    进入模板选择
+                    进入文档生成
                   </button>
                 </div>
               )}

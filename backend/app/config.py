@@ -33,8 +33,16 @@ class Settings(BaseSettings):
     max_upload_bytes: int = 52_428_800
     demo_admin_account: str = "admin"
     demo_admin_password: str = "admin123"  # noqa: S105
+    demo_organization_name: str = "Demo 组织"
     celery_task_always_eager: bool = False
     conversion_timeout_seconds: int = 120
+    procurement_planning_enabled: bool = True
+    procurement_analysis_chunk_chars: int = 24_000
+    procurement_analysis_max_parallel_chunks: int = 3
+    procurement_analysis_soft_time_limit_seconds: int = 1_800
+    procurement_analysis_time_limit_seconds: int = 1_860
+    procurement_analysis_stale_after_seconds: int = 300
+    procurement_analysis_recovery_interval_seconds: int = 60
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -57,6 +65,14 @@ class Settings(BaseSettings):
         if len(value) < 8:
             raise ValueError("DEMO_ADMIN_PASSWORD must contain at least 8 characters")
         return value
+
+    @field_validator("demo_organization_name")
+    @classmethod
+    def validate_demo_organization_name(cls, value: str) -> str:
+        normalized = value.strip()
+        if len(normalized) < 2:
+            raise ValueError("DEMO_ORGANIZATION_NAME must contain at least 2 characters")
+        return normalized
 
     def validate_runtime(self) -> None:
         if self.app_env == "production" and len(self.app_secret_key) < 32:

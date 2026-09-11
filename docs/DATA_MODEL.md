@@ -2,6 +2,12 @@
 
 模型按组织隔离。身份域包括 organizations、users、user_sessions、roles、permissions、user_roles；项目域包括 projects、project_members、project_stages；文件域包括 files、file_versions、file_parse_jobs、parsed_documents、parsed_tables、document_blocks。
 
-字段域包括 field_definitions、field_values、field_evidence、field_confirmations、field_conflicts、field_snapshots。模板域包括 templates、template_versions、template_sections、template_variables、document_format_profiles。生成与文档域包括 generation_jobs/steps/events、documents、document_versions/sections/content_blocks/comments、comparison_runs/items、validation_rules/runs/issues、finalization_records、export_jobs/artifacts、audit_logs。
+字段域包括 field_definitions、field_values、field_evidence、field_confirmations、field_conflicts、field_snapshots。模板域包括 templates、template_versions、template_sections（含 parent_id/level 章节树）、template_variables、document_format_profiles。生成与文档域包括 generation_jobs/steps/events、documents、document_versions/sections（同样含 parent_id/level）/content_blocks/comments、comparison_runs/items、validation_rules/runs/issues、finalization_records、export_jobs/artifacts、audit_logs。
 
 关键业务表携带组织、创建/更新人、时间和 revision。版本记录保存 source_file_id/version/SHA-256、field_snapshot_id、template_id/version、prompt_version、generation_provider/model 和 parent_version_id。数据库变更只通过 `backend/migrations`；`make migration-check` 会对全新空库升级到 head 并检查关键表。
+
+采购方案域包括 procurement_analysis_runs、procurement_plans、procurement_content_items、procurement_packages、procurement_package_contents、procurement_budget_items、procurement_budget_allocations、tender_document_groups、tender_document_group_packages、procurement_evidence、procurement_issues、procurement_confirmations、procurement_rule_sets 和 procurement_generation_batches。
+
+一份可研来源版本可以产生多次分析和多个候选方案。一个方案包含多个建设内容项、采购包和主招标文件组；唯一 `package_id` 约束保证同一有效方案中每个采购包只能归属一个主文件组，一个主文件组可关联多个采购包。主文件份数由有效招标方式的 `tender_document_groups` 行数计算，不保存或信任模型自行给出的数量。
+
+generation_jobs 和 documents 增加可空的采购方案、主文件组和采购包绑定以及不可变生成快照。可空设计兼容历史单文件、外部上传文件和既有成品，不迁移或伪造历史采购证据。迁移 `20260908_0009` 只增表和可空字段；回滚先移除这些链接再删除新增表，原项目、文件、文档版本和导出记录保留。

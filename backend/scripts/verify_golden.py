@@ -19,6 +19,37 @@ ROOT = Path(__file__).resolve().parents[2]
 CASE_DIR = ROOT / "golden_cases" / "demo_001"
 ARTIFACT_DIR = ROOT / "artifacts" / "golden_case"
 PLACEHOLDER = re.compile(r"\{\{[^{}]+\}\}|\[\[[^\[\]]+\]\]|__+[A-Za-z0-9_]+__+")
+FINAL_PROHIBITED = (
+    "【待确认】",
+    "ai_generated",
+    "P0",
+    "P1",
+    "人工录入",
+    "平台内部字段",
+    "请回到官方原文核对",
+)
+TENDER_TABLES_AND_FORMS = (
+    "投标人须知前附表",
+    "评标办法前附表",
+    "资格审查表",
+    "符合性审查表",
+    "商务、技术和报价评审因素表",
+    "合同协议书",
+    "采购清单",
+    "技术规格和性能指标",
+    "投标函",
+    "法定代表人身份证明",
+    "授权委托书",
+    "开标一览表",
+    "分项报价表",
+    "商务偏离表",
+    "技术偏离表",
+    "资格证明文件目录",
+    "业绩表",
+    "项目团队表",
+    "服务方案",
+    "承诺函",
+)
 STAGES = {
     "项目建议书_V1.0": ("requirement", "项目建议书"),
     "可行性研究报告_V1.0": ("feasibility", "可行性研究报告"),
@@ -66,6 +97,12 @@ def verify() -> None:
         with zipfile.ZipFile(docx_path) as archive:
             _assert(archive.testzip() is None, f"{docx_path.name} OOXML ZIP 完整", checks)
             _assert("word/document.xml" in archive.namelist(), f"{docx_path.name} 包含 document.xml", checks)
+            document_xml = archive.read("word/document.xml").decode("utf-8")
+            footer_xml = "\n".join(
+                archive.read(name).decode("utf-8")
+                for name in archive.namelist()
+                if name.startswith("word/footer") and name.endswith(".xml")
+            )
         word = WordDocument(docx_path)
         word_text = "\n".join(p.text for p in word.paragraphs)
         for table in word.tables:
@@ -82,6 +119,40 @@ def verify() -> None:
         pdf_text = "\n".join(page.extract_text() or "" for page in reader.pages)
         _assert(document_title in pdf_text, f"{pdf_path.name} 可提取关键标题", checks)
         _assert(not PLACEHOLDER.search(pdf_text), f"{pdf_path.name} 未替换变量为 0", checks)
+        if stage == "tender":
+            _assert(len(word.tables) >= 20, "招标 DOCX 包含完整前附表、评审表和可填写投标格式表格", checks)
+            _assert('TOC \\o "1-3"' in document_xml, "招标 DOCX 使用可更新目录域", checks)
+            _assert("PAGEREF toc_" in document_xml, "招标 DOCX 目录页码使用可更新引用域", checks)
+            _assert(
+                document_xml.count("w:tblHeader") >= len(word.tables),
+                "招标 DOCX 表格均设置跨页重复表头",
+                checks,
+            )
+            _assert(" PAGE " in footer_xml, "招标 DOCX 页脚包含页码域", checks)
+            _assert("目录将在" not in word_text + pdf_text, "招标 DOCX/PDF 目录不含更新占位提示", checks)
+            _assert("D9EAF7" not in document_xml, "招标 DOCX 不使用平台蓝色表头装饰", checks)
+            _assert(not re.search(r"。\s*。|；\s*。", word_text), "招标 DOCX 正文无重复句末标点", checks)
+            _assert(not re.search(r"。\s*。|；\s*。", pdf_text), "招标 PDF 正文无重复句末标点", checks)
+            for name in TENDER_TABLES_AND_FORMS:
+                _assert(name in word_text, f"招标 DOCX 包含 {name}", checks)
+                _assert(name in pdf_text, f"招标 PDF 包含 {name}", checks)
+            for marker in FINAL_PROHIBITED:
+                _assert(marker not in word_text, f"招标 DOCX 不含内部标记 {marker}", checks)
+                _assert(marker not in pdf_text, f"招标 PDF 不含内部标记 {marker}", checks)
+            for internal_appendix in ("字段来源清单", "一致性校验报告", "风险清单"):
+                _assert(internal_appendix not in word_text, f"招标正文未附带 {internal_appendix}", checks)
+                _assert(internal_appendix not in pdf_text, f"招标 PDF 未附带 {internal_appendix}", checks)
+            for section_title in expected_sections[stage]:
+                _assert(
+                    pdf_text.count(section_title) >= 2, f"招标 PDF 目录和正文均显示 {section_title}", checks
+                )
+            _assert(len(reader.pages) >= 12, "招标 PDF 具有正式分页正文", checks)
+            for page_number, page in enumerate(reader.pages, 1):
+                page_text = page.extract_text() or ""
+                body_text = page_text.replace(document_title, "")
+                body_text = re.sub(rf"第\s*{page_number}\s*页", "", body_text)
+                body_text = re.sub(r"\s+", "", body_text)
+                _assert(len(body_text) >= 10, f"招标 PDF 第 {page_number} 页不是空白页", checks)
         for page in reader.pages:
             width = float(page.mediabox.width)
             height = float(page.mediabox.height)
@@ -186,8 +257,7 @@ def verify() -> None:
         "checks": checks,
         "artifacts": artifact_results,
         "external_boundary": (
-            "Demo 通用模板已验证；客户正式模板和授权字体尚未提供，"
-            "不能声明客户模板严格合规。"
+            "Demo 通用模板已验证；客户正式模板和授权字体尚未提供，不能声明客户模板严格合规。"
         ),
     }
     (ARTIFACT_DIR / "format-compliance-report.json").write_text(

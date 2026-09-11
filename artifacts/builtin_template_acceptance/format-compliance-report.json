@@ -1,0 +1,24 @@
+{
+  "docx": {
+    "paper": "A4",
+    "margins": "由锁定模板源继承；python-docx/LibreOffice 打开验证",
+    "fonts": "正文宋体、标题黑体；容器安装 Noto CJK 作为转换字体",
+    "font_sizes": "正文 11pt、一级标题 16pt、二级标题 14pt、标题 22pt",
+    "line_spacing": "1.5 倍",
+    "headings": "Heading 1–3 与模板章节树（DFS）一致",
+    "numbering": "正文段落与章节顺序由模板计划和生成步骤锁定",
+    "toc": "当前四类内置模板未配置自动目录域；不冒充已验证",
+    "header_footer": "保留模板页眉，统一页脚和 PAGE 域",
+    "tables": "字段来源清单表格已生成",
+    "chinese": "python-docx 与 PDF 文本提取均验证中文文本非空",
+    "unresolved_variables": 0
+  },
+  "pdf": {
+    "page_count": 33,
+    "all_pages_a4": true,
+    "all_pages_have_extractable_text": true,
+    "png_screenshot_count": 14,
+    "visual_review": "passed_by_delivery_visual_review"
+  },
+  "status": "passed"
+}

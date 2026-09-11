@@ -1,6 +1,6 @@
 # 项目文件链式生成平台
 
-面向项目编制、审核和管理人员的可运行全栈平台。唯一主链路为：需求说明/项目建议书 → 可研报告 → 招标文件 → 合同。下游既可选择平台内上一阶段的已定稿版本，也可上传已有文件。金额、主体、期限、范围、税率和付款等 P0 字段必须具有来源证据并经人工确认，阻断问题清零后才能定稿。
+面向项目编制、审核和管理人员的可运行全栈平台。唯一主链路为：需求说明/项目建议书 → 可研报告 → 采购方案分析与确认 → 一份或多份招标文件 → 按已确认采购包生成合同草稿。下游既可选择平台内上一阶段的已定稿版本，也可上传已有文件；外部招标文件直接生成合同的原入口保持可用。金额、主体、期限、范围、税率和付款等 P0 字段必须具有来源证据并经人工确认，阻断问题清零后才能定稿。
 
 ## 快速启动
 
@@ -9,7 +9,7 @@
 3. 等所有服务为 healthy 后访问 `http://localhost:8080`。
 4. 开发默认账号：`admin`；默认密码：`admin123`。它们分别由 `DEMO_ADMIN_ACCOUNT` 和 `DEMO_ADMIN_PASSWORD` 控制，仅供本机 Demo，生产部署必须更换为至少 12 位的强密码。
 
-如需启用 DeepSeek，将 `.env` 中的 `LLM_PROVIDER` 设为 `openai_compatible`，并填写 `OPENAI_BASE_URL`、`OPENAI_API_KEY`、`OPENAI_MODEL` 和 `LLM_TIMEOUT_SECONDS`。密钥只放在被 Git 忽略的本机 `.env`，不得写入源码、文档或提交记录。
+如需启用 DeepSeek，将 `.env` 中的 `LLM_PROVIDER` 设为 `openai_compatible`，并填写 `OPENAI_BASE_URL`、`OPENAI_API_KEY`、`OPENAI_MODEL` 和 `LLM_TIMEOUT_SECONDS`。采购方案功能由 `PROCUREMENT_PLANNING_ENABLED` 控制，长文档分块大小由 `PROCUREMENT_ANALYSIS_CHUNK_CHARS` 控制。密钥只放在被 Git 忽略的本机 `.env`，不得写入源码、文档或提交记录。
 
 常用命令：`make install`、`make migrate`、`make seed`、`make test`、`make test-e2e`、`make golden-case`、`make verify`、`make down`。`make clean` 仅清理可再生缓存和构建目录，保留源码、Golden Case 输入与 `artifacts` 交付物。
 
@@ -21,7 +21,7 @@
 - 文档：DOCX 模板原生 OOXML、PDF、XLSX；容器内 LibreOffice 负责 DOCX 可打开性和转换复核。
 - AI：确定性 Demo Provider 与 OpenAI-compatible Provider；模板中心支持“程序解析 + 小模型理解 + 人工确认”从成品 DOCX 提取候选模板，AI 建议不会自动成为正式字段或自动发布模板。
 
-完整说明见 [产品说明](docs/PRODUCT.md)、[架构](docs/ARCHITECTURE.md)、[测试](docs/TESTING.md)、[部署](docs/DEPLOYMENT.md) 和 [已知限制](KNOWN_LIMITATIONS.md)。OpenAPI 契约位于 `docs/openapi.json`，运行态接口文档为 `/docs`。
+完整说明见 [采购方案链路](docs/PROCUREMENT_PLANNING.md)、[产品说明](docs/PRODUCT.md)、[架构](docs/ARCHITECTURE.md)、[测试](docs/TESTING.md)、[部署](docs/DEPLOYMENT.md) 和 [已知限制](KNOWN_LIMITATIONS.md)。OpenAPI 契约位于 `docs/openapi.json`，运行态接口文档为 `/docs`。
 
 ## 验收边界
 

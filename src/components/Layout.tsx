@@ -3,7 +3,7 @@ import type { Page } from "../types";
 const nav: [string, IconName, Page][] = [
   ["项目空间", "grid", "project-list"],
   ["模板中心", "template", "template-center"],
-  ["字段字典", "dictionary", "field-dictionary"],
+  ["动态字段提取", "dictionary", "field-dictionary"],
   ["系统管理", "settings", "system-management"],
 ];
 export function Sidebar({
@@ -69,7 +69,7 @@ export function Topbar({ page, navigate }: { page: Page; navigate: (p: Page) => 
     "project-detail": "某省公司中心机房节能改造项目",
     "template-center": "模板中心",
     "template-detail": "机房建设项目可行性研究报告模板",
-    "field-dictionary": "字段字典",
+    "field-dictionary": "动态字段提取",
     "system-management": "系统管理",
     "field-confirmation": "招标 · 字段确认",
     "template-selection": "招标 · 选择模板",

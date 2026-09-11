@@ -7,12 +7,16 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-os.environ.setdefault("APP_ENV", "test")
-os.environ.setdefault("DATABASE_URL", "sqlite:///./artifacts/golden_case/golden.db")
-os.environ.setdefault("STORAGE_BACKEND", "local")
-os.environ.setdefault("LOCAL_STORAGE_PATH", "artifacts/golden_case/objects")
-os.environ.setdefault("CELERY_TASK_ALWAYS_EAGER", "true")
-os.environ.setdefault("LLM_PROVIDER", "demo")
+os.environ["APP_ENV"] = "test"
+os.environ["DATABASE_URL"] = os.environ.get(
+    "GOLDEN_DATABASE_URL", "sqlite:///./artifacts/golden_case/golden.db"
+)
+os.environ["STORAGE_BACKEND"] = "local"
+os.environ["LOCAL_STORAGE_PATH"] = os.environ.get(
+    "GOLDEN_LOCAL_STORAGE_PATH", "artifacts/golden_case/objects"
+)
+os.environ["CELERY_TASK_ALWAYS_EAGER"] = "true"
+os.environ["LLM_PROVIDER"] = "demo"
 
 from docx import Document as WordDocument  # noqa: E402
 from docx.enum.text import WD_ALIGN_PARAGRAPH  # noqa: E402
@@ -71,32 +75,93 @@ STAGE_LABELS = {
 
 FIELD_VALUES: dict[str, dict[str, Any]] = {
     "requirement": {
-        "project_name": "宁夏数字政务协同平台建设项目",
+        "project_name": "宁夏数据中心网络设备更新项目",
         "project_owner": "宁夏示例政务服务中心",
-        "construction_scope": "建设统一事项管理、协同办理和运行分析能力",
-        "project_period": 18,
+        "construction_scope": "更新数据中心核心交换与接入交换设备，完善网络管理和安全运行保障能力",
+        "project_period": 8,
     },
     "feasibility": {
-        "project_name": "宁夏数字政务协同平台建设项目",
+        "project_name": "宁夏数据中心网络设备更新项目",
         "total_investment": 12_800_000,
-        "construction_scope": "建设基础支撑、事项管理、协同办理、数据治理和安全运维体系",
-        "project_period": 18,
+        "construction_scope": "更新数据中心核心交换、接入交换和配套光模块，实施网络迁移与运行保障建设",
+        "project_period": 8,
     },
     "tender": {
-        "project_name": "宁夏数字政务协同平台建设项目",
+        "project_name": "宁夏数据中心网络设备更新项目",
+        "tender_number": "NX-SB-2026-001",
+        "package_number": "第一标包",
+        "tenderer": "宁夏示例政务服务中心",
+        "tender_agency": "不委托招标代理机构",
+        "tender_method": "公开招标",
+        "issue_date": "2026-09-08",
         "procurement_budget": 9_800_000,
         "maximum_price": 9_500_000,
-        "procurement_scope": "采购事项管理、协同办理、数据治理软件及实施服务",
+        "procurement_scope": "采购核心交换设备、接入交换设备及配套硬件，包含安装调试和交付培训。",
+        "qualification_requirements": (
+            "投标人须依法设立并具有独立承担民事责任的能力；具有履行合同所必需的设备和专业技术能力；"
+            "近三年在经营活动中没有重大违法记录。资格证明材料按第六章格式提交。"
+        ),
+        "joint_venture_policy": "本标包不接受联合体投标。",
+        "document_acquisition": "2026年9月9日至2026年9月15日登录项目采购平台下载。",
+        "bid_deadline": "2026-09-29 09:30，电子投标文件应在截止时间前完成加密上传。",
+        "bid_opening": "2026-09-29 09:30，在宁夏回族自治区银川市示例政务服务中心第一开标室组织线上开标。",
+        "announcement_media": "中国招标投标公共服务平台和项目采购平台。",
+        "contact_information": (
+            "招标人联系人：张宁；联系电话：0951-0000000；地址：宁夏回族自治区银川市示例路1号。"
+        ),
+        "bid_bond": "人民币壹拾万元整，采用银行保函或保险保函，在投标截止时间前提交。",
+        "bid_validity": "自投标截止之日起90日历天。",
+        "clarification_rules": (
+            "投标人应在投标截止时间15日前通过项目采购平台提交澄清问题；招标人通过平台统一答复。"
+        ),
+        "rejection_rules": (
+            "未按要求签章、资格审查不合格、实质性条款不响应、报价超过最高限价或存在法律规定的其他否决情形。"
+        ),
+        "evaluation_method": "综合评估法",
+        "evaluation_criteria": (
+            "1|商务响应|15|0-15|资质、业绩和商务条款响应完整得15分；每缺一项扣5分，最低0分\n"
+            "2|技术性能|45|0-45|技术规格全部满足得35分；实质性指标正偏离每项加2分，最高加10分\n"
+            "3|实施与服务|20|0-20|供货、安装、培训、质保方案按完整性和可执行性分档评分\n"
+            "4|投标报价|20|0-20|满足文件要求且报价最低的评审价为基准价，价格分按基准价/评审价×20计算"
+        ),
+        "tie_break_rule": "综合得分相同时，投标报价低者优先；报价仍相同时，技术得分高者优先。",
+        "general_contract_terms_source": (
+            "平台参考模板V1.0；正式发布前须由招标人法务依据适用制度锁定标准条款版本。"
+        ),
+        "payment_terms": "合同签订并收到履约担保后支付30%；到货初验合格后支付40%；最终验收合格后支付30%。",
+        "delivery_period": "合同生效后60日历天内完成全部设备到货、安装和调试。",
+        "delivery_location": "宁夏回族自治区银川市招标人指定数据中心。",
+        "acceptance_criteria": (
+            "依据合同、投标文件和技术规格逐项验收，提交到货清单、检测报告、安装记录、培训记录和验收报告。"
+        ),
+        "warranty_requirements": "最终验收合格之日起提供36个月原厂质保和7×24小时故障响应服务。",
+        "procurement_list": (
+            "1|核心交换设备|2|台|详见技术规格表|实质性\n"
+            "2|接入交换设备|24|台|详见技术规格表|实质性\n"
+            "3|光模块|96|只|与交换设备兼容|一般"
+        ),
+        "technical_specifications": (
+            "1|核心交换设备|交换容量≥25.6Tbps；包转发率≥7200Mpps|实质性|提供厂商公开资料或检测报告\n"
+            "2|接入交换设备|48个千兆电口；不少于4个万兆光口|实质性|提供厂商公开资料\n"
+            "3|光模块|万兆单模，传输距离不低于10km|一般|提供产品规格书"
+        ),
+        "installation_requirements": "完成设备上架、布线、配置、联调和割接，形成配置备份与实施记录。",
+        "training_requirements": "提供不少于2场现场培训，覆盖设备运维、故障定位和配置备份恢复。",
+        "data_security_requirements": (
+            "实施过程不得复制业务数据；配置文件和日志应加密传输并按招标人要求留存。"
+        ),
+        "interface_requirements": "设备应支持SNMPv3、Syslog和标准网络管理接口，并接入现有监控系统。",
+        "operations_requirements": "质保期内提供7×24小时技术支持，重大故障30分钟响应、4小时到场。",
     },
     "contract": {
         "party_a": "宁夏示例政务服务中心",
         "party_b": "示例数字科技有限公司",
-        "contract_subject": "数字政务协同平台软件及实施服务",
-        "contract_scope": "交付事项管理、协同办理和数据治理软件，完成部署、培训及验收支持",
+        "contract_subject": "数据中心网络设备供货及配套服务",
+        "contract_scope": "交付核心交换设备、接入交换设备和光模块，完成安装调试、培训及验收支持",
         "final_contract_amount": 9_260_000,
         "tax_rate": 6,
         "tax_inclusion": "含税总价",
-        "contract_duration": "合同生效后 12 个月",
+        "contract_duration": "合同生效后 60 日历天内完成交付，质保期 36 个月",
         "delivery_location": "宁夏回族自治区银川市甲方指定地点",
         "payment_plan": [
             {"label": "预付款", "ratio": 30, "amount": 2_778_000, "trigger": "合同生效并收到合规发票"},
@@ -104,7 +169,7 @@ FIELD_VALUES: dict[str, dict[str, Any]] = {
             {"label": "终验款", "ratio": 30, "amount": 2_778_000, "trigger": "系统完成终验"},
         ],
         "acceptance": "按照合同范围、技术要求和双方确认的验收方案组织初验与终验",
-        "warranty": "终验合格之日起提供十二个月免费质保服务",
+        "warranty": "终验合格之日起提供三十六个月原厂免费质保服务",
         "breach": "违约责任按照双方确认的合同条款承担",
         "effective_conditions": "双方法定代表人或授权代表签字并加盖公章后生效",
     },
@@ -214,7 +279,14 @@ def create_case_inputs() -> None:
                 "效益和风险",
                 "结论",
             ],
-            "tender": ["招标公告", "投标人须知", "采购需求", "合同条款", "评标办法"],
+            "tender": [
+                "招标公告",
+                "投标人须知",
+                "评标办法",
+                "合同条款及格式",
+                "供货或服务要求",
+                "投标文件格式",
+            ],
             "contract": [
                 "合同主体",
                 "合同标的和范围",
@@ -339,9 +411,7 @@ def _finalize(db: Any, version: DocumentVersion, admin: User) -> dict[str, objec
     run = validate_document_version(db, version)
     db.flush()
     if run.status != "passed":
-        issues = list(
-            db.scalars(select(ValidationIssue).where(ValidationIssue.validation_run_id == run.id))
-        )
+        issues = list(db.scalars(select(ValidationIssue).where(ValidationIssue.validation_run_id == run.id)))
         messages = [f"{issue.rule_key}: {issue.message} @ {issue.location}" for issue in issues]
         selected = [(block.id, block.reviewed) for block in blocks]
         raise RuntimeError(
@@ -452,8 +522,11 @@ def generate() -> None:
     validations: dict[str, object] = {}
     manifest: dict[str, Any] = {"demo_only": True, "artifacts": {}}
     with SessionLocal() as db:
-        organization = db.scalar(select(Organization).where(Organization.name == "Demo 组织"))
-        admin = db.scalar(select(User).where(User.email == get_settings().demo_admin_account))
+        settings = get_settings()
+        organization = db.scalar(
+            select(Organization).where(Organization.name == settings.demo_organization_name)
+        )
+        admin = db.scalar(select(User).where(User.email == settings.demo_admin_account))
         if organization is None or admin is None:
             raise RuntimeError("Demo seed failed")
         project = _create_project(db, organization, admin)
@@ -483,6 +556,7 @@ def generate() -> None:
                     Template.status == "published",
                     Template.generation_enabled.is_(True),
                     Template.source_kind == "platform_reference_template",
+                    *((Template.procurement_type == "设备采购",) if stage == "tender" else ()),
                 )
             )
             if template is None:
@@ -496,6 +570,7 @@ def generate() -> None:
                 template_version=template.current_version,
                 idempotency_key=f"golden-demo-001-{stage}",
                 user_id=admin.id,
+                template_applicability_confirmed=stage == "tender",
             )
             db.flush()
             version = execute_generation_job(db, job.id)

@@ -5,7 +5,7 @@ import { useAuth } from "./Auth";
 const navItems = [
   ["/projects", "项目空间"],
   ["/templates", "模板中心"],
-  ["/field-dictionary", "字段字典"],
+  ["/field-dictionary", "动态字段提取"],
   ["/admin/users", "系统管理"],
 ] as const;
 
@@ -17,7 +17,7 @@ export function Shell() {
     : location.pathname.startsWith("/templates")
       ? "模板中心"
       : location.pathname.startsWith("/field-dictionary")
-        ? "字段字典"
+        ? "动态字段提取"
         : "系统管理";
   return (
     <div className="flex min-h-screen bg-[#F6F8FB] text-slate-700">
@@ -122,6 +122,7 @@ const STATUS_LABELS: Record<string, string> = {
   generated: "生成完成",
   draft: "草稿",
   reviewing: "审阅中",
+  validation_failed: "校验失败",
   ready_to_finalize: "可定稿",
   finalized: "已定稿",
   superseded: "已被新版本替代",
@@ -147,7 +148,7 @@ export function StatusBadge({ status }: { status: string }) {
     status === "passed" ||
     status === "published"
       ? "bg-emerald-50 text-emerald-700"
-      : status === "failed" || status === "stale"
+      : status === "failed" || status === "stale" || status === "validation_failed"
         ? "bg-red-50 text-red-700"
         : "bg-blue-50 text-blue-700";
   return (

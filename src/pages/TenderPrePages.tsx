@@ -103,7 +103,6 @@ export function TenderSourceSelectionPage({ navigate }: { navigate: (p: Page) =>
               "上传/确认文件",
               "字段解析",
               "字段确认",
-              "选择模板",
               "配置生成",
               "生成中",
               "审校",

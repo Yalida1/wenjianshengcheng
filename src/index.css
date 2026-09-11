@@ -153,3 +153,113 @@ input {
   background: #dce7f7;
   color: #24457c;
 }
+
+.document-paper {
+  @apply rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8;
+}
+
+.document-paragraph {
+  @apply block w-full rounded-lg border border-transparent px-3 py-2 text-left transition;
+}
+
+.document-paragraph-editor {
+  @apply block min-h-28 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm leading-7 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+}
+
+.pending-mark {
+  @apply rounded-sm bg-red-100 px-0.5 font-medium text-red-700;
+  font-style: normal;
+}
+
+@keyframes task-progress-runner {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(520%);
+  }
+}
+
+@keyframes task-progress-scan {
+  0%,
+  100% {
+    transform: translateY(-7px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.9;
+  }
+}
+
+@keyframes task-progress-dot {
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.task-progress-ambient {
+  position: absolute;
+  inset: -60% -20% auto 42%;
+  height: 12rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(191 219 254 / 0.38), transparent 68%);
+  pointer-events: none;
+}
+
+.task-progress-document {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgb(191 219 254);
+  border-radius: 0.875rem;
+  background: rgb(239 246 255 / 0.9);
+  color: #155aa8;
+}
+
+.task-progress-scan {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2563eb, transparent);
+  box-shadow: 0 0 7px rgb(37 99 235 / 0.65);
+  animation: task-progress-scan 1.8s ease-in-out infinite;
+}
+
+.task-progress-runner {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 22%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.92), transparent);
+  animation: task-progress-runner 1.7s linear infinite;
+}
+
+.task-progress-dot {
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: #2563eb;
+  box-shadow: 0 0 0 4px rgb(37 99 235 / 0.12);
+  animation: task-progress-dot 1.15s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-progress-scan,
+  .task-progress-runner,
+  .task-progress-dot {
+    animation: none;
+  }
+}

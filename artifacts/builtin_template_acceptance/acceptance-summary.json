@@ -1,0 +1,1357 @@
+{
+  "schema_version": "1.0",
+  "overall_status": "passed",
+  "conclusion": "通过",
+  "started_at": "2026-09-07T10:17:17.003608+00:00",
+  "finished_at": "2026-09-07T10:20:19.539315+00:00",
+  "provider_evidence_state": "使用 Demo/Test Provider 验证",
+  "environment": {
+    "operating_system": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "docker": "Docker version 29.4.2, build 055a478 (host; verify container not mounted)",
+    "node": "v22.19.0",
+    "python": "Python 3.12.3",
+    "postgres": "PostgreSQL 16.4",
+    "redis": "redis-server 7.4.11",
+    "libreoffice": "LibreOffice 24.2.7.2 420(Build:2)",
+    "database_url": "postgres:5432/builtin_template_acceptance",
+    "redis_namespace": "11",
+    "s3_bucket": "project-documents-builtin-template-acceptance",
+    "ai_provider": "demo",
+    "test_demo_provider": true,
+    "executed_at": "2026-09-07T10:17:18.856686+00:00"
+  },
+  "counts": {
+    "builtin_templates": 22,
+    "generation_enabled_templates": 13,
+    "minimum_render_passed": 13,
+    "generated_files": 22,
+    "docx_checked": 19,
+    "pdf_checked": 4,
+    "negative_tests": 18,
+    "negative_tests_passed": 18,
+    "api_requests": 922,
+    "api_500": 0
+  },
+  "checks": [
+    {
+      "id": "BTA-INV-001",
+      "status": "passed",
+      "detail": {
+        "count": 22,
+        "by_kind": {
+          "national_official_text": 9,
+          "adapted_from_official_outline": 9,
+          "platform_reference_template": 4,
+          "other_official_template": 0
+        }
+      }
+    },
+    {
+      "id": "BTA-INV-002",
+      "status": "passed",
+      "detail": "全部生成模板对象 SHA 与数据库一致；正式文本索引无本地副本"
+    },
+    {
+      "id": "BTA-TPL-002",
+      "status": "passed",
+      "detail": {
+        "rendered": 13,
+        "reference_only": 9
+      }
+    },
+    {
+      "id": "BTA-POS-001",
+      "status": "passed",
+      "detail": {
+        "stage": "requirement",
+        "validation": {
+          "P0": 0,
+          "P1": 0,
+          "P2": 0
+        }
+      }
+    },
+    {
+      "id": "BTA-POS-002",
+      "status": "passed",
+      "detail": {
+        "stage": "feasibility",
+        "validation": {
+          "P0": 0,
+          "P1": 0,
+          "P2": 0
+        }
+      }
+    },
+    {
+      "id": "BTA-POS-003",
+      "status": "passed",
+      "detail": {
+        "stage": "tender",
+        "validation": {
+          "P0": 0,
+          "P1": 0,
+          "P2": 0
+        }
+      }
+    },
+    {
+      "id": "BTA-POS-004",
+      "status": "passed",
+      "detail": {
+        "validation": {
+          "P0": 4,
+          "P1": 0,
+          "P2": 0
+        },
+        "status": 422
+      }
+    },
+    {
+      "id": "BTA-POS-005",
+      "status": "passed",
+      "detail": {
+        "validation": {
+          "P0": 0,
+          "P1": 0,
+          "P2": 0
+        },
+        "status": 200
+      }
+    },
+    {
+      "id": "BTA-MAP-001",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-MAP-001",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "forbidden_field_mapping",
+        "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+        "request_id": "bta-41d43bd2-ae11-461c-ad24-ef06d1392ccd",
+        "audit_recorded": true,
+        "database_state": "字段记录未创建"
+      }
+    },
+    {
+      "id": "BTA-MAP-002",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-MAP-002",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "forbidden_field_mapping",
+        "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+        "request_id": "bta-a6b53618-c60f-453b-b8f9-a24d70bdb1a0",
+        "audit_recorded": true,
+        "database_state": "字段记录未创建"
+      }
+    },
+    {
+      "id": "BTA-MAP-003",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-MAP-003",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "forbidden_field_mapping",
+        "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+        "request_id": "bta-4f4dfbbe-801d-42b0-b587-58f7e13559a3",
+        "audit_recorded": true,
+        "database_state": "字段记录未创建"
+      }
+    },
+    {
+      "id": "BTA-MAP-004",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-MAP-004",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "forbidden_field_mapping",
+        "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+        "request_id": "bta-d5d9cd34-d5ef-43db-b4bf-0f85cac0d836",
+        "audit_recorded": true,
+        "database_state": "字段记录未创建"
+      }
+    },
+    {
+      "id": "BTA-MAP-005",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-MAP-005",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "forbidden_field_mapping",
+        "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+        "request_id": "bta-d8421af6-840d-4b06-8c36-5ea06a487e30",
+        "audit_recorded": true,
+        "database_state": "字段记录未创建"
+      }
+    },
+    {
+      "id": "BTA-TPL-001",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-TPL-001",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "template_not_applicable",
+        "message": "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+        "request_id": "bta-9ddaa77b-c0ba-4993-9366-f4c302c1459b",
+        "audit_recorded": true,
+        "database_state": "未创建生成任务"
+      }
+    },
+    {
+      "id": "BTA-NEG-001",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-001",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "缺少必需 P0 字段",
+        "request_id": "bta-8f88f863-9e19-443b-bc6a-a5b3e8b24c37",
+        "audit_recorded": true,
+        "database_state": "合同预草案仍为 draft/可导出但不可定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-004",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-004",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "最终合同金额为空",
+        "request_id": "bta-8f88f863-9e19-443b-bc6a-a5b3e8b24c37",
+        "audit_recorded": true,
+        "database_state": "合同预草案仍为 draft/可导出但不可定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-002",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-002",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "存在 P0 问题，不能定稿",
+        "request_id": "bta-094a1e01-7e5b-42e0-973e-a6932c7761de",
+        "audit_recorded": true,
+        "database_state": "招标预算保持 ai_suggested，文档未定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-003",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-003",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "存在 P0 问题，不能定稿",
+        "request_id": "bta-7ad67e7e-36c0-4e75-9162-d3d4c79d13fc",
+        "audit_recorded": true,
+        "database_state": "项目单位保持 conflict，文档未定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-005",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-005",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "存在 P0 问题，不能定稿",
+        "request_id": "bta-8e78e513-9095-4cc0-a2b4-f4e78349070a",
+        "audit_recorded": true,
+        "database_state": "付款比例不等于 100%，文档未定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-006",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-006",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "存在 P0 问题，不能定稿",
+        "request_id": "bta-4f856554-347f-41fc-8862-ed69b1e9bfb6",
+        "audit_recorded": true,
+        "database_state": "付款金额合计不等于合同金额，文档未定稿"
+      }
+    },
+    {
+      "id": "BTA-NEG-007",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-007",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "finalization_blocked",
+        "message": "存在 P0 问题，不能定稿",
+        "request_id": "bta-96308296-0dd0-4f6f-bada-7c6dce063e33",
+        "audit_recorded": true,
+        "database_state": "修订版保持 draft，占位符内容块已保存并由校验阻断"
+      }
+    },
+    {
+      "id": "BTA-NEG-008",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-008",
+        "status": "passed",
+        "http_status": 422,
+        "error_code": "template_not_applicable",
+        "message": "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+        "request_id": "bta-eb9675a1-2d29-4d78-b2ff-b674e88f640f",
+        "audit_recorded": true,
+        "database_state": "过期模板仍发布留痕，但未创建生成任务"
+      }
+    },
+    {
+      "id": "BTA-NEG-009",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-009",
+        "status": "passed",
+        "http_status": 403,
+        "error_code": "fixed_template_block_forbidden",
+        "message": "固定模板条款仅允许模板管理员修改",
+        "request_id": "bta-54470444-3a41-407c-b5de-fae325ed3cfc",
+        "audit_recorded": true,
+        "database_state": "fixed_template 原文未变化"
+      }
+    },
+    {
+      "id": "BTA-NEG-010",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-010",
+        "status": "passed",
+        "http_status": 200,
+        "error_code": null,
+        "message": "上游新定稿后所有已启动下游均标为 stale",
+        "request_id": "bta-7517f9bb-9a64-45ec-b0da-193f2640cca1",
+        "audit_recorded": true,
+        "database_state": [
+          {
+            "id": "58599f9d-0c5e-482c-9b68-fe9e75d77ce8",
+            "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+            "stage": "feasibility",
+            "status": "stale",
+            "source_type": "upstream_final",
+            "source_file_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+            "finalized_document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+            "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+            "revision": 4
+          },
+          {
+            "id": "a378e09b-b960-43f5-8999-b3a419177129",
+            "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+            "stage": "tender",
+            "status": "stale",
+            "source_type": "upstream_final",
+            "source_file_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+            "finalized_document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+            "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+            "revision": 4
+          },
+          {
+            "id": "4fb030a6-f7e5-42dd-85de-5c20bfb6862d",
+            "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+            "stage": "contract",
+            "status": "stale",
+            "source_type": "upstream_final",
+            "source_file_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+            "finalized_document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+            "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+            "revision": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "BTA-NEG-011",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-011",
+        "status": "passed",
+        "http_status": 409,
+        "error_code": "immutable_version",
+        "message": "已定稿版本不可修改，请创建新修订草稿",
+        "request_id": "bta-c3be11af-8fad-425b-a590-4ad91ced99d8",
+        "audit_recorded": true,
+        "database_state": "原定稿版本 immutable=true，正文未覆盖"
+      }
+    },
+    {
+      "id": "BTA-NEG-012",
+      "status": "passed",
+      "detail": {
+        "case_id": "BTA-NEG-012",
+        "status": "passed",
+        "http_status": [
+          403,
+          403,
+          403
+        ],
+        "error_code": [
+          "forbidden",
+          "forbidden",
+          "forbidden"
+        ],
+        "message": "只读用户确认字段、定稿和导出均被拒绝",
+        "request_id": [
+          "bta-f308d5a7-7c02-4478-8e2c-fc7885fca3f7",
+          "bta-52366d6f-e506-4ace-808a-8d4ab0279fea",
+          "bta-2764637d-7661-4157-9cd2-d41208939853"
+        ],
+        "audit_recorded": true,
+        "database_state": "字段、定稿记录和导出任务均未因只读请求改变"
+      }
+    },
+    {
+      "id": "BTA-TRC-001",
+      "status": "passed",
+      "detail": {
+        "p0_count": 26,
+        "confirmed": 26
+      }
+    },
+    {
+      "id": "BTA-FID-001",
+      "status": "passed",
+      "detail": [
+        {
+          "stage": "requirement",
+          "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+          "template_version": 1,
+          "template_sha_match": true,
+          "section_keys_match": true,
+          "header_preserved": true,
+          "format_profile_locked": true,
+          "source_docx_sha256": "a0296c68ff67f645b1f8c53b66dcf4db9aa5ea119808b5cfef0ba32208afe0ab",
+          "export_docx_sha256": "f8f20eaec24ec0f05ef3c58056a4da4998f897f19b99de42d2e40e8f7c93c281",
+          "status": "passed"
+        },
+        {
+          "stage": "feasibility",
+          "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+          "template_version": 1,
+          "template_sha_match": true,
+          "section_keys_match": true,
+          "header_preserved": true,
+          "format_profile_locked": true,
+          "source_docx_sha256": "cd7af1428bb7485b83ff613213272de9fa2d6a7f93cadf148ed26f181e0c45b6",
+          "export_docx_sha256": "f45162f91332008e1586e89554034f5de6803b97e3f04d4ece980afe4493b803",
+          "status": "passed"
+        },
+        {
+          "stage": "tender",
+          "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+          "template_version": 1,
+          "template_sha_match": true,
+          "section_keys_match": true,
+          "header_preserved": true,
+          "format_profile_locked": true,
+          "source_docx_sha256": "aa62766838521c98a361564a29160c2419a05c5f859073c4246d6dcbd6987f33",
+          "export_docx_sha256": "d4941efac4acc0b6c05aa257e0bc87fb7b560def5e3da2ca88231dd7feb9bef0",
+          "status": "passed"
+        },
+        {
+          "stage": "contract",
+          "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+          "template_version": 1,
+          "template_sha_match": true,
+          "section_keys_match": true,
+          "header_preserved": true,
+          "format_profile_locked": true,
+          "source_docx_sha256": "85b3a6da6bf4327f064406fa5db9e4237a459c603b5b80a2004edec43b12b8c7",
+          "export_docx_sha256": "8bb38445271e715b76a761d6a219d34f9961437017865e6cbe2b8e88298e17be",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "BTA-INT-001",
+      "status": "passed",
+      "detail": {
+        "checked": 19,
+        "failed": 0
+      }
+    },
+    {
+      "id": "BTA-INT-002",
+      "status": "passed",
+      "detail": {
+        "checked": 4,
+        "failed": 0
+      }
+    },
+    {
+      "id": "BTA-E2E-001",
+      "status": "passed",
+      "detail": {
+        "command": [
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "e2e/builtin-template-acceptance.spec.ts",
+          "e2e/routes-responsive.spec.ts",
+          "--reporter=line"
+        ],
+        "exit_code": 0,
+        "log": "artifacts/builtin_template_acceptance/logs/playwright-e2e.log",
+        "status": "passed"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "name": "environment-node",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "v22.19.0\n",
+      "stderr": ""
+    },
+    {
+      "name": "environment-python",
+      "command": [
+        "python",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "Python 3.12.3\n",
+      "stderr": ""
+    },
+    {
+      "name": "environment-libreoffice",
+      "command": [
+        "soffice",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "LibreOffice 24.2.7.2 420(Build:2)\n\n",
+      "stderr": ""
+    },
+    {
+      "name": "playwright-e2e",
+      "command": [
+        "pnpm",
+        "exec",
+        "playwright",
+        "test",
+        "e2e/builtin-template-acceptance.spec.ts",
+        "e2e/routes-responsive.spec.ts",
+        "--reporter=line"
+      ],
+      "exit_code": 0,
+      "stdout": "\nRunning 2 tests using 1 worker\n\n\u001b[1A\u001b[2K[1/2] [chromium] › e2e/builtin-template-acceptance.spec.ts:15:1 › 内置模板固定数据四阶段 UI 主链路\n\u001b[1A\u001b[2K[2/2] [chromium] › e2e/routes-responsive.spec.ts:5:1 › 核心路由刷新、三种桌面宽度与基础可访问性通过\n\u001b[1A\u001b[2K  2 passed (57.3s)\n",
+      "stderr": ""
+    }
+  ],
+  "generated_files": [
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/一般投资项目可行性研究报告参考模板.docx",
+      "file_type": "docx",
+      "size_bytes": 39719,
+      "sha256": "d54a8b555286089454f7c98f16462aa34d13ee14cd66f8f5722a726896af4f95",
+      "export_job_id": "bbb639eb-3213-44a2-9061-0bd4ad38eacf",
+      "document_version_id": "0ccf8eee-ecee-4547-804b-07b2ce3d9e0d",
+      "document_version": 1,
+      "template_id": "4eaeffd7-38ec-4000-ab87-0d33889cbefe",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "a95bb900-41ae-41de-b02e-8832705d2094",
+      "artifact": {
+        "id": "8e8e3b5c-6548-44e9-8a8b-41f90d824ad5",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39719,
+        "sha256": "d54a8b555286089454f7c98f16462aa34d13ee14cd66f8f5722a726896af4f95",
+        "metadata": {
+          "document_version_id": "0ccf8eee-ecee-4547-804b-07b2ce3d9e0d",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "4eaeffd7-38ec-4000-ab87-0d33889cbefe",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/企业投资项目可研报告适配模板_2023年大纲.docx",
+      "file_type": "docx",
+      "size_bytes": 40635,
+      "sha256": "86c38c66caff8abf5ed1ab51aea881c79cf19d3a5145acba4b7e5387fd724686",
+      "export_job_id": "fb6963e8-b6e3-479b-988f-93183ef9feca",
+      "document_version_id": "0623db87-007c-4511-a198-7d1d25795f2a",
+      "document_version": 2,
+      "template_id": "89282dfe-ff0b-4f81-95dc-50ad3b83eaed",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "a95bb900-41ae-41de-b02e-8832705d2094",
+      "artifact": {
+        "id": "751729a1-7dbb-4529-9fbd-b32fc0226b25",
+        "filename": "document_V2.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40635,
+        "sha256": "86c38c66caff8abf5ed1ab51aea881c79cf19d3a5145acba4b7e5387fd724686",
+        "metadata": {
+          "document_version_id": "0623db87-007c-4511-a198-7d1d25795f2a",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "89282dfe-ff0b-4f81-95dc-50ad3b83eaed",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/勘察招标文件适配模板_2017年版.docx",
+      "file_type": "docx",
+      "size_bytes": 41082,
+      "sha256": "c6d4d37c4b700e36a1523efd57d42b16b85f67cadd3dc570ca93a59f96141a71",
+      "export_job_id": "8a6e56c2-d902-43c9-95cc-b0eb8a08682a",
+      "document_version_id": "69828e87-f617-4ddd-b0d6-d554f9fada63",
+      "document_version": 1,
+      "template_id": "f6b4de1d-931e-495a-90a3-127444e8df45",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "e626bc7f-9dfb-47cc-9cd0-8b0a0872eb17",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41082,
+        "sha256": "c6d4d37c4b700e36a1523efd57d42b16b85f67cadd3dc570ca93a59f96141a71",
+        "metadata": {
+          "document_version_id": "69828e87-f617-4ddd-b0d6-d554f9fada63",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "f6b4de1d-931e-495a-90a3-127444e8df45",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/建设工程施工合同填报模板_GF-2017-0201适配.docx",
+      "file_type": "docx",
+      "size_bytes": 39565,
+      "sha256": "1e950f6ca2be1aaf6ab09be522e45d102483eaf8ad26ba06820c891af9ba5a44",
+      "export_job_id": "89a4d7cd-0dc3-482f-8aa5-4407aa98a285",
+      "document_version_id": "0083abf9-ba51-45c3-950d-bb2f77477f95",
+      "document_version": 1,
+      "template_id": "24d1b54c-4d79-4ac7-8ba9-f612cddd5745",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cf271b97-9419-4fbe-843f-736b5af00237",
+      "artifact": {
+        "id": "713848d1-3965-4d25-9581-0ffa4e03bba4",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39565,
+        "sha256": "1e950f6ca2be1aaf6ab09be522e45d102483eaf8ad26ba06820c891af9ba5a44",
+        "metadata": {
+          "document_version_id": "0083abf9-ba51-45c3-950d-bb2f77477f95",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "24d1b54c-4d79-4ac7-8ba9-f612cddd5745",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/政府投资项目可研报告适配模板_2023年大纲.docx",
+      "file_type": "docx",
+      "size_bytes": 40625,
+      "sha256": "93fea4c3b1667ffaee6361887f6be354053aae377a4818afa5cec13c1d64cbd3",
+      "export_job_id": "a52e61c4-a41e-4cb9-a2e9-7d6a0ab668cc",
+      "document_version_id": "91a3c62b-9e46-4ae5-94f5-a8681475991f",
+      "document_version": 3,
+      "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "a95bb900-41ae-41de-b02e-8832705d2094",
+      "artifact": {
+        "id": "7b4ebe1f-07ef-40f9-a9b4-e29ebff0115b",
+        "filename": "document_V3.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40625,
+        "sha256": "93fea4c3b1667ffaee6361887f6be354053aae377a4818afa5cec13c1d64cbd3",
+        "metadata": {
+          "document_version_id": "91a3c62b-9e46-4ae5-94f5-a8681475991f",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/requirement/政府投资项目建议书通用参考模板.docx",
+      "file_type": "docx",
+      "size_bytes": 39634,
+      "sha256": "abf772b7da7fc83414c1a14584d84f4f48cb1a1a64434b1b7a9bfaa23224db7e",
+      "export_job_id": "dda09503-c7ff-43e4-9a1b-1782a4da35ca",
+      "document_version_id": "78a71039-aa9e-4467-972b-51f4c0231ab0",
+      "document_version": 1,
+      "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "018eb145-6310-4ec4-afda-4d3e6a341b42",
+      "artifact": {
+        "id": "5e3985d0-42dd-47ad-ba38-69afd18d1c34",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39634,
+        "sha256": "abf772b7da7fc83414c1a14584d84f4f48cb1a1a64434b1b7a9bfaa23224db7e",
+        "metadata": {
+          "document_version_id": "78a71039-aa9e-4467-972b-51f4c0231ab0",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/政府采购货物买卖合同填报模板_2024年试行文本适配.docx",
+      "file_type": "docx",
+      "size_bytes": 39583,
+      "sha256": "fd27f89868ca195b919406864d6d16c9591234779f67f2ccab9341255aea460e",
+      "export_job_id": "f3c4fbf7-6be8-4618-b0d0-000516233cdf",
+      "document_version_id": "3989e948-4089-4dec-9510-a546c08e7f06",
+      "document_version": 2,
+      "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cf271b97-9419-4fbe-843f-736b5af00237",
+      "artifact": {
+        "id": "d3b40e9b-0671-4c2c-92d8-b6c61d1667be",
+        "filename": "document_V2.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39583,
+        "sha256": "fd27f89868ca195b919406864d6d16c9591234779f67f2ccab9341255aea460e",
+        "metadata": {
+          "document_version_id": "3989e948-4089-4dec-9510-a546c08e7f06",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/材料采购招标文件适配模板_2017年版.docx",
+      "file_type": "docx",
+      "size_bytes": 41087,
+      "sha256": "6d3ebc54c7756f80ccf4911e04cbc1102efba34d0ea05e093d9129c20fb03f36",
+      "export_job_id": "c6489e13-2377-42e8-a971-dbd927279366",
+      "document_version_id": "d3045395-6be2-4d82-b93c-d29a39c0621d",
+      "document_version": 2,
+      "template_id": "22c9167a-5ffb-435c-88ca-8cd5320b744b",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "7dbd0dec-83dd-46e6-85dd-f89087bd5f85",
+        "filename": "document_V2.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41087,
+        "sha256": "6d3ebc54c7756f80ccf4911e04cbc1102efba34d0ea05e093d9129c20fb03f36",
+        "metadata": {
+          "document_version_id": "d3045395-6be2-4d82-b93c-d29a39c0621d",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "22c9167a-5ffb-435c-88ca-8cd5320b744b",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/监理招标文件适配模板_2017年版.docx",
+      "file_type": "docx",
+      "size_bytes": 41080,
+      "sha256": "6509fb7c4c1dd542c207948715fb07d67784037b8b3cc7f0fd7a47b14a28d9bf",
+      "export_job_id": "d93d373f-8bc3-4a7f-ad63-2f702e9107bd",
+      "document_version_id": "e9312d0a-034d-420d-9937-9d7e2dc229fe",
+      "document_version": 3,
+      "template_id": "bd1acc23-a8e9-4bc5-893a-a27e57a66e90",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "ab11361e-332c-40fd-9a3e-9cf80b95846a",
+        "filename": "document_V3.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41080,
+        "sha256": "6509fb7c4c1dd542c207948715fb07d67784037b8b3cc7f0fd7a47b14a28d9bf",
+        "metadata": {
+          "document_version_id": "e9312d0a-034d-420d-9937-9d7e2dc229fe",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "bd1acc23-a8e9-4bc5-893a-a27e57a66e90",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设备采购招标文件适配模板_2017年版.docx",
+      "file_type": "docx",
+      "size_bytes": 41087,
+      "sha256": "b260bfe16b42d75583ccbf8b87370ee6dee40d14c2c1f32ff758052917c6288a",
+      "export_job_id": "f5a8ca71-4a30-4981-9e60-e745368968f5",
+      "document_version_id": "9af2a64f-5ca6-4cb5-b626-991ed26e1bb2",
+      "document_version": 4,
+      "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "2a6c401e-057f-4506-a764-b3b4a8b9eab3",
+        "filename": "document_V4.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41087,
+        "sha256": "b260bfe16b42d75583ccbf8b87370ee6dee40d14c2c1f32ff758052917c6288a",
+        "metadata": {
+          "document_version_id": "9af2a64f-5ca6-4cb5-b626-991ed26e1bb2",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设计招标文件适配模板_2017年版.docx",
+      "file_type": "docx",
+      "size_bytes": 41083,
+      "sha256": "6889ffefaa46cc27045ff3f33dcd7a5fcedeec400d78236222ad1972f716d487",
+      "export_job_id": "dc084db1-9cfc-478c-8f1f-46f08aeb279c",
+      "document_version_id": "9d82b929-e974-4b04-a5e2-107ee6f47206",
+      "document_version": 5,
+      "template_id": "ffd4325f-5acb-4677-a3eb-28655d9d7b05",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "d6bc7ac4-4b03-4c67-9465-3a617b7f8f1a",
+        "filename": "document_V5.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41083,
+        "sha256": "6889ffefaa46cc27045ff3f33dcd7a5fcedeec400d78236222ad1972f716d487",
+        "metadata": {
+          "document_version_id": "9d82b929-e974-4b04-a5e2-107ee6f47206",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "ffd4325f-5acb-4677-a3eb-28655d9d7b05",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/通用采购合同参考模板.docx",
+      "file_type": "docx",
+      "size_bytes": 39599,
+      "sha256": "638e68d6e0d4b0a22b43a09ff2b07c16125538348c9028d5c8502fda41112161",
+      "export_job_id": "13ecaa23-540e-40bd-b375-52a757aa2e25",
+      "document_version_id": "2dde9723-68cc-43cc-a61b-6c27b632603a",
+      "document_version": 3,
+      "template_id": "9545d84c-2eb1-4a19-b118-9b0137e1b4c4",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cf271b97-9419-4fbe-843f-736b5af00237",
+      "artifact": {
+        "id": "700464db-40bd-46c0-b52e-f75147ad19ec",
+        "filename": "document_V3.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39599,
+        "sha256": "638e68d6e0d4b0a22b43a09ff2b07c16125538348c9028d5c8502fda41112161",
+        "metadata": {
+          "document_version_id": "2dde9723-68cc-43cc-a61b-6c27b632603a",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "9545d84c-2eb1-4a19-b118-9b0137e1b4c4",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "内置模板最小渲染",
+      "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/通用采购招标文件参考模板.docx",
+      "file_type": "docx",
+      "size_bytes": 40851,
+      "sha256": "d4b740080d8dd070783870df06d4f96b4e74dabf5f591215b23a599348de3453",
+      "export_job_id": "4a310acf-dee1-4cc2-af98-16488052c6f7",
+      "document_version_id": "071782ae-6b75-4b75-93b8-29e40ebcd9ee",
+      "document_version": 6,
+      "template_id": "b781c7b0-978e-45f8-80a2-b0da91e66a32",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "cdd176ca-eedd-4f4d-b4b9-7cb844980da9",
+      "artifact": {
+        "id": "cb8378dd-8f87-466b-a105-fd3aefd73956",
+        "filename": "document_V6.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40851,
+        "sha256": "d4b740080d8dd070783870df06d4f96b4e74dabf5f591215b23a599348de3453",
+        "metadata": {
+          "document_version_id": "071782ae-6b75-4b75-93b8-29e40ebcd9ee",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "b781c7b0-978e-45f8-80a2-b0da91e66a32",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "项目建议书正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/requirement/项目建议书_V1.0.docx",
+      "file_type": "docx",
+      "size_bytes": 39887,
+      "sha256": "f8f20eaec24ec0f05ef3c58056a4da4998f897f19b99de42d2e40e8f7c93c281",
+      "export_job_id": "f62dfcbc-837b-4597-ae5d-c835b81113c9",
+      "document_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+      "document_version": 1,
+      "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "2de3e28a-26f8-4ee4-86c6-2a86f8ee2a5b",
+      "artifact": {
+        "id": "d27946f2-c949-4507-ac97-6e2863a3a927",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 39887,
+        "sha256": "f8f20eaec24ec0f05ef3c58056a4da4998f897f19b99de42d2e40e8f7c93c281",
+        "metadata": {
+          "document_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "项目建议书正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/requirement/项目建议书_V1.0.pdf",
+      "file_type": "pdf",
+      "size_bytes": 134046,
+      "sha256": "9db21a483742d0a6031e50458944b4b324d2aae83272d9d187d79fe997dc3ab6",
+      "export_job_id": "3e2fd0ad-2c4f-4f4c-968f-f502d6730724",
+      "document_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+      "document_version": 1,
+      "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+      "template_version": 1,
+      "source_kind": "uploaded_file",
+      "source_version_id": "2de3e28a-26f8-4ee4-86c6-2a86f8ee2a5b",
+      "artifact": {
+        "id": "0ae03afe-b1d5-45d4-997f-fcbe066d88bc",
+        "filename": "document_V1.pdf",
+        "mime_type": "application/pdf",
+        "size_bytes": 134046,
+        "sha256": "9db21a483742d0a6031e50458944b4b324d2aae83272d9d187d79fe997dc3ab6",
+        "metadata": {
+          "document_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "可行性研究报告正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/feasibility/可行性研究报告_V1.0.docx",
+      "file_type": "docx",
+      "size_bytes": 40911,
+      "sha256": "f45162f91332008e1586e89554034f5de6803b97e3f04d4ece980afe4493b803",
+      "export_job_id": "80ed30a7-f476-44a1-b842-a13d073c9ad5",
+      "document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+      "document_version": 1,
+      "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+      "artifact": {
+        "id": "86d7723a-0927-498f-8fd4-320b012d2745",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40911,
+        "sha256": "f45162f91332008e1586e89554034f5de6803b97e3f04d4ece980afe4493b803",
+        "metadata": {
+          "document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "可行性研究报告正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/feasibility/可行性研究报告_V1.0.pdf",
+      "file_type": "pdf",
+      "size_bytes": 269394,
+      "sha256": "2c4a87bbe3f63b100aa8ea2d8985a16b9bb22ffa1a2b17175ec9b4ccb498031b",
+      "export_job_id": "5a676505-8c9d-40c2-b2ba-24d2ba4a955e",
+      "document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+      "document_version": 1,
+      "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+      "artifact": {
+        "id": "f8723399-788d-4b09-a657-1627956a9119",
+        "filename": "document_V1.pdf",
+        "mime_type": "application/pdf",
+        "size_bytes": 269394,
+        "sha256": "2c4a87bbe3f63b100aa8ea2d8985a16b9bb22ffa1a2b17175ec9b4ccb498031b",
+        "metadata": {
+          "document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "招标文件正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/tender/招标文件_V1.0.docx",
+      "file_type": "docx",
+      "size_bytes": 41369,
+      "sha256": "d4941efac4acc0b6c05aa257e0bc87fb7b560def5e3da2ca88231dd7feb9bef0",
+      "export_job_id": "adcc3627-bc2d-4dba-9cc5-7e26916b7e9c",
+      "document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+      "document_version": 1,
+      "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+      "artifact": {
+        "id": "e2fdee82-1945-4293-a4e3-44434fee8d9f",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 41369,
+        "sha256": "d4941efac4acc0b6c05aa257e0bc87fb7b560def5e3da2ca88231dd7feb9bef0",
+        "metadata": {
+          "document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "招标文件正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/tender/招标文件_V1.0.pdf",
+      "file_type": "pdf",
+      "size_bytes": 199786,
+      "sha256": "d9dbd952f0644282d54af05ee0dc202041cf3ff928dbf159b769ef46369caa71",
+      "export_job_id": "64c005dd-b7d0-45ab-babb-12ce08b2dff2",
+      "document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+      "document_version": 1,
+      "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+      "artifact": {
+        "id": "074f2aed-48e2-46bf-bcbc-a26873cccb2a",
+        "filename": "document_V1.pdf",
+        "mime_type": "application/pdf",
+        "size_bytes": 199786,
+        "sha256": "d9dbd952f0644282d54af05ee0dc202041cf3ff928dbf159b769ef46369caa71",
+        "metadata": {
+          "document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "合同签署前预草案（预期不可定稿）",
+      "path": "artifacts/builtin_template_acceptance/contract/合同签署前预草案_V0.9.docx",
+      "file_type": "docx",
+      "size_bytes": 40354,
+      "sha256": "2605bb8ba7880c83043a5b8f1c0f2efc90e8cd2cb3607c8d0fe18dbc1b3f0124",
+      "export_job_id": "fec457b8-7adc-45f0-b6d8-dea894dbb0c5",
+      "document_version_id": "74435852-f131-4443-9d56-27e7087bf87f",
+      "document_version": 1,
+      "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+      "artifact": {
+        "id": "2496c7cd-86ce-4bf9-9772-67aadc0ed89f",
+        "filename": "document_V1.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40354,
+        "sha256": "2605bb8ba7880c83043a5b8f1c0f2efc90e8cd2cb3607c8d0fe18dbc1b3f0124",
+        "metadata": {
+          "document_version_id": "74435852-f131-4443-9d56-27e7087bf87f",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "合同签约准备版正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/contract/合同签约准备版_V1.0.docx",
+      "file_type": "docx",
+      "size_bytes": 40771,
+      "sha256": "8bb38445271e715b76a761d6a219d34f9961437017865e6cbe2b8e88298e17be",
+      "export_job_id": "092c461b-e6b4-440b-8603-ed4edc566ac5",
+      "document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+      "document_version": 2,
+      "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+      "artifact": {
+        "id": "9968b35e-0bfd-4f38-8a69-5fd42e264e9c",
+        "filename": "document_V2.docx",
+        "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "size_bytes": 40771,
+        "sha256": "8bb38445271e715b76a761d6a219d34f9961437017865e6cbe2b8e88298e17be",
+        "metadata": {
+          "document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    },
+    {
+      "purpose": "合同签约准备版正式验收文件",
+      "path": "artifacts/builtin_template_acceptance/contract/合同签约准备版_V1.0.pdf",
+      "file_type": "pdf",
+      "size_bytes": 182105,
+      "sha256": "d0a003df036223bb6d4a2ae7a410b16c05d4359879f4f36e37277fdf859971e2",
+      "export_job_id": "4c516261-ece0-4759-af0b-32235667a8c2",
+      "document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+      "document_version": 2,
+      "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+      "template_version": 1,
+      "source_kind": "upstream_final",
+      "source_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+      "artifact": {
+        "id": "033c56e0-c53b-4a75-9006-afebed128ebc",
+        "filename": "document_V2.pdf",
+        "mime_type": "application/pdf",
+        "size_bytes": 182105,
+        "sha256": "d0a003df036223bb6d4a2ae7a410b16c05d4359879f4f36e37277fdf859971e2",
+        "metadata": {
+          "document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+          "format_profile": {
+            "standard": "demo_enterprise_report_cn",
+            "page_size": "A4",
+            "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+            "strict_compliance": false
+          },
+          "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+          "template_version": 1
+        },
+        "revision": 1
+      }
+    }
+  ],
+  "failures": [],
+  "reports": {
+    "template_inventory": "artifacts/builtin_template_acceptance/template-inventory.json",
+    "field_traceability": "artifacts/builtin_template_acceptance/field-traceability.xlsx",
+    "lineage": "artifacts/builtin_template_acceptance/document-lineage.json",
+    "validation": "artifacts/builtin_template_acceptance/validation-report.json",
+    "format": "artifacts/builtin_template_acceptance/format-compliance-report.json",
+    "fidelity": "artifacts/builtin_template_acceptance/template-fidelity-report.json",
+    "docx_integrity": "artifacts/builtin_template_acceptance/docx-integrity-report.json",
+    "pdf_integrity": "artifacts/builtin_template_acceptance/pdf-integrity-report.json"
+  },
+  "e2e": {
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "e2e/builtin-template-acceptance.spec.ts",
+      "e2e/routes-responsive.spec.ts",
+      "--reporter=line"
+    ],
+    "exit_code": 0,
+    "log": "artifacts/builtin_template_acceptance/logs/playwright-e2e.log",
+    "status": "passed"
+  },
+  "visual_review": {
+    "status": "passed_by_delivery_visual_review",
+    "screenshots": [
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-3.png",
+      "artifacts/builtin_template_acceptance/screenshots/合同签约准备版_V1.0-page-6.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-8.png",
+      "artifacts/builtin_template_acceptance/screenshots/可行性研究报告_V1.0-page-17.png",
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/项目建议书_V1.0-page-5.png",
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-1.png",
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-2.png",
+      "artifacts/builtin_template_acceptance/screenshots/招标文件_V1.0-page-5.png"
+    ]
+  },
+  "delivery_verify": {
+    "status": "passed",
+    "exit_code": 0,
+    "frontend_tests": "10 passed",
+    "backend_tests": "40 passed",
+    "backend_coverage_percent": 83.06,
+    "e2e_tests": "5 passed",
+    "migration_tables": 46,
+    "golden_case_checks": 156,
+    "secret_scan_files": 161,
+    "dependency_audit": "no known vulnerabilities"
+  },
+  "external_dependency_boundaries": [
+    "未使用客户 DeepSeek 密钥或生产模型额度；生成语义质量仅由 demo/deterministic-v1 验证",
+    "未验证客户专有模板",
+    "未由行业专家确认可研专业结论",
+    "未由采购人员正式审核招标条款",
+    "未由法务最终审核合同条款",
+    "未对未配置 Format Profile 的国标条目作严格合规声明",
+    "容器未安装商业授权字体，严格字体一致性依赖客户部署字体授权"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "project": {
+    "code": "BTA-GREEN-DC-001",
+    "name": "测试项目—区域绿色数据中心节能改造",
+    "owner": "甲方测试有限公司",
+    "location": "测试市高新区数据中心",
+    "project_period_months": 12
+  },
+  "scope": {
+    "project_total": [
+      "制冷系统改造",
+      "UPS系统改造",
+      "智能配电改造",
+      "能源管理平台建设",
+      "机房环境监控升级",
+      "服务器节能调优",
+      "基础设施加固",
+      "综合布线优化"
+    ],
+    "procurement": [
+      "制冷系统改造",
+      "UPS系统改造",
+      "智能配电改造",
+      "能源管理平台建设",
+      "机房环境监控升级",
+      "服务器节能调优"
+    ],
+    "excluded": ["基础设施加固", "综合布线优化", "三年运维服务"]
+  },
+  "amounts": {
+    "total_investment": 12800000,
+    "procurement_budget": 9800000,
+    "maximum_price": 9500000,
+    "final_contract_amount": 9180000,
+    "tax_rate_percent": 13
+  },
+  "periods": {
+    "project_period": "12个月",
+    "tender_delivery": "120日历天",
+    "contract_duration": "110日历天",
+    "warranty": "36个月"
+  },
+  "contract": {
+    "party_a": "甲方测试有限公司",
+    "party_b": "乙方测试设备有限公司",
+    "tax_inclusion": "含税总价",
+    "delivery_location": "测试市高新区数据中心",
+    "payment_plan": [
+      {"label": "预付款", "ratio": 20, "amount": 1836000, "trigger": "合同生效且收到合规发票后"},
+      {"label": "到货款", "ratio": 50, "amount": 4590000, "trigger": "全部设备到货并完成开箱验收后"},
+      {"label": "验收款", "ratio": 25, "amount": 2295000, "trigger": "项目最终验收合格后"},
+      {"label": "质保金", "ratio": 5, "amount": 459000, "trigger": "36个月质保期届满且无未解决质量问题后"}
+    ]
+  },
+  "invariants": {
+    "total_investment_must_not_equal_budget": true,
+    "budget_must_not_equal_contract_amount": true,
+    "maximum_price_must_not_equal_contract_amount": true,
+    "project_period_must_not_equal_contract_duration": true,
+    "project_scope_must_not_equal_procurement_scope": true,
+    "payment_ratio_total": 100,
+    "payment_amount_total": 9180000
+  }
+}

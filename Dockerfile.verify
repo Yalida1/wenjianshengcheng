@@ -25,7 +25,7 @@ RUN corepack enable && corepack prepare pnpm@10.34.3 --activate
 
 COPY pyproject.toml ./
 COPY backend/app/__init__.py backend/app/__init__.py
-RUN pip install --retries 10 --timeout 60 --no-cache-dir -e ".[dev]"
+RUN pip install --retries 10 --timeout 60 --no-cache-dir ".[dev]"
 RUN python -m pip install --retries 10 --timeout 60 --no-cache-dir \
     --index-url https://pypi.org/simple --upgrade "pip==26.2.1"
 

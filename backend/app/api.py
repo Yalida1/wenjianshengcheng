@@ -5,10 +5,12 @@ import json
 import logging
 import time
 from collections import defaultdict, deque
+from datetime import date
 from decimal import Decimal
 from typing import Annotated, Any
+from urllib.parse import quote
 
-from fastapi import APIRouter, Depends, Query, Request, Response, UploadFile
+from fastapi import APIRouter, Body, Depends, Query, Request, Response, UploadFile
 from fastapi import File as UploadMarker
 from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
@@ -16,8 +18,15 @@ from sqlalchemy.orm import Session
 
 from .audit import record_audit
 from .config import get_settings
-from .dependencies import CurrentUser, DbSession, require_permission, require_project_access
+from .dependencies import (
+    CurrentUser,
+    DbSession,
+    require_permission,
+    require_project_access,
+    user_permission_codes,
+)
 from .errors import APIError
+from .field_catalog import BASE_FIELD_DEFINITIONS, default_rules_for_field
 from .models import (
     AuditLog,
     ComparisonItem,
@@ -47,6 +56,11 @@ from .models import (
     ParsedDocument,
     ParsedTable,
     Permission,
+    ProcurementAnalysisRun,
+    ProcurementGenerationBatch,
+    ProcurementIssue,
+    ProcurementPlan,
+    ProcurementRuleSet,
     Project,
     ProjectMember,
     ProjectStage,
@@ -56,6 +70,7 @@ from .models import (
     TemplateSection,
     TemplateVariable,
     TemplateVersion,
+    TenderDocumentGroup,
     User,
     UserRole,
     ValidationIssue,
@@ -63,13 +78,20 @@ from .models import (
     utc_now,
 )
 from .schemas import (
+    AITextOptimizeRequest,
+    AITextOptimizeResponse,
+    ApplicableFieldsResponse,
+    ApplicableFieldView,
     CommentCreate,
     CommentResolve,
     ComparisonRequest,
     ContentBlockPatch,
     ContractPaymentCheck,
     ExportRequest,
+    FieldCandidateExtractionView,
     FieldConfirmationRequest,
+    FieldDefinitionCreate,
+    FieldDefinitionPatch,
     FieldDefinitionView,
     FieldValueCreate,
     FieldValuePatch,
@@ -85,6 +107,19 @@ from .schemas import (
     OrganizationView,
     Page,
     ParseJobView,
+    ProcurementAnalysisRequest,
+    ProcurementAnalysisRunView,
+    ProcurementBatchGenerationRequest,
+    ProcurementGenerationBatchView,
+    ProcurementIssueResolveRequest,
+    EnsureDefaultGroupingRequest,
+    ProcurementPlanConfirmRequest,
+    ProcurementPlanStructureUpdate,
+    ProcurementPlanView,
+    ProcurementRuleSetCreate,
+    ProcurementRuleSetPublishRequest,
+    ProcurementRuleSetView,
+    ProjectApplicableFieldsResponse,
     ProjectCreate,
     ProjectDeleteRequest,
     ProjectDeleteResult,
@@ -96,6 +131,7 @@ from .schemas import (
     StageSourceOption,
     StageSourceRequest,
     StageView,
+    TemplateConfigErrorView,
     TemplateCreate,
     TemplateExtractionConfirmRequest,
     TemplateExtractionJobView,
@@ -116,9 +152,25 @@ from .security import (
     parse_session_token,
     verify_password,
 )
+from .services.auto_draft import build_file_auto_draft_job
+from .services.exporting import export_filename
 from .services.generation import build_generation_job, document_version_sha256
+from .services.procurement_planning import (
+    build_analysis_run,
+    confirm_plan,
+    ensure_default_document_groups,
+    group_snapshot,
+    plan_view,
+    recalculate_plan,
+    replace_plan_structure,
+)
 from .services.project_deletion import delete_project_graph
-from .services.providers import TEMPLATE_EXTRACTION_PROMPT_VERSION
+from .services.providers import (
+    TEMPLATE_EXTRACTION_PROMPT_VERSION,
+    TEXT_OPTIMIZATION_PROMPT_VERSION,
+    get_provider,
+)
+from .services.section_tree import validate_parent_selection
 from .services.storage import (
     get_storage,
     object_key,
@@ -130,6 +182,7 @@ from .services.template_extraction import build_candidate_template_docx
 from .services.templates import DEMO_TEMPLATE_CONTENT_TYPE, preflight_docx_template
 from .services.validation import validate_contract_payments, validate_document_version
 from .tasks import (
+    enqueue_procurement_analysis,
     export_document_task,
     extract_template_task,
     generate_document_task,
@@ -152,6 +205,7 @@ export_router = APIRouter(prefix="/exports", tags=["exports"])
 system_router = APIRouter(tags=["system"])
 comparison_router = APIRouter(prefix="/comparisons", tags=["comparisons"])
 format_profile_router = APIRouter(prefix="/format-profiles", tags=["templates"])
+procurement_router = APIRouter(tags=["procurement-planning"])
 
 STAGES = ("requirement", "feasibility", "tender", "contract")
 STAGE_INDEX = {stage: index for index, stage in enumerate(STAGES)}
@@ -165,11 +219,13 @@ FORBIDDEN_FIELD_MAPPINGS = {
     ("feasibility", "total_investment", "tender", "procurement_budget"),
     ("feasibility", "total_investment", "tender", "maximum_price"),
     ("feasibility", "total_investment", "contract", "final_contract_amount"),
+    ("tender", "maximum_price", "contract", "final_contract_amount"),
     ("requirement", "project_period", "contract", "contract_duration"),
     ("feasibility", "project_period", "contract", "contract_duration"),
     ("feasibility", "construction_scope", "tender", "procurement_scope"),
     ("feasibility", "construction_scope", "contract", "contract_scope"),
 }
+NO_BID_BOND_VALUE = "本项目不要求投标保证金"
 _login_attempts: dict[str, deque[float]] = defaultdict(deque)
 
 
@@ -264,6 +320,28 @@ def list_projects(
     )
 
 
+def _allocate_project_code(db: DbSession, organization_id: str, preferred: str | None) -> str:
+    """Allocate a unique project code; preferred may be None for temporary TMP-* codes."""
+    candidates: list[str] = []
+    if preferred and preferred.strip():
+        candidates.append(preferred.strip())
+    # Temporary codes until source materials are parsed and backfilled.
+    stamp = int(time.time() * 1000)
+    candidates.append(f"TMP-{stamp}")
+    for index in range(1, 8):
+        candidates.append(f"TMP-{stamp}-{index}")
+    for code in candidates:
+        exists = db.scalar(
+            select(Project.id).where(
+                Project.organization_id == organization_id,
+                Project.code == code,
+            )
+        )
+        if exists is None:
+            return code
+    raise APIError(409, "project_code_conflict", "无法分配唯一项目编号，请稍后重试")
+
+
 @project_router.post("", response_model=ProjectView, status_code=201)
 def create_project(
     payload: ProjectCreate,
@@ -271,9 +349,11 @@ def create_project(
     db: DbSession,
     user: Annotated[User, Depends(require_permission("project.create"))],
 ) -> Project:
+    data = payload.model_dump()
+    data["code"] = _allocate_project_code(db, user.organization_id, data.get("code"))
     project = Project(
         organization_id=user.organization_id,
-        **payload.model_dump(),
+        **data,
         created_by=user.id,
         updated_by=user.id,
     )
@@ -334,8 +414,24 @@ def update_project(
             "项目已被其他用户修改",
             details={"expected": payload.revision, "actual": project.revision},
         )
-    before = {"name": project.name, "description": project.description, "status": project.status}
-    for key, value in payload.model_dump(exclude={"revision"}, exclude_none=True).items():
+    before = {
+        "code": project.code,
+        "name": project.name,
+        "description": project.description,
+        "status": project.status,
+    }
+    updates = payload.model_dump(exclude={"revision"}, exclude_none=True)
+    if "code" in updates and updates["code"] != project.code:
+        conflict = db.scalar(
+            select(Project.id).where(
+                Project.organization_id == project.organization_id,
+                Project.code == updates["code"],
+                Project.id != project.id,
+            )
+        )
+        if conflict is not None:
+            raise APIError(409, "project_code_conflict", "项目编号已被本组织其他项目使用")
+    for key, value in updates.items():
         setattr(project, key, value)
     project.revision += 1
     project.updated_by = user.id
@@ -347,7 +443,12 @@ def update_project(
         "project",
         project.id,
         before=before,
-        after={"name": project.name, "description": project.description, "status": project.status},
+        after={
+            "code": project.code,
+            "name": project.name,
+            "description": project.description,
+            "status": project.status,
+        },
     )
     db.commit()
     db.refresh(project)
@@ -420,16 +521,12 @@ def delete_project(
 @project_router.get("/{project_id}/stages", response_model=list[StageView])
 def list_stages(project_id: str, db: DbSession, user: CurrentUser) -> list[ProjectStage]:
     require_project_access(db, user, project_id)
-    records = list(
-        db.scalars(select(ProjectStage).where(ProjectStage.project_id == project_id))
-    )
+    records = list(db.scalars(select(ProjectStage).where(ProjectStage.project_id == project_id)))
     return sorted(records, key=lambda item: STAGE_INDEX[item.stage])
 
 
 @project_router.get("/{project_id}/members", response_model=list[ProjectMemberView])
-def list_project_members(
-    project_id: str, db: DbSession, user: CurrentUser
-) -> list[ProjectMember]:
+def list_project_members(project_id: str, db: DbSession, user: CurrentUser) -> list[ProjectMember]:
     require_project_access(db, user, project_id)
     return list(
         db.scalars(
@@ -440,9 +537,7 @@ def list_project_members(
     )
 
 
-@project_router.post(
-    "/{project_id}/members", response_model=ProjectMemberView, status_code=201
-)
+@project_router.post("/{project_id}/members", response_model=ProjectMemberView, status_code=201)
 def add_project_member(
     project_id: str,
     payload: ProjectMemberCreate,
@@ -485,9 +580,7 @@ def add_project_member(
     return member
 
 
-@project_router.get(
-    "/{project_id}/stages/{stage}/sources", response_model=list[StageSourceOption]
-)
+@project_router.get("/{project_id}/stages/{stage}/sources", response_model=list[StageSourceOption])
 def list_stage_sources(
     project_id: str, stage: str, db: DbSession, user: CurrentUser
 ) -> list[StageSourceOption]:
@@ -550,7 +643,7 @@ def set_stage_source(
     payload: StageSourceRequest,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("project.write"))],
 ) -> ProjectStage:
     _validate_stage(stage)
     require_project_access(db, user, project_id)
@@ -590,6 +683,30 @@ def set_stage_source(
     stage_record.status = "source_ready"
     stage_record.revision += 1
     stage_record.updated_by = user.id
+    if stage == "tender" and before["source_file_version_id"] != payload.source_file_version_id:
+        affected_plans = list(
+            db.scalars(
+                select(ProcurementPlan).where(
+                    ProcurementPlan.project_id == project_id,
+                    ProcurementPlan.source_version_id != payload.source_file_version_id,
+                    ProcurementPlan.status.in_(["draft", "confirmed"]),
+                )
+            )
+        )
+        affected_plan_ids = [item.id for item in affected_plans]
+        for plan in affected_plans:
+            plan.status = "stale"
+            plan.draft_generation_allowed = False
+            plan.finalization_allowed = False
+            plan.revision += 1
+            plan.updated_by = user.id
+        if affected_plan_ids:
+            for document in db.scalars(
+                select(Document).where(Document.procurement_plan_id.in_(affected_plan_ids))
+            ):
+                document.status = "stale"
+                document.revision += 1
+                document.updated_by = user.id
     record_audit(
         db,
         request,
@@ -612,12 +729,19 @@ def set_stage_source(
 async def upload_file(
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("project.write"))],
     upload: Annotated[UploadFile, UploadMarker()],
     project_id: Annotated[str, Query(...)],
     stage: Annotated[str, Query(...)],
+    auto_generate_draft: Annotated[bool, Query()] = False,
 ) -> File:
     _validate_stage(stage)
+    if auto_generate_draft and stage != "tender":
+        raise APIError(
+            422,
+            "auto_draft_stage_unsupported",
+            "当前仅支持从可研材料自动生成招标文件草稿",
+        )
     require_project_access(db, user, project_id)
     content = await upload.read(get_settings().max_upload_bytes + 1)
     extension, mime_type = validate_upload(upload.filename or "upload", upload.content_type, content)
@@ -630,6 +754,7 @@ async def upload_file(
         mime_type=mime_type,
         size_bytes=len(content),
         status="uploaded",
+        auto_generate_draft=auto_generate_draft,
         created_by=user.id,
         updated_by=user.id,
     )
@@ -665,7 +790,12 @@ async def upload_file(
         "file.upload",
         "file",
         file_record.id,
-        after={"name": file_record.original_name, "sha256": version.sha256, "stage": stage},
+        after={
+            "name": file_record.original_name,
+            "sha256": version.sha256,
+            "stage": stage,
+            "auto_generate_draft": auto_generate_draft,
+        },
     )
     db.commit()
     result = parse_file_task.delay(parse_job.id)
@@ -770,6 +900,119 @@ def list_parse_jobs(file_id: str, db: DbSession, user: CurrentUser) -> list[File
     )
 
 
+@file_router.post("/{file_id}/field-candidates", response_model=FieldCandidateExtractionView)
+def extract_file_field_candidates(
+    file_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("project.write"))],
+) -> FieldCandidateExtractionView:
+    file_record = get_file(file_id, db, user)
+    if not file_record.project_id or not file_record.stage:
+        raise APIError(422, "file_not_bound_to_stage", "文件未关联项目阶段")
+    version = db.scalar(
+        select(FileVersion).where(
+            FileVersion.file_id == file_record.id,
+            FileVersion.version == file_record.latest_version,
+        )
+    )
+    if version is None:
+        raise APIError(404, "file_version_not_found", "文件版本不存在")
+    blocks = list(
+        db.scalars(
+            select(DocumentBlock)
+            .where(DocumentBlock.file_version_id == version.id)
+            .order_by(DocumentBlock.sequence)
+        )
+    )
+    if file_record.status != "parsed" or not blocks:
+        raise APIError(409, "file_not_parsed", "文件解析完成后才能提取字段候选")
+    from .services.incremental_extraction import extract_file_field_candidates_idempotent
+
+    summary = extract_file_field_candidates_idempotent(
+        db,
+        file_record=file_record,
+        version=version,
+        blocks=blocks,
+        actor_id=user.id,
+    )
+    parsed_document = db.scalar(select(ParsedDocument).where(ParsedDocument.file_version_id == version.id))
+    if parsed_document:
+        parsed_document.metadata_json = {
+            **(parsed_document.metadata_json or {}),
+            "field_extraction": summary,
+            "field_extraction_refresh_reason": "manual_field_candidates",
+        }
+    record_audit(
+        db,
+        request,
+        user,
+        "file.fields.extract",
+        "file",
+        file_record.id,
+        after=summary,
+    )
+    db.commit()
+    return FieldCandidateExtractionView(
+        file_id=file_record.id,
+        file_version_id=version.id,
+        created=int(summary.get("created", 0)),
+        existing=int(summary.get("existing", 0)),
+        skipped=int(summary.get("skipped", 0)),
+        revised=int(summary.get("revised", 0)),
+        conflicts=int(summary.get("conflicts", 0)),
+        created_keys=list(summary.get("created_keys", [])),
+        existing_keys=list(summary.get("existing_keys", [])),
+        skipped_keys=list(summary.get("skipped_keys", [])),
+        revised_keys=list(summary.get("revised_keys", [])),
+    )
+
+
+@file_router.post("/{file_id}/auto-draft", response_model=GenerationJobView, status_code=202)
+def start_file_auto_draft(
+    file_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> GenerationJob:
+    file_record = get_file(file_id, db, user)
+    version = db.scalar(
+        select(FileVersion).where(
+            FileVersion.file_id == file_record.id,
+            FileVersion.version == file_record.latest_version,
+        )
+    )
+    if version is None:
+        raise APIError(404, "file_version_not_found", "文件版本不存在")
+    job = build_file_auto_draft_job(
+        db,
+        file_record=file_record,
+        version=version,
+        actor_id=user.id,
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "file.auto_draft.start",
+        "generation_job",
+        job.id,
+        after={"file_id": file_record.id, "automatic": True},
+    )
+    db.commit()
+    if job.status not in {"succeeded", "failed", "cancelled"}:
+        result = generate_document_task.delay(job.id)
+        db.expire_all()
+        refreshed = db.get(GenerationJob, job.id)
+        if refreshed and refreshed.task_id is None:
+            refreshed.task_id = result.id
+            db.commit()
+    refreshed = db.get(GenerationJob, job.id)
+    if refreshed is None:
+        raise APIError(500, "generation_job_lost", "自动草稿生成任务创建失败")
+    return refreshed
+
+
 @router.get("/parse-jobs/{parse_job_id}", response_model=ParseJobView, tags=["files"])
 def get_parse_job(parse_job_id: str, db: DbSession, user: CurrentUser) -> FileParseJob:
     job = db.get(FileParseJob, parse_job_id)
@@ -834,6 +1077,8 @@ def get_parse_result(parse_job_id: str, db: DbSession, user: CurrentUser) -> dic
 @router.post("/parse-jobs/{parse_job_id}/retry", response_model=ParseJobView, tags=["files"])
 def retry_parse_job(parse_job_id: str, request: Request, db: DbSession, user: CurrentUser) -> FileParseJob:
     job = get_parse_job(parse_job_id, db, user)
+    if "project.write" not in user_permission_codes(db, user):
+        raise APIError(403, "forbidden", "缺少权限：project.write")
     if job.status not in {"failed", "needs_ocr"}:
         raise APIError(409, "parse_job_not_retryable", "当前解析任务不能重试")
     job.status = "queued"
@@ -882,12 +1127,353 @@ def list_field_definitions(
     db: DbSession,
     user: CurrentUser,
     stage: str | None = None,
+    include_inactive: bool = False,
 ) -> list[FieldDefinition]:
     stmt = select(FieldDefinition).where(FieldDefinition.organization_id == user.organization_id)
     if stage:
         _validate_stage(stage)
         stmt = stmt.where(FieldDefinition.stage == stage)
+    if not include_inactive:
+        stmt = stmt.where(FieldDefinition.is_active.is_(True))
     return list(db.scalars(stmt.order_by(FieldDefinition.stage, FieldDefinition.field_key)))
+
+
+def _applicable_fields_response(result: Any) -> ApplicableFieldsResponse:
+    from .services.applicable_fields import ApplicableFieldsResult
+
+    assert isinstance(result, ApplicableFieldsResult)
+    return ApplicableFieldsResponse(
+        document_group_id=result.document_group_id,
+        profile=result.profile,
+        resolution_source=result.resolution_source,
+        source_template_id=result.source_template_id,
+        source_template_version=result.source_template_version,
+        setup_incomplete=result.setup_incomplete,
+        setup_incomplete_reason=result.setup_incomplete_reason,
+        template_config_errors=[
+            TemplateConfigErrorView(variable_key=item.variable_key, message=item.message)
+            for item in result.template_config_errors
+        ],
+        fields=[ApplicableFieldView(**item) for item in result.as_dict()["fields"]],
+    )
+
+
+def _refresh_tender_field_candidates(
+    db: Session,
+    *,
+    project_id: str,
+    organization_id: str,
+    actor_id: str,
+    reason: str,
+    document_group_id: str | None = None,
+) -> dict[str, Any]:
+    from .services.incremental_extraction import refresh_field_candidates_from_parsed_blocks
+
+    return refresh_field_candidates_from_parsed_blocks(
+        db,
+        project_id=project_id,
+        organization_id=organization_id,
+        actor_id=actor_id,
+        stage="tender",
+        reason=reason,
+        document_group_id=document_group_id,
+    )
+
+
+@project_router.get(
+    "/{project_id}/document-groups/{group_id}/applicable-fields",
+    response_model=ApplicableFieldsResponse,
+    tags=["fields"],
+)
+def get_document_group_applicable_fields(
+    project_id: str,
+    group_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> ApplicableFieldsResponse:
+    require_project_access(db, user, project_id)
+    from .services.applicable_fields import get_document_group_for_project, resolve_applicable_fields
+
+    group = get_document_group_for_project(db, project_id=project_id, group_id=group_id)
+    if group is None:
+        raise APIError(404, "document_group_not_found", "待编制文件组不存在")
+    result = resolve_applicable_fields(
+        db,
+        project_id=project_id,
+        document_group=group,
+        organization_id=user.organization_id,
+    )
+    return _applicable_fields_response(result)
+
+
+@project_router.get(
+    "/{project_id}/stages/{stage}/applicable-fields",
+    response_model=ProjectApplicableFieldsResponse,
+    tags=["fields"],
+)
+def list_stage_applicable_fields(
+    project_id: str,
+    stage: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> ProjectApplicableFieldsResponse:
+    require_project_access(db, user, project_id)
+    _validate_stage(stage)
+    if stage != "tender":
+        return ProjectApplicableFieldsResponse(project_id=project_id, stage=stage, groups=[])
+    from .services.applicable_fields import list_project_tender_groups, resolve_applicable_fields
+
+    groups = list_project_tender_groups(db, project_id)
+    payloads: list[ApplicableFieldsResponse] = []
+    for group in groups:
+        result = resolve_applicable_fields(
+            db,
+            project_id=project_id,
+            document_group=group,
+            organization_id=user.organization_id,
+        )
+        payloads.append(_applicable_fields_response(result))
+    return ProjectApplicableFieldsResponse(project_id=project_id, stage=stage, groups=payloads)
+
+
+def _get_field_definition(db: Session, user: User, definition_id: str) -> FieldDefinition:
+    definition = db.scalar(
+        select(FieldDefinition).where(
+            FieldDefinition.id == definition_id,
+            FieldDefinition.organization_id == user.organization_id,
+        )
+    )
+    if definition is None:
+        raise APIError(404, "field_definition_not_found", "字段定义不存在")
+    return definition
+
+
+def _normalize_field_rules(
+    rules: dict[str, Any] | None, *, field_key: str, field_label: str
+) -> dict[str, Any]:
+    from .field_catalog import merge_missing_aliases
+
+    if rules is None:
+        return default_rules_for_field(field_key, field_label)
+    normalized = dict(rules)
+    aliases = normalized.get("aliases")
+    if not isinstance(aliases, list) or not aliases:
+        return default_rules_for_field(field_key, field_label)
+    cleaned = [str(item).strip() for item in aliases if str(item).strip()]
+    if not cleaned:
+        return default_rules_for_field(field_key, field_label)
+    normalized["aliases"] = cleaned
+    return merge_missing_aliases(normalized, field_key, field_label)
+
+
+@router.post(
+    "/field-definitions",
+    response_model=FieldDefinitionView,
+    status_code=201,
+    tags=["fields"],
+)
+def create_field_definition(
+    payload: FieldDefinitionCreate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> FieldDefinition:
+    _validate_stage(payload.stage)
+    exists = db.scalar(
+        select(FieldDefinition.id).where(
+            FieldDefinition.organization_id == user.organization_id,
+            FieldDefinition.stage == payload.stage,
+            FieldDefinition.field_key == payload.field_key,
+        )
+    )
+    if exists:
+        raise APIError(409, "field_definition_exists", "同阶段字段键已存在")
+    definition = FieldDefinition(
+        organization_id=user.organization_id,
+        stage=payload.stage,
+        field_key=payload.field_key,
+        field_label=payload.field_label,
+        data_type=payload.data_type,
+        unit=payload.unit,
+        criticality=payload.criticality,
+        required=payload.required,
+        is_base=False,
+        is_active=True,
+        rules=_normalize_field_rules(
+            payload.rules, field_key=payload.field_key, field_label=payload.field_label
+        ),
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(definition)
+    db.flush()
+    record_audit(db, request, user, "field_definition.create", "field_definition", definition.id)
+    db.commit()
+    db.refresh(definition)
+    return definition
+
+
+@router.patch(
+    "/field-definitions/{definition_id}",
+    response_model=FieldDefinitionView,
+    tags=["fields"],
+)
+def patch_field_definition(
+    definition_id: str,
+    payload: FieldDefinitionPatch,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> FieldDefinition:
+    definition = _get_field_definition(db, user, definition_id)
+    if definition.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "字段定义已被其他用户修改")
+    if payload.field_label is not None:
+        definition.field_label = payload.field_label
+    if payload.data_type is not None:
+        definition.data_type = payload.data_type
+    if payload.unit is not None or "unit" in payload.model_fields_set:
+        definition.unit = payload.unit
+    if payload.criticality is not None:
+        definition.criticality = payload.criticality
+    if payload.required is not None:
+        definition.required = payload.required
+    if payload.rules is not None or payload.field_label is not None:
+        source_rules = payload.rules if payload.rules is not None else definition.rules
+        definition.rules = _normalize_field_rules(
+            source_rules if isinstance(source_rules, dict) else None,
+            field_key=definition.field_key,
+            field_label=definition.field_label,
+        )
+    definition.revision += 1
+    definition.updated_by = user.id
+    record_audit(db, request, user, "field_definition.update", "field_definition", definition.id)
+    db.commit()
+    db.refresh(definition)
+    return definition
+
+
+@router.post(
+    "/field-definitions/{definition_id}/deactivate",
+    response_model=FieldDefinitionView,
+    tags=["fields"],
+)
+def deactivate_field_definition(
+    definition_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> FieldDefinition:
+    definition = _get_field_definition(db, user, definition_id)
+    if not definition.is_active:
+        return definition
+    definition.is_active = False
+    definition.revision += 1
+    definition.updated_by = user.id
+    record_audit(db, request, user, "field_definition.deactivate", "field_definition", definition.id)
+    db.commit()
+    db.refresh(definition)
+    return definition
+
+
+@router.post(
+    "/field-definitions/{definition_id}/activate",
+    response_model=FieldDefinitionView,
+    tags=["fields"],
+)
+def activate_field_definition(
+    definition_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+) -> FieldDefinition:
+    definition = _get_field_definition(db, user, definition_id)
+    if definition.is_active:
+        return definition
+    definition.is_active = True
+    definition.revision += 1
+    definition.updated_by = user.id
+    record_audit(db, request, user, "field_definition.activate", "field_definition", definition.id)
+    db.commit()
+    db.refresh(definition)
+    return definition
+
+
+@router.post(
+    "/field-definitions/restore-base",
+    response_model=list[FieldDefinitionView],
+    tags=["fields"],
+)
+def restore_base_field_definitions(
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("system.admin"))],
+    stage: str,
+) -> list[FieldDefinition]:
+    _validate_stage(stage)
+    specs = BASE_FIELD_DEFINITIONS.get(stage, [])
+    restored: list[FieldDefinition] = []
+    for key, label, data_type, unit, criticality, required in specs:
+        existing = db.scalar(
+            select(FieldDefinition).where(
+                FieldDefinition.organization_id == user.organization_id,
+                FieldDefinition.stage == stage,
+                FieldDefinition.field_key == key,
+            )
+        )
+        if existing is None:
+            definition = FieldDefinition(
+                organization_id=user.organization_id,
+                stage=stage,
+                field_key=key,
+                field_label=label,
+                data_type=data_type,
+                unit=unit,
+                criticality=criticality,
+                required=required,
+                is_base=True,
+                is_active=True,
+                rules=default_rules_for_field(key, label),
+                created_by=user.id,
+                updated_by=user.id,
+            )
+            db.add(definition)
+            restored.append(definition)
+            continue
+        changed = False
+        if not existing.is_active:
+            existing.is_active = True
+            changed = True
+        if not existing.is_base:
+            existing.is_base = True
+            changed = True
+        if changed:
+            existing.revision += 1
+            existing.updated_by = user.id
+            restored.append(existing)
+    record_audit(
+        db,
+        request,
+        user,
+        "field_definition.restore_base",
+        "field_definition",
+        stage,
+        metadata={"restored_count": len(restored)},
+    )
+    db.commit()
+    for item in restored:
+        db.refresh(item)
+    return list(
+        db.scalars(
+            select(FieldDefinition)
+            .where(
+                FieldDefinition.organization_id == user.organization_id,
+                FieldDefinition.stage == stage,
+                FieldDefinition.is_active.is_(True),
+            )
+            .order_by(FieldDefinition.field_key)
+        )
+    )
 
 
 @router.get("/field-snapshots", response_model=list[dict[str, Any]], tags=["fields"])
@@ -986,6 +1572,17 @@ def _reject_forbidden_mapping(stage: str, field_key: str, evidence: dict[str, An
         )
 
 
+def _is_no_bid_bond_value(field: FieldValue) -> bool:
+    if field.stage != "tender" or field.field_key.rsplit("::", 1)[-1] != "bid_bond":
+        return False
+    text = str(field.normalized_value if field.normalized_value is not None else field.value or "").strip()
+    compact = text.replace(" ", "")
+    return compact == NO_BID_BOND_VALUE or (
+        "投标保证金" in compact
+        and any(marker in compact for marker in ("不要求", "不收取", "不缴纳", "无需"))
+    )
+
+
 @field_router.post("", response_model=FieldValueView, status_code=201)
 def create_field_value(
     project_id: str,
@@ -993,7 +1590,7 @@ def create_field_value(
     payload: FieldValueCreate,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("project.write"))],
 ) -> FieldValueView:
     _validate_stage(stage)
     require_project_access(db, user, project_id)
@@ -1044,7 +1641,7 @@ def update_field_value(
     payload: FieldValuePatch,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("project.write"))],
 ) -> FieldValueView:
     current = db.get(FieldValue, field_value_id)
     if current is None or not current.is_current:
@@ -1112,7 +1709,7 @@ def confirm_field_value(
     payload: FieldConfirmationRequest,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("project.write"))],
 ) -> FieldValueView:
     field = db.get(FieldValue, field_value_id)
     if field is None or not field.is_current:
@@ -1130,6 +1727,16 @@ def confirm_field_value(
         raise APIError(422, "invalid_p0_source", "P0 字段来源不允许直接确认")
     if field.source_type == "extracted" and not payload.evidence_acknowledged:
         raise APIError(422, "evidence_not_acknowledged", "请先核对并确认来源证据")
+    if _is_no_bid_bond_value(field):
+        retained_basis = db.scalar(
+            select(FieldEvidence.id).where(FieldEvidence.field_value_id == field.id).limit(1)
+        )
+        if retained_basis is None:
+            raise APIError(
+                422,
+                "bid_bond_basis_required",
+                "请先保存不收取投标保证金的确认依据",
+            )
     field.status = "user_confirmed"
     field.revision += 1
     field.updated_by = user.id
@@ -1162,9 +1769,7 @@ def _validate_template_source_metadata(
     issuing_authority: str | None,
     source_url: str | None,
 ) -> None:
-    if source_kind == "adapted_from_official_outline" and (
-        not issuing_authority or not source_url
-    ):
+    if source_kind == "adapted_from_official_outline" and (not issuing_authority or not source_url):
         raise APIError(
             422,
             "official_source_metadata_missing",
@@ -1193,6 +1798,23 @@ def _get_template_extraction_job(
     if job is None or job.organization_id != user.organization_id:
         raise APIError(404, "template_extraction_not_found", "模板提取任务不存在")
     return job
+
+
+def _template_view(template: Template, *, has_docx_source: bool | None = None) -> TemplateView:
+    payload = TemplateView.model_validate(template).model_dump()
+    if has_docx_source is not None:
+        payload["has_docx_source"] = has_docx_source
+    return TemplateView.model_validate(payload)
+
+
+def _template_has_docx_source(db: Session, template: Template) -> bool:
+    version = db.scalar(
+        select(TemplateVersion).where(
+            TemplateVersion.template_id == template.id,
+            TemplateVersion.version == template.current_version,
+        )
+    )
+    return bool(version and version.storage_key)
 
 
 @template_extraction_router.post("", response_model=TemplateExtractionJobView, status_code=201)
@@ -1291,9 +1913,7 @@ def list_template_extractions(
     )
 
 
-@template_extraction_router.get(
-    "/{extraction_job_id}", response_model=TemplateExtractionJobView
-)
+@template_extraction_router.get("/{extraction_job_id}", response_model=TemplateExtractionJobView)
 def get_template_extraction(
     extraction_job_id: str,
     db: DbSession,
@@ -1302,9 +1922,7 @@ def get_template_extraction(
     return _get_template_extraction_job(extraction_job_id, db, user)
 
 
-@template_extraction_router.post(
-    "/{extraction_job_id}/retry", response_model=TemplateExtractionJobView
-)
+@template_extraction_router.post("/{extraction_job_id}/retry", response_model=TemplateExtractionJobView)
 def retry_template_extraction(
     extraction_job_id: str,
     request: Request,
@@ -1340,23 +1958,34 @@ def retry_template_extraction(
     return job
 
 
-@template_extraction_router.post(
-    "/{extraction_job_id}/confirm", response_model=TemplateView
-)
+@template_extraction_router.post("/{extraction_job_id}/confirm", response_model=TemplateView)
 def confirm_template_extraction(
     extraction_job_id: str,
     payload: TemplateExtractionConfirmRequest,
     request: Request,
     db: DbSession,
     user: Annotated[User, Depends(require_permission("template.manage"))],
-) -> Template:
+) -> TemplateView:
     job = _get_template_extraction_job(extraction_job_id, db, user)
     if job.confirmed_template_id:
         existing = db.get(Template, job.confirmed_template_id)
         if existing is not None:
-            return existing
+            return _template_view(existing, has_docx_source=True)
     if job.status != "review_required":
+        if job.status == "quality_rejected":
+            raise APIError(
+                409,
+                "template_extraction_quality_rejected",
+                "提取结果未通过正式模板质量门禁，不能建立或发布模板",
+            )
         raise APIError(409, "template_extraction_not_ready", "模板候选尚未进入人工确认阶段")
+    quality = job.result_json.get("quality") if isinstance(job.result_json, dict) else None
+    if not isinstance(quality, dict) or not quality.get("passed"):
+        raise APIError(
+            409,
+            "template_extraction_quality_rejected",
+            "提取结果未通过正式模板质量门禁，不能建立或发布模板",
+        )
     if job.revision != payload.revision:
         raise APIError(409, "revision_conflict", "模板提取结果已被其他用户更新")
     _validate_template_source_metadata(
@@ -1371,19 +2000,31 @@ def confirm_template_extraction(
     selected_section_ids = set(payload.selected_section_ids)
     selected_variable_ids = set(payload.selected_variable_ids)
     sections = [
-        item
-        for item in raw_sections
-        if isinstance(item, dict) and item.get("id") in selected_section_ids
+        item for item in raw_sections if isinstance(item, dict) and item.get("id") in selected_section_ids
     ]
     variables = [
-        item
-        for item in raw_variables
-        if isinstance(item, dict) and item.get("id") in selected_variable_ids
+        item for item in raw_variables if isinstance(item, dict) and item.get("id") in selected_variable_ids
     ]
     if len(sections) != len(selected_section_ids):
         raise APIError(422, "template_section_selection_invalid", "所选章节包含不存在的候选项")
     if len(variables) != len(selected_variable_ids):
         raise APIError(422, "template_variable_selection_invalid", "所选变量包含不存在的候选项")
+    try:
+        validate_parent_selection(raw_sections, selected_section_ids)
+    except ValueError as exc:
+        raise APIError(422, "template_section_parent_required", str(exc)) from exc
+    # Preserve DFS order from extraction result.
+    sections = sorted(
+        sections,
+        key=lambda item: next(
+            (
+                index
+                for index, raw in enumerate(raw_sections)
+                if isinstance(raw, dict) and raw.get("id") == item.get("id")
+            ),
+            0,
+        ),
+    )
     file_version = db.get(FileVersion, job.file_version_id)
     file_record = db.get(File, file_version.file_id) if file_version else None
     if file_version is None or file_record is None:
@@ -1435,26 +2076,59 @@ def confirm_template_extraction(
     get_storage().put(template_key, candidate_content, DEMO_TEMPLATE_CONTENT_TYPE)
     template_version.storage_key = template_key
     template_version.sha256 = sha256_bytes(candidate_content)
-    used_keys: set[str] = set()
-    for sequence, section in enumerate(sections):
-        key = str(section.get("key") or f"section_{sequence + 1}")[:120]
-        if key in used_keys:
-            key = f"{key[:110]}_{sequence + 1}"
-        used_keys.add(key)
-        db.add(
-            TemplateSection(
-                organization_id=user.organization_id,
-                template_version_id=template_version.id,
-                sequence=sequence,
-                key=key,
-                title=str(section.get("title") or f"章节 {sequence + 1}")[:300],
-                section_type="editable",
-                required=True,
-                content=None,
-                created_by=user.id,
-                updated_by=user.id,
+    selected_block_ids = {
+        str(block_id) for section in sections for block_id in section.get("source_block_ids", []) if block_id
+    }
+    source_blocks = {
+        block.id: block
+        for block in db.scalars(
+            select(DocumentBlock).where(
+                DocumentBlock.file_version_id == file_version.id,
+                DocumentBlock.id.in_(selected_block_ids),
             )
         )
+    }
+    protected_title_tokens = ("投标人须知", "评标办法", "通用合同条款", "标准条款")
+    used_keys: set[str] = set()
+    key_to_section: dict[str, TemplateSection] = {}
+    for sequence, section in enumerate(sections, 1):
+        key = str(section.get("key") or f"section_{sequence}")[:120]
+        if key in used_keys:
+            key = f"{key[:110]}_{sequence}"
+        used_keys.add(key)
+        parent_key = section.get("parent_key")
+        parent = key_to_section.get(str(parent_key)) if parent_key else None
+        level = max(1, min(3, int(section.get("level") or (parent.level + 1 if parent else 1))))
+        title = str(section.get("title") or f"章节 {sequence}")[:300]
+        source_text = "\n".join(
+            source_blocks[block_id].text
+            for block_id in section.get("source_block_ids", [])
+            if block_id in source_blocks and source_blocks[block_id].text.strip()
+        )
+        protected = payload.source_kind == "other_official_template" and any(
+            token in title for token in protected_title_tokens
+        )
+        record = TemplateSection(
+            organization_id=user.organization_id,
+            template_version_id=template_version.id,
+            sequence=sequence,
+            key=key,
+            title=title,
+            parent_id=parent.id if parent else None,
+            level=level,
+            section_type="fixed_template" if protected else "editable",
+            required=True,
+            content=source_text if protected else None,
+            created_by=user.id,
+            updated_by=user.id,
+        )
+        db.add(record)
+        db.flush()
+        key_to_section[key] = record
+        # Allow children that still reference the original candidate key.
+        original_key = str(section.get("key") or "")
+        if original_key and original_key not in key_to_section:
+            key_to_section[original_key] = record
     for variable in variables:
         variable_key = str(variable.get("variable_key", ""))[:120]
         if not variable_key:
@@ -1476,6 +2150,7 @@ def confirm_template_extraction(
         "selected_section_ids": payload.selected_section_ids,
         "selected_variable_ids": payload.selected_variable_ids,
         "template_id": template.id,
+        "published": True,
     }
     job.result_json = result_json
     job.confirmed_template_id = template.id
@@ -1483,6 +2158,10 @@ def confirm_template_extraction(
     job.revision += 1
     job.updated_by = user.id
     file_record.status = "template_candidate_confirmed"
+    template_version.status = "published"
+    template_version.published_at = utc_now()
+    template.status = "published"
+    template.revision += 1
     record_audit(
         db,
         request,
@@ -1495,10 +2174,11 @@ def confirm_template_extraction(
             "section_count": len(sections),
             "variable_count": len(variables),
             "source_sha256": file_version.sha256,
+            "published": True,
         },
     )
     db.commit()
-    return template
+    return _template_view(template, has_docx_source=True)
 
 
 @template_router.get("", response_model=list[TemplateView])
@@ -1508,7 +2188,30 @@ def list_templates(
     stage: str | None = None,
     current_only: bool = True,
     generation_only: bool = False,
-) -> list[Template]:
+    project_id: str | None = None,
+) -> list[TemplateView]:
+    preferred_template_ids: set[str] = set()
+    if project_id:
+        require_project_access(db, user, project_id)
+        plan_ids = list(
+            db.scalars(
+                select(ProcurementPlan.id).where(
+                    ProcurementPlan.project_id == project_id,
+                    ProcurementPlan.status == "confirmed",
+                )
+            )
+        )
+        if plan_ids:
+            preferred_template_ids = {
+                template_id
+                for template_id in db.scalars(
+                    select(TenderDocumentGroup.template_id).where(
+                        TenderDocumentGroup.plan_id.in_(plan_ids),
+                        TenderDocumentGroup.template_id.is_not(None),
+                    )
+                )
+                if template_id
+            }
     stmt = select(Template).where(Template.organization_id == user.organization_id)
     if stage:
         _validate_stage(stage)
@@ -1516,8 +2219,30 @@ def list_templates(
     if current_only:
         stmt = stmt.where(Template.status == "published")
     if generation_only:
-        stmt = stmt.where(Template.generation_enabled.is_(True))
-    return list(db.scalars(stmt.order_by(Template.name)))
+        today = date.today()
+        stmt = stmt.join(
+            TemplateVersion,
+            (TemplateVersion.template_id == Template.id)
+            & (TemplateVersion.version == Template.current_version),
+        ).where(
+            Template.generation_enabled.is_(True),
+            TemplateVersion.status == "published",
+            (TemplateVersion.effective_date.is_(None)) | (TemplateVersion.effective_date <= today),
+            (TemplateVersion.expiry_date.is_(None)) | (TemplateVersion.expiry_date >= today),
+        )
+    templates = list(db.scalars(stmt))
+    templates.sort(
+        key=lambda item: (
+            item.id not in preferred_template_ids,
+            item.is_builtin,
+            item.procurement_type is None,
+            item.name,
+        )
+    )
+    return [
+        _template_view(template, has_docx_source=_template_has_docx_source(db, template))
+        for template in templates
+    ]
 
 
 @template_router.get("/{template_id}", response_model=dict[str, Any])
@@ -1538,12 +2263,8 @@ def get_template(template_id: str, db: DbSession, user: CurrentUser) -> dict[str
     }
 
 
-@template_router.get(
-    "/{template_id}/versions", response_model=list[TemplateVersionView]
-)
-def list_template_versions(
-    template_id: str, db: DbSession, user: CurrentUser
-) -> list[TemplateVersion]:
+@template_router.get("/{template_id}/versions", response_model=list[TemplateVersionView])
+def list_template_versions(template_id: str, db: DbSession, user: CurrentUser) -> list[TemplateVersion]:
     template = db.get(Template, template_id)
     if template is None or template.organization_id != user.organization_id:
         raise APIError(404, "template_not_found", "模板不存在")
@@ -1581,9 +2302,7 @@ def download_template_source(
     return StreamingResponse(
         iter([get_storage().get(version.storage_key)]),
         media_type=DEMO_TEMPLATE_CONTENT_TYPE,
-        headers={
-            "Content-Disposition": f'attachment; filename="template-v{version.version}.docx"'
-        },
+        headers={"Content-Disposition": f'attachment; filename="template-v{version.version}.docx"'},
     )
 
 
@@ -1707,6 +2426,8 @@ def list_template_sections(
             "sequence": section.sequence,
             "key": section.key,
             "title": section.title,
+            "parent_id": section.parent_id,
+            "level": section.level,
             "section_type": section.section_type,
             "required": section.required,
             "content": section.content,
@@ -1841,7 +2562,7 @@ def publish_template(
     request: Request,
     db: DbSession,
     user: Annotated[User, Depends(require_permission("template.publish"))],
-) -> Template:
+) -> TemplateView:
     template = db.get(Template, template_id)
     if template is None or template.organization_id != user.organization_id:
         raise APIError(404, "template_not_found", "模板不存在")
@@ -1881,13 +2602,11 @@ def publish_template(
     template.revision += 1
     record_audit(db, request, user, "template.publish", "template", template.id)
     db.commit()
-    return template
+    return _template_view(template, has_docx_source=True)
 
 
 @format_profile_router.get("", response_model=list[FormatProfileView])
-def list_format_profiles(
-    db: DbSession, user: CurrentUser
-) -> list[DocumentFormatProfile]:
+def list_format_profiles(db: DbSession, user: CurrentUser) -> list[DocumentFormatProfile]:
     return list(
         db.scalars(
             select(DocumentFormatProfile)
@@ -1936,11 +2655,18 @@ def start_generation(
     payload: GenerationRequest,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
 ) -> GenerationJob:
     _validate_stage(stage)
     project = require_project_access(db, user, project_id)
     template = db.get(Template, payload.template_id)
+    template_version = db.scalar(
+        select(TemplateVersion).where(
+            TemplateVersion.template_id == payload.template_id,
+            TemplateVersion.version == payload.template_version,
+        )
+    )
+    today = date.today()
     if (
         template is None
         or template.organization_id != user.organization_id
@@ -1948,11 +2674,55 @@ def start_generation(
         or template.status != "published"
         or template.current_version != payload.template_version
         or not template.generation_enabled
+        or template_version is None
+        or template_version.status != "published"
+        or (template_version.effective_date is not None and template_version.effective_date > today)
+        or (template_version.expiry_date is not None and template_version.expiry_date < today)
     ):
         raise APIError(
             422,
             "template_not_applicable",
             "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+        )
+    procurement_snapshot: dict[str, object] | None = None
+    procurement_plan: ProcurementPlan | None = None
+    procurement_group: TenderDocumentGroup | None = None
+    if (
+        payload.procurement_plan_id
+        or payload.procurement_document_group_id
+        or payload.procurement_package_ids
+    ):
+        if not payload.procurement_plan_id or not payload.procurement_document_group_id:
+            raise APIError(
+                422,
+                "procurement_binding_incomplete",
+                "采购方案生成必须同时绑定方案版本和主文件组",
+            )
+        procurement_plan = db.get(ProcurementPlan, payload.procurement_plan_id)
+        procurement_group = db.get(TenderDocumentGroup, payload.procurement_document_group_id)
+        if (
+            procurement_plan is None
+            or procurement_plan.project_id != project.id
+            or procurement_plan.organization_id != user.organization_id
+            or procurement_group is None
+            or procurement_group.plan_id != procurement_plan.id
+        ):
+            raise APIError(404, "procurement_plan_not_found", "采购方案或主文件组不存在")
+        recalculate_plan(db, procurement_plan)
+        if procurement_plan.status != "confirmed":
+            raise APIError(422, "procurement_plan_not_confirmed", "请先确认采购方案")
+        if not procurement_plan.draft_generation_allowed:
+            raise APIError(422, "procurement_generation_blocked", "采购范围、归属或模板仍有阻断项")
+        if stage == "tender" and (
+            procurement_group.template_id != template.id
+            or procurement_group.template_version != payload.template_version
+        ):
+            raise APIError(422, "procurement_template_mismatch", "生成模板与主文件组确认模板不一致")
+        procurement_snapshot = group_snapshot(
+            db,
+            procurement_plan,
+            procurement_group,
+            payload.procurement_package_ids,
         )
     job = build_generation_job(
         db,
@@ -1962,6 +2732,12 @@ def start_generation(
         template_version=payload.template_version,
         idempotency_key=payload.idempotency_key,
         user_id=user.id,
+        selected_section_keys=payload.selected_section_keys,
+        include_descendants=payload.include_descendants,
+        procurement_plan_id=procurement_plan.id if procurement_plan else None,
+        procurement_document_group_id=procurement_group.id if procurement_group else None,
+        procurement_snapshot=procurement_snapshot,
+        template_applicability_confirmed=payload.template_applicability_confirmed,
     )
     record_audit(db, request, user, "generation.start", "generation_job", job.id)
     db.commit()
@@ -1986,9 +2762,7 @@ def get_generation_job(job_id: str, db: DbSession, user: CurrentUser) -> Generat
 
 
 @generation_router.get("/{job_id}/steps", response_model=list[dict[str, Any]])
-def list_generation_steps(
-    job_id: str, db: DbSession, user: CurrentUser
-) -> list[dict[str, Any]]:
+def list_generation_steps(job_id: str, db: DbSession, user: CurrentUser) -> list[dict[str, Any]]:
     job = get_generation_job(job_id, db, user)
     steps = list(
         db.scalars(
@@ -2042,9 +2816,9 @@ def list_generation_events(
 
 
 @generation_router.post("/{job_id}/retry", response_model=GenerationJobView, status_code=202)
-def retry_generation_job(
-    job_id: str, request: Request, db: DbSession, user: CurrentUser
-) -> GenerationJob:
+def retry_generation_job(job_id: str, request: Request, db: DbSession, user: CurrentUser) -> GenerationJob:
+    if "document.edit" not in user_permission_codes(db, user):
+        raise APIError(403, "forbidden", "缺少权限：document.edit")
     job = get_generation_job(job_id, db, user)
     if job.status not in {"failed", "retrying"}:
         raise APIError(409, "job_not_retryable", "当前生成任务不能重试")
@@ -2061,6 +2835,8 @@ def retry_generation_job(
 
 @generation_router.post("/{job_id}/cancel", response_model=GenerationJobView)
 def cancel_generation_job(job_id: str, request: Request, db: DbSession, user: CurrentUser) -> GenerationJob:
+    if "document.edit" not in user_permission_codes(db, user):
+        raise APIError(403, "forbidden", "缺少权限：document.edit")
     job = get_generation_job(job_id, db, user)
     if job.status in {"succeeded", "failed", "cancelled"}:
         raise APIError(409, "job_terminal", "任务已结束，不能取消")
@@ -2086,6 +2862,9 @@ def list_documents(project_id: str, db: DbSession, user: CurrentUser) -> list[di
             "title": document.title,
             "status": document.status,
             "current_version": document.current_version,
+            "procurement_plan_id": document.procurement_plan_id,
+            "procurement_document_group_id": document.procurement_document_group_id,
+            "procurement_package_ids": document.procurement_package_ids,
             "revision": document.revision,
         }
         for document in documents
@@ -2161,6 +2940,8 @@ def get_document_version(version_id: str, db: DbSession, user: CurrentUser) -> d
                 "key": section.key,
                 "title": section.title,
                 "sequence": section.sequence,
+                "parent_id": section.parent_id,
+                "level": section.level,
                 "blocks": [
                     {
                         "id": block.id,
@@ -2190,9 +2971,7 @@ def get_document_version(version_id: str, db: DbSession, user: CurrentUser) -> d
 
 
 @document_router.get("/versions/{version_id}/comments", response_model=list[dict[str, Any]])
-def list_document_comments(
-    version_id: str, db: DbSession, user: CurrentUser
-) -> list[dict[str, Any]]:
+def list_document_comments(version_id: str, db: DbSession, user: CurrentUser) -> list[dict[str, Any]]:
     version = _get_document_version(db, user, version_id)
     comments = list(
         db.scalars(
@@ -2215,9 +2994,7 @@ def list_document_comments(
     ]
 
 
-@document_router.post(
-    "/versions/{version_id}/comments", response_model=dict[str, Any], status_code=201
-)
+@document_router.post("/versions/{version_id}/comments", response_model=dict[str, Any], status_code=201)
 def create_document_comment(
     version_id: str,
     payload: CommentCreate,
@@ -2280,7 +3057,7 @@ def update_content_block(
     payload: ContentBlockPatch,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
 ) -> dict[str, Any]:
     block = db.get(DocumentContentBlock, block_id)
     section = db.get(DocumentSection, block.document_section_id) if block else None
@@ -2290,6 +3067,12 @@ def update_content_block(
     _get_document_version(db, user, version.id)
     if version.immutable or version.status == "finalized":
         raise APIError(409, "immutable_version", "已定稿版本不可修改，请创建新修订草稿")
+    if block.source_kind == "fixed_template":
+        raise APIError(
+            403,
+            "fixed_template_block_forbidden",
+            "固定模板条款受模板版本保护；如需调整，请创建并审批新的模板版本",
+        )
     if block.revision != payload.revision:
         raise APIError(
             409,
@@ -2303,6 +3086,9 @@ def update_content_block(
     block.source_kind = "user_edited"
     block.revision += 1
     block.updated_by = user.id
+    version.status = "reviewing"
+    version.revision += 1
+    version.updated_by = user.id
     record_audit(
         db,
         request,
@@ -2323,8 +3109,75 @@ def update_content_block(
     }
 
 
+@document_router.post(
+    "/blocks/{block_id}/ai-optimize",
+    response_model=AITextOptimizeResponse,
+)
+def optimize_content_block_text(
+    block_id: str,
+    payload: AITextOptimizeRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> AITextOptimizeResponse:
+    block = db.get(DocumentContentBlock, block_id)
+    section = db.get(DocumentSection, block.document_section_id) if block else None
+    version = db.get(DocumentVersion, section.document_version_id) if section else None
+    if block is None or section is None or version is None:
+        raise APIError(404, "content_block_not_found", "内容块不存在")
+    _get_document_version(db, user, version.id)
+    if version.immutable or version.status == "finalized":
+        raise APIError(409, "immutable_version", "已定稿版本不可修改，请创建新修订草稿")
+    if block.source_kind == "fixed_template":
+        raise APIError(403, "fixed_template_block_forbidden", "固定模板条款不允许使用 AI 改写")
+    if isinstance(block.content, str):
+        block_text = block.content
+    elif isinstance(block.content, dict):
+        content_text = block.content.get("text", "")
+        block_text = content_text if isinstance(content_text, str) else str(content_text)
+    else:
+        block_text = str(block.content or "")
+    if payload.selected_text not in block_text:
+        raise APIError(409, "selection_stale", "选取内容已发生变化，请重新选择后再优化")
+    provider = get_provider()
+    try:
+        result = provider.optimize_text(
+            selected_text=payload.selected_text,
+            prompt=payload.prompt,
+            action=payload.action,
+        )
+    except Exception as exc:
+        logger.exception("Document text optimization failed for block %s", block.id)
+        raise APIError(502, "ai_optimization_failed", "AI 优化暂时失败，请稍后重试") from exc
+    record_audit(
+        db,
+        request,
+        user,
+        "document.block.ai_optimize",
+        "document_content_block",
+        block.id,
+        metadata={
+            "provider": provider.name,
+            "model": provider.model,
+            "prompt_version": TEXT_OPTIMIZATION_PROMPT_VERSION,
+            "action": payload.action,
+            "selected_text_length": len(payload.selected_text),
+        },
+    )
+    db.commit()
+    return AITextOptimizeResponse(
+        optimized_prompt=result.optimized_prompt,
+        suggestion=result.suggestion,
+        provider=provider.name,
+        model=provider.model,
+        prompt_version=TEXT_OPTIMIZATION_PROMPT_VERSION,
+    )
+
+
 @document_router.post("/versions/{version_id}/validate", response_model=ValidationRunView)
 def run_validation(version_id: str, request: Request, db: DbSession, user: CurrentUser) -> ValidationRunView:
+    if "document.edit" not in user_permission_codes(db, user):
+        raise APIError(403, "forbidden", "缺少权限：document.edit")
     version = _get_document_version(db, user, version_id)
     run = validate_document_version(db, version)
     record_audit(db, request, user, "validation.run", "document_version", version.id)
@@ -2374,12 +3227,12 @@ def finalize_document_version(
         }
     run = validate_document_version(db, version)
     db.flush()
-    if run.issue_counts.get("P0", 0) > 0:
+    if run.issue_counts.get("P0", 0) > 0 or run.issue_counts.get("P1", 0) > 0:
         db.commit()
         raise APIError(
             422,
             "finalization_blocked",
-            "存在 P0 问题，不能定稿",
+            "存在未解决的 P0 或 P1 问题，不能定稿",
             details={"validation_run_id": run.id, "issue_counts": run.issue_counts},
         )
     version.status = "finalized"
@@ -2423,6 +3276,8 @@ def finalize_document_version(
 def create_document_revision(
     version_id: str, request: Request, db: DbSession, user: CurrentUser
 ) -> dict[str, Any]:
+    if "document.edit" not in user_permission_codes(db, user):
+        raise APIError(403, "forbidden", "缺少权限：document.edit")
     source = _get_document_version(db, user, version_id)
     document = db.get(Document, source.document_id)
     if document is None:
@@ -2452,6 +3307,7 @@ def create_document_revision(
             .order_by(DocumentSection.sequence)
         )
     )
+    id_remap: dict[str, str] = {}
     for source_section in source_sections:
         section = DocumentSection(
             organization_id=user.organization_id,
@@ -2459,11 +3315,14 @@ def create_document_revision(
             sequence=source_section.sequence,
             key=source_section.key,
             title=source_section.title,
+            parent_id=None,
+            level=source_section.level,
             created_by=user.id,
             updated_by=user.id,
         )
         db.add(section)
         db.flush()
+        id_remap[source_section.id] = section.id
         blocks = db.scalars(
             select(DocumentContentBlock).where(DocumentContentBlock.document_section_id == source_section.id)
         )
@@ -2483,6 +3342,15 @@ def create_document_revision(
                     updated_by=user.id,
                 )
             )
+    for source_section in source_sections:
+        if not source_section.parent_id:
+            continue
+        new_id = id_remap.get(source_section.id)
+        new_parent_id = id_remap.get(source_section.parent_id)
+        if new_id and new_parent_id:
+            cloned = db.get(DocumentSection, new_id)
+            if cloned is not None:
+                cloned.parent_id = new_parent_id
     document.current_version = next_number
     document.status = "draft"
     record_audit(db, request, user, "document.revision.create", "document_version", revision.id)
@@ -2668,7 +3536,7 @@ def start_export(
     payload: ExportRequest,
     request: Request,
     db: DbSession,
-    user: CurrentUser,
+    user: Annotated[User, Depends(require_permission("export.create"))],
 ) -> dict[str, Any]:
     version = _get_document_version(db, user, version_id)
     existing = db.scalar(select(ExportJob).where(ExportJob.idempotency_key == payload.idempotency_key))
@@ -2680,6 +3548,7 @@ def start_export(
         job = ExportJob(
             organization_id=user.organization_id,
             document_version_id=version.id,
+            document_revision=version.revision,
             output_format=payload.output_format,
             status="queued",
             idempotency_key=payload.idempotency_key,
@@ -2705,6 +3574,10 @@ def start_export(
         "status": job.status,
         "sha256": job.sha256,
         "error": job.error,
+        "created_at": job.created_at,
+        "updated_at": job.updated_at,
+        "version": version.version,
+        "version_revision": job.document_revision,
     }
 
 
@@ -2721,13 +3594,15 @@ def get_export_job(job_id: str, db: DbSession, user: CurrentUser) -> dict[str, A
         "status": job.status,
         "sha256": job.sha256,
         "error": job.error,
+        "created_at": job.created_at,
+        "updated_at": job.updated_at,
+        "version": _get_document_version(db, user, job.document_version_id).version,
+        "version_revision": job.document_revision,
     }
 
 
 @export_router.get("/{job_id}/artifacts", response_model=list[dict[str, Any]])
-def list_export_artifacts(
-    job_id: str, db: DbSession, user: CurrentUser
-) -> list[dict[str, Any]]:
+def list_export_artifacts(job_id: str, db: DbSession, user: CurrentUser) -> list[dict[str, Any]]:
     job = db.get(ExportJob, job_id)
     if job is None or job.organization_id != user.organization_id:
         raise APIError(404, "export_job_not_found", "导出任务不存在")
@@ -2754,11 +3629,16 @@ def list_export_artifacts(
 
 
 @export_router.get("/{job_id}/download")
-def download_export(job_id: str, db: DbSession, user: CurrentUser) -> StreamingResponse:
+def download_export(
+    job_id: str,
+    db: DbSession,
+    user: CurrentUser,
+    preview: bool = False,
+) -> StreamingResponse:
     job = db.get(ExportJob, job_id)
     if job is None or job.organization_id != user.organization_id:
         raise APIError(404, "export_job_not_found", "导出任务不存在")
-    _get_document_version(db, user, job.document_version_id)
+    version = _get_document_version(db, user, job.document_version_id)
     if job.status != "succeeded" or not job.storage_key:
         raise APIError(409, "export_not_ready", "导出文件尚未生成完成")
     content = get_storage().get(job.storage_key)
@@ -2770,10 +3650,15 @@ def download_export(job_id: str, db: DbSession, user: CurrentUser) -> StreamingR
         "pdf": "application/pdf",
         "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     }[job.output_format]
+    filename = export_filename(db, version, job.output_format)
+    disposition = "inline" if preview else "attachment"
     return StreamingResponse(
         iter([content]),
         media_type=mime,
-        headers={"Content-Disposition": f'attachment; filename="document.{job.output_format}"'},
+        headers={
+            "Content-Disposition": f"{disposition}; filename*=UTF-8''{quote(filename)}",
+            "Cache-Control": "no-store",
+        },
     )
 
 
@@ -2880,8 +3765,7 @@ def list_permissions(db: DbSession, user: CurrentUser) -> list[dict[str, Any]]:
     del user
     permissions = list(db.scalars(select(Permission).order_by(Permission.code)))
     return [
-        {"id": permission.id, "code": permission.code, "name": permission.name}
-        for permission in permissions
+        {"id": permission.id, "code": permission.code, "name": permission.name} for permission in permissions
     ]
 
 
@@ -2927,6 +3811,645 @@ def contract_payment_check(payload: ContractPaymentCheck, user: CurrentUser) -> 
     return {"valid": not errors, "errors": errors}
 
 
+@system_router.get("/features", response_model=dict[str, bool])
+def feature_flags(user: CurrentUser) -> dict[str, bool]:
+    del user
+    return {"procurement_planning": get_settings().procurement_planning_enabled}
+
+
+@procurement_router.get("/procurement-rule-sets", response_model=list[ProcurementRuleSetView])
+def list_procurement_rule_sets(
+    db: DbSession,
+    user: CurrentUser,
+    status: str | None = Query(default=None, max_length=30),
+) -> list[ProcurementRuleSet]:
+    statement = select(ProcurementRuleSet).where(ProcurementRuleSet.organization_id == user.organization_id)
+    if status:
+        statement = statement.where(ProcurementRuleSet.status == status)
+    return list(db.scalars(statement.order_by(ProcurementRuleSet.key, ProcurementRuleSet.version.desc())))
+
+
+@procurement_router.post(
+    "/procurement-rule-sets",
+    response_model=ProcurementRuleSetView,
+    status_code=201,
+)
+def create_procurement_rule_set(
+    payload: ProcurementRuleSetCreate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.manage"))],
+) -> ProcurementRuleSet:
+    if payload.effective_date and payload.expiry_date and payload.expiry_date < payload.effective_date:
+        raise APIError(422, "procurement_rule_date_invalid", "规则失效日期不能早于生效日期")
+    from .services.feasibility_rules import validate_rules_document
+
+    rule_errors = validate_rules_document(payload.rules_json or {})
+    if rule_errors:
+        raise APIError(
+            422,
+            "procurement_rule_schema_invalid",
+            "采购规则 DSL 不合法",
+            details={"errors": rule_errors},
+        )
+    latest = db.scalar(
+        select(func.max(ProcurementRuleSet.version)).where(
+            ProcurementRuleSet.organization_id == user.organization_id,
+            ProcurementRuleSet.key == payload.key,
+        )
+    )
+    rule_set = ProcurementRuleSet(
+        organization_id=user.organization_id,
+        key=payload.key,
+        name=payload.name,
+        version=(latest or 0) + 1,
+        status="draft",
+        applicable_subject=payload.applicable_subject,
+        region=payload.region,
+        funding_nature=payload.funding_nature,
+        source_name=payload.source_name,
+        source_url=payload.source_url,
+        effective_date=payload.effective_date,
+        expiry_date=payload.expiry_date,
+        rules_json=payload.rules_json,
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(rule_set)
+    db.flush()
+    record_audit(db, request, user, "procurement_rule_set.create", "procurement_rule_set", rule_set.id)
+    db.commit()
+    return rule_set
+
+
+@procurement_router.post(
+    "/procurement-rule-sets/{rule_set_id}/publish",
+    response_model=ProcurementRuleSetView,
+)
+def publish_procurement_rule_set(
+    rule_set_id: str,
+    payload: ProcurementRuleSetPublishRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("template.publish"))],
+) -> ProcurementRuleSet:
+    rule_set = db.get(ProcurementRuleSet, rule_set_id)
+    if rule_set is None or rule_set.organization_id != user.organization_id:
+        raise APIError(404, "procurement_rule_set_not_found", "采购规则集不存在")
+    if rule_set.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "采购规则集已被修改")
+    if rule_set.status == "published":
+        return rule_set
+    previous_versions = list(
+        db.scalars(
+            select(ProcurementRuleSet).where(
+                ProcurementRuleSet.organization_id == user.organization_id,
+                ProcurementRuleSet.key == rule_set.key,
+                ProcurementRuleSet.status == "published",
+                ProcurementRuleSet.id != rule_set.id,
+            )
+        )
+    )
+    for previous in previous_versions:
+        previous.status = "superseded"
+        previous.revision += 1
+        previous.updated_by = user.id
+    rule_set.status = "published"
+    rule_set.revision += 1
+    rule_set.updated_by = user.id
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_rule_set.publish",
+        "procurement_rule_set",
+        rule_set.id,
+        after={"key": rule_set.key, "version": rule_set.version, "source": rule_set.source_name},
+    )
+    db.commit()
+    return rule_set
+
+
+def _get_procurement_run(db: Session, user: User, run_id: str) -> ProcurementAnalysisRun:
+    run = db.get(ProcurementAnalysisRun, run_id)
+    if run is None or run.organization_id != user.organization_id:
+        raise APIError(404, "procurement_analysis_not_found", "采购分析记录不存在")
+    require_project_access(db, user, run.project_id)
+    return run
+
+
+def _get_procurement_plan(db: Session, user: User, plan_id: str) -> ProcurementPlan:
+    plan = db.get(ProcurementPlan, plan_id)
+    if plan is None or plan.organization_id != user.organization_id:
+        raise APIError(404, "procurement_plan_not_found", "采购方案不存在")
+    require_project_access(db, user, plan.project_id)
+    return plan
+
+
+@procurement_router.post(
+    "/projects/{project_id}/procurement-analyses",
+    response_model=ProcurementAnalysisRunView,
+    status_code=202,
+)
+def start_procurement_analysis(
+    project_id: str,
+    payload: ProcurementAnalysisRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> ProcurementAnalysisRun:
+    if not get_settings().procurement_planning_enabled:
+        raise APIError(404, "feature_disabled", "采购方案分析功能当前已关闭")
+    project = require_project_access(db, user, project_id)
+    run = build_analysis_run(
+        db,
+        project=project,
+        source_kind=payload.source_kind,
+        source_version_id=payload.source_version_id,
+        user_id=user.id,
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_analysis.start",
+        "procurement_analysis_run",
+        run.id,
+        after={"source_kind": run.source_kind, "source_version_id": run.source_version_id},
+    )
+    enqueue_procurement_analysis(db, run)
+    db.expire_all()
+    refreshed = db.get(ProcurementAnalysisRun, run.id)
+    if refreshed is None:
+        raise APIError(500, "procurement_analysis_lost", "采购分析任务创建失败")
+    return refreshed
+
+
+@procurement_router.get(
+    "/projects/{project_id}/procurement-analyses",
+    response_model=list[ProcurementAnalysisRunView],
+)
+def list_procurement_analyses(
+    project_id: str, db: DbSession, user: CurrentUser
+) -> list[ProcurementAnalysisRun]:
+    require_project_access(db, user, project_id)
+    return list(
+        db.scalars(
+            select(ProcurementAnalysisRun)
+            .where(ProcurementAnalysisRun.project_id == project_id)
+            .order_by(ProcurementAnalysisRun.created_at.desc())
+        )
+    )
+
+
+@procurement_router.get("/procurement-analyses/{run_id}", response_model=ProcurementAnalysisRunView)
+def get_procurement_analysis(run_id: str, db: DbSession, user: CurrentUser) -> ProcurementAnalysisRun:
+    return _get_procurement_run(db, user, run_id)
+
+
+@procurement_router.post(
+    "/procurement-analyses/{run_id}/retry",
+    response_model=ProcurementAnalysisRunView,
+    status_code=202,
+)
+def retry_procurement_analysis(
+    run_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> ProcurementAnalysisRun:
+    run = _get_procurement_run(db, user, run_id)
+    if run.status in {"succeeded", "succeeded_demo"}:
+        raise APIError(409, "procurement_analysis_already_succeeded", "采购分析已经完成，无需重试")
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_analysis.retry",
+        "procurement_analysis_run",
+        run.id,
+        before={"status": run.status, "task_id": run.task_id, "error": run.error},
+    )
+    enqueue_procurement_analysis(db, run)
+    db.expire_all()
+    refreshed = db.get(ProcurementAnalysisRun, run.id)
+    if refreshed is None:
+        raise APIError(500, "procurement_analysis_lost", "采购分析任务重试失败")
+    return refreshed
+
+
+@procurement_router.get("/projects/{project_id}/procurement-plans", response_model=list[ProcurementPlanView])
+def list_procurement_plans(project_id: str, db: DbSession, user: CurrentUser) -> list[dict[str, Any]]:
+    require_project_access(db, user, project_id)
+    plans = list(
+        db.scalars(
+            select(ProcurementPlan)
+            .where(ProcurementPlan.project_id == project_id)
+            .order_by(ProcurementPlan.version.desc(), ProcurementPlan.is_recommended.desc())
+        )
+    )
+    return [plan_view(db, plan) for plan in plans]
+
+
+@procurement_router.get("/procurement-plans/{plan_id}", response_model=ProcurementPlanView)
+def get_procurement_plan(plan_id: str, db: DbSession, user: CurrentUser) -> dict[str, Any]:
+    return plan_view(db, _get_procurement_plan(db, user, plan_id))
+
+
+@procurement_router.put("/procurement-plans/{plan_id}/structure", response_model=ProcurementPlanView)
+def update_procurement_plan_structure(
+    plan_id: str,
+    payload: ProcurementPlanStructureUpdate,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> dict[str, Any]:
+    plan = _get_procurement_plan(db, user, plan_id)
+    if plan.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "采购方案已被其他用户修改，请刷新后重试")
+    before = plan_view(db, plan)
+    replace_plan_structure(
+        db,
+        plan,
+        packages_payload=[item.model_dump(mode="python") for item in payload.packages],
+        groups_payload=[item.model_dump(mode="python") for item in payload.document_groups],
+        name=payload.name,
+        user_id=user.id,
+    )
+    refresh_summary = _refresh_tender_field_candidates(
+        db,
+        project_id=plan.project_id,
+        organization_id=plan.organization_id,
+        actor_id=user.id,
+        reason="procurement_plan_structure_update",
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_plan.structure.update",
+        "procurement_plan",
+        plan.id,
+        before={"revision": before["revision"], "document_count": before["recommended_document_count"]},
+        after={
+            "revision": plan.revision,
+            "document_count": plan.recommended_document_count,
+            "field_refresh": {
+                "created": refresh_summary.get("created"),
+                "revised": refresh_summary.get("revised"),
+                "files_processed": refresh_summary.get("files_processed"),
+            },
+        },
+    )
+    db.commit()
+    return plan_view(db, plan)
+
+
+@procurement_router.post(
+    "/procurement-plans/{plan_id}/ensure-default-grouping",
+    response_model=ProcurementPlanView,
+)
+def ensure_procurement_plan_default_grouping(
+    plan_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+    payload: EnsureDefaultGroupingRequest | None = Body(default=None),
+) -> dict[str, Any]:
+    """按用户显式策略补齐待编制清单；无 strategy 时不改动方案（不再静默一包一套）。"""
+    plan = _get_procurement_plan(db, user, plan_id)
+    before = plan_view(db, plan)
+    strategy = payload.strategy if payload is not None else None
+    applied = ensure_default_document_groups(
+        db, plan, user_id=user.id, strategy=strategy
+    )
+    recalculate_plan(db, plan)
+    refresh_summary: dict[str, Any] | None = None
+    if applied:
+        refresh_summary = _refresh_tender_field_candidates(
+            db,
+            project_id=plan.project_id,
+            organization_id=plan.organization_id,
+            actor_id=user.id,
+            reason="ensure_default_grouping",
+        )
+        record_audit(
+            db,
+            request,
+            user,
+            "procurement_plan.ensure_default_grouping",
+            "procurement_plan",
+            plan.id,
+            before={
+                "revision": before["revision"],
+                "document_count": before["recommended_document_count"],
+                "package_count": before["procurement_package_count"],
+            },
+            after={
+                "revision": plan.revision,
+                "document_count": plan.recommended_document_count,
+                "package_count": plan.procurement_package_count,
+                "strategy": strategy,
+                "field_refresh": {
+                    "created": refresh_summary.get("created"),
+                    "revised": refresh_summary.get("revised"),
+                    "files_processed": refresh_summary.get("files_processed"),
+                },
+            },
+        )
+    db.commit()
+    return plan_view(db, plan)
+
+
+@procurement_router.post("/procurement-plans/{plan_id}/confirm", response_model=ProcurementPlanView)
+def confirm_procurement_plan(
+    plan_id: str,
+    payload: ProcurementPlanConfirmRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.finalize"))],
+) -> dict[str, Any]:
+    plan = _get_procurement_plan(db, user, plan_id)
+    if plan.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "采购方案已被其他用户修改，请刷新后重试")
+    confirmation = confirm_plan(db, plan, user_id=user.id, note=payload.decision_note)
+    refresh_summary = _refresh_tender_field_candidates(
+        db,
+        project_id=plan.project_id,
+        organization_id=plan.organization_id,
+        actor_id=user.id,
+        reason="procurement_plan_confirm",
+    )
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_plan.confirm",
+        "procurement_plan",
+        plan.id,
+        after={
+            "plan_version": plan.version,
+            "confirmed_document_count": plan.confirmed_document_count,
+            "snapshot_sha256": confirmation.snapshot_sha256,
+            "field_refresh": {
+                "created": refresh_summary.get("created"),
+                "revised": refresh_summary.get("revised"),
+                "files_processed": refresh_summary.get("files_processed"),
+            },
+        },
+    )
+    db.commit()
+    return plan_view(db, plan)
+
+
+@procurement_router.post("/procurement-issues/{issue_id}/resolve", response_model=ProcurementPlanView)
+def resolve_procurement_issue(
+    issue_id: str,
+    payload: ProcurementIssueResolveRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> dict[str, Any]:
+    issue = db.get(ProcurementIssue, issue_id)
+    if issue is None or issue.organization_id != user.organization_id:
+        raise APIError(404, "procurement_issue_not_found", "待确认项不存在")
+    plan = _get_procurement_plan(db, user, issue.plan_id)
+    if issue.revision != payload.revision:
+        raise APIError(409, "revision_conflict", "待确认项已更新，请刷新后重试")
+    if issue.category == "rule_check":
+        raise APIError(422, "rule_issue_requires_data_change", "该问题需修改范围、归属或预算数据后自动复核")
+    if plan.status == "confirmed":
+        raise APIError(409, "confirmed_plan_immutable", "已确认采购方案不可直接修改")
+    issue.status = "resolved"
+    issue.resolution = payload.resolution
+    issue.updated_by = user.id
+    issue.revision += 1
+    plan.revision += 1
+    recalculate_plan(db, plan)
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_issue.resolve",
+        "procurement_issue",
+        issue.id,
+        after={"resolution": issue.resolution},
+    )
+    db.commit()
+    return plan_view(db, plan)
+
+
+def _refresh_batch(db: Session, batch: ProcurementGenerationBatch) -> list[GenerationJob]:
+    jobs = list(
+        db.scalars(
+            select(GenerationJob)
+            .where(GenerationJob.procurement_batch_id == batch.id)
+            .order_by(GenerationJob.created_at)
+        )
+    )
+    batch.succeeded_count = sum(job.status == "succeeded" for job in jobs)
+    batch.failed_count = sum(job.status in {"failed", "stale"} for job in jobs)
+    if batch.succeeded_count == batch.total_count:
+        batch.status = "succeeded"
+    elif batch.succeeded_count + batch.failed_count == batch.total_count:
+        batch.status = "partial_failed" if batch.succeeded_count else "failed"
+    elif any(job.status in {"running", "retrying"} for job in jobs):
+        batch.status = "running"
+    else:
+        batch.status = "queued"
+    return jobs
+
+
+def _batch_view(db: Session, batch: ProcurementGenerationBatch) -> dict[str, Any]:
+    jobs = _refresh_batch(db, batch)
+    return {
+        "id": batch.id,
+        "project_id": batch.project_id,
+        "plan_id": batch.plan_id,
+        "status": batch.status,
+        "idempotency_key": batch.idempotency_key,
+        "total_count": batch.total_count,
+        "succeeded_count": batch.succeeded_count,
+        "failed_count": batch.failed_count,
+        "jobs": jobs,
+        "revision": batch.revision,
+    }
+
+
+@procurement_router.post(
+    "/procurement-plans/{plan_id}/generate-batch",
+    response_model=ProcurementGenerationBatchView,
+    status_code=202,
+)
+def generate_procurement_plan_batch(
+    plan_id: str,
+    payload: ProcurementBatchGenerationRequest,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> dict[str, Any]:
+    plan = _get_procurement_plan(db, user, plan_id)
+    recalculate_plan(db, plan)
+    if plan.status != "confirmed" or not plan.draft_generation_allowed:
+        raise APIError(422, "procurement_generation_blocked", "采购方案尚未确认或仍有范围、归属、模板阻断项")
+    existing = db.scalar(
+        select(ProcurementGenerationBatch).where(
+            ProcurementGenerationBatch.idempotency_key == payload.idempotency_key
+        )
+    )
+    if existing:
+        if existing.plan_id != plan.id:
+            raise APIError(409, "idempotency_conflict", "幂等键已用于其他采购方案")
+        return _batch_view(db, existing)
+    group_ids = list(dict.fromkeys(payload.group_ids))
+    groups = list(
+        db.scalars(
+            select(TenderDocumentGroup).where(
+                TenderDocumentGroup.plan_id == plan.id,
+                TenderDocumentGroup.id.in_(group_ids),
+                TenderDocumentGroup.status == "active",
+            )
+        )
+    )
+    if {item.id for item in groups} != set(group_ids):
+        raise APIError(422, "invalid_document_group_selection", "包含不存在或不可生成的主文件组")
+    if any(item.procurement_method not in {"public_tender", "invited_tender", "tender"} for item in groups):
+        raise APIError(422, "unsupported_procurement_method", "非招标采购文件当前不支持生成，已单独统计")
+    batch = ProcurementGenerationBatch(
+        organization_id=plan.organization_id,
+        project_id=plan.project_id,
+        plan_id=plan.id,
+        status="queued",
+        idempotency_key=payload.idempotency_key,
+        total_count=len(groups),
+        created_by=user.id,
+        updated_by=user.id,
+    )
+    db.add(batch)
+    db.flush()
+    jobs: list[GenerationJob] = []
+    for group in groups:
+        if not group.template_id or not group.template_version:
+            raise APIError(422, "procurement_template_missing", f"{group.name} 尚未匹配模板")
+        template = db.get(Template, group.template_id)
+        if template is None:
+            raise APIError(422, "procurement_template_missing", f"{group.name} 的模板不存在")
+        snapshot = group_snapshot(db, plan, group)
+        job_key = (
+            "proc-batch-" + hashlib.sha256(f"{payload.idempotency_key}:{group.id}".encode()).hexdigest()[:40]
+        )
+        jobs.append(
+            build_generation_job(
+                db,
+                project=require_project_access(db, user, plan.project_id),
+                stage="tender",
+                template=template,
+                template_version=group.template_version,
+                idempotency_key=job_key,
+                user_id=user.id,
+                procurement_plan_id=plan.id,
+                procurement_document_group_id=group.id,
+                procurement_batch_id=batch.id,
+                procurement_snapshot=snapshot,
+                template_applicability_confirmed=True,
+            )
+        )
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_plan.generate_batch",
+        "procurement_generation_batch",
+        batch.id,
+        after={"plan_id": plan.id, "group_ids": group_ids},
+    )
+    db.commit()
+    for job in jobs:
+        try:
+            result = generate_document_task.delay(job.id)
+            db.expire_all()
+            refreshed = db.get(GenerationJob, job.id)
+            if refreshed and refreshed.task_id is None:
+                refreshed.task_id = result.id
+                db.commit()
+        except Exception as exc:  # noqa: BLE001 - one failed document must not discard successful siblings
+            failed_job = db.get(GenerationJob, job.id)
+            if failed_job is not None:
+                failed_job.status = "failed"
+                failed_job.error = f"任务调度失败：{type(exc).__name__}"
+                db.commit()
+            logger.exception("procurement_batch_item_failed batch_id=%s job_id=%s", batch.id, job.id)
+    db.expire_all()
+    refreshed_batch = db.get(ProcurementGenerationBatch, batch.id)
+    if refreshed_batch is None:
+        raise APIError(500, "procurement_batch_lost", "批量生成任务创建失败")
+    response = _batch_view(db, refreshed_batch)
+    db.commit()
+    return response
+
+
+@procurement_router.get(
+    "/procurement-generation-batches/{batch_id}", response_model=ProcurementGenerationBatchView
+)
+def get_procurement_generation_batch(batch_id: str, db: DbSession, user: CurrentUser) -> dict[str, Any]:
+    batch = db.get(ProcurementGenerationBatch, batch_id)
+    if batch is None or batch.organization_id != user.organization_id:
+        raise APIError(404, "procurement_batch_not_found", "批量生成任务不存在")
+    require_project_access(db, user, batch.project_id)
+    return _batch_view(db, batch)
+
+
+@procurement_router.post(
+    "/procurement-generation-batches/{batch_id}/retry-failed",
+    response_model=ProcurementGenerationBatchView,
+    status_code=202,
+)
+def retry_procurement_generation_batch(
+    batch_id: str,
+    request: Request,
+    db: DbSession,
+    user: Annotated[User, Depends(require_permission("document.edit"))],
+) -> dict[str, Any]:
+    batch = db.get(ProcurementGenerationBatch, batch_id)
+    if batch is None or batch.organization_id != user.organization_id:
+        raise APIError(404, "procurement_batch_not_found", "批量生成任务不存在")
+    require_project_access(db, user, batch.project_id)
+    jobs = _refresh_batch(db, batch)
+    retryable = [job for job in jobs if job.status in {"failed", "retrying", "stale"}]
+    if not retryable:
+        raise APIError(409, "no_failed_batch_items", "当前没有可重试的失败项")
+    for job in retryable:
+        job.status = "queued"
+        job.error = None
+    record_audit(
+        db,
+        request,
+        user,
+        "procurement_batch.retry_failed",
+        "procurement_generation_batch",
+        batch.id,
+        after={"job_ids": [job.id for job in retryable]},
+    )
+    db.commit()
+    for job in retryable:
+        try:
+            generate_document_task.delay(job.id)
+        except Exception as exc:  # noqa: BLE001
+            failed_job = db.get(GenerationJob, job.id)
+            if failed_job is not None:
+                failed_job.status = "failed"
+                failed_job.error = f"重试调度失败：{type(exc).__name__}"
+                db.commit()
+            logger.exception("procurement_batch_retry_failed batch_id=%s job_id=%s", batch.id, job.id)
+    db.expire_all()
+    refreshed = db.get(ProcurementGenerationBatch, batch.id)
+    if refreshed is None:
+        raise APIError(500, "procurement_batch_lost", "批量生成任务不存在")
+    response = _batch_view(db, refreshed)
+    db.commit()
+    return response
+
+
 router.include_router(auth_router)
 router.include_router(project_router)
 router.include_router(file_router)
@@ -2939,4 +4462,5 @@ router.include_router(validation_router)
 router.include_router(export_router)
 router.include_router(comparison_router)
 router.include_router(format_profile_router)
+router.include_router(procurement_router)
 router.include_router(system_router)

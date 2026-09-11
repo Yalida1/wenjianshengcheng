@@ -1,0 +1,1547 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 项目文件链
+      - generic [ref=e7]: 受控生成与定稿平台
+    - navigation "主导航" [ref=e8]:
+      - link "项目空间" [ref=e9] [cursor=pointer]:
+        - /url: /projects
+      - link "模板中心" [ref=e10] [cursor=pointer]:
+        - /url: /templates
+      - link "字段字典" [ref=e11] [cursor=pointer]:
+        - /url: /field-dictionary
+      - link "系统管理" [ref=e12] [cursor=pointer]:
+        - /url: /admin/users
+    - generic [ref=e13]:
+      - generic [ref=e14]: Demo 管理员
+      - generic [ref=e15]: admin
+      - button "退出登录" [ref=e16]
+  - generic [ref=e17]:
+    - banner [ref=e18]:
+      - heading "项目空间" [level=1] [ref=e19]
+      - generic [ref=e20]: Demo 管理员
+    - main [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - heading "项目空间" [level=2] [ref=e24]
+          - paragraph [ref=e25]: 每个项目沿项目建议书、可研报告、招标文件和合同主链路推进。
+        - button "新建项目" [ref=e27]
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - link "ROUTE-1788921748732 路由与响应式巡检项目" [ref=e31] [cursor=pointer]:
+              - /url: /projects/dae3f4b9-3b26-4309-8a01-414d2e9ce7aa
+              - generic [ref=e32] [cursor=pointer]:
+                - generic [ref=e33] [cursor=pointer]: ROUTE-1788921748732
+                - heading "路由与响应式巡检项目" [level=3] [ref=e34] [cursor=pointer]
+            - generic [ref=e35]: 进行中
+          - paragraph [ref=e36]: 尚未填写项目说明
+          - generic [ref=e37]:
+            - generic [ref=e38]: 最后更新 2026/9/9 10:42:28
+            - generic [ref=e39]:
+              - link "进入项目" [ref=e40] [cursor=pointer]:
+                - /url: /projects/dae3f4b9-3b26-4309-8a01-414d2e9ce7aa
+              - button "删除项目" [active] [ref=e41]
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - link "ROUTE-1788921606477 路由与响应式巡检项目" [ref=e44] [cursor=pointer]:
+              - /url: /projects/3a744fc6-dbb6-46b4-b020-b2e49bcbafbf
+              - generic [ref=e45] [cursor=pointer]:
+                - generic [ref=e46] [cursor=pointer]: ROUTE-1788921606477
+                - heading "路由与响应式巡检项目" [level=3] [ref=e47] [cursor=pointer]
+            - generic [ref=e48]: 进行中
+          - paragraph [ref=e49]: 尚未填写项目说明
+          - generic [ref=e50]:
+            - generic [ref=e51]: 最后更新 2026/9/9 10:40:06
+            - generic [ref=e52]:
+              - link "进入项目" [ref=e53] [cursor=pointer]:
+                - /url: /projects/3a744fc6-dbb6-46b4-b020-b2e49bcbafbf
+              - button "删除项目" [ref=e54]
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - link "ROUTE-1788921564599 路由与响应式巡检项目" [ref=e57] [cursor=pointer]:
+              - /url: /projects/bf386f93-fec2-4079-81dc-7bff0515d38f
+              - generic [ref=e58] [cursor=pointer]:
+                - generic [ref=e59] [cursor=pointer]: ROUTE-1788921564599
+                - heading "路由与响应式巡检项目" [level=3] [ref=e60] [cursor=pointer]
+            - generic [ref=e61]: 进行中
+          - paragraph [ref=e62]: 尚未填写项目说明
+          - generic [ref=e63]:
+            - generic [ref=e64]: 最后更新 2026/9/9 10:39:24
+            - generic [ref=e65]:
+              - link "进入项目" [ref=e66] [cursor=pointer]:
+                - /url: /projects/bf386f93-fec2-4079-81dc-7bff0515d38f
+              - button "删除项目" [ref=e67]
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - link "PROC-E2E-1788921553719 采购方案端到端测试项目" [ref=e70] [cursor=pointer]:
+              - /url: /projects/b27e699a-0e9f-496f-b313-477eb89a41e1
+              - generic [ref=e71] [cursor=pointer]:
+                - generic [ref=e72] [cursor=pointer]: PROC-E2E-1788921553719
+                - heading "采购方案端到端测试项目" [level=3] [ref=e73] [cursor=pointer]
+            - generic [ref=e74]: 进行中
+          - paragraph [ref=e75]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e76]:
+            - generic [ref=e77]: 最后更新 2026/9/9 10:39:13
+            - generic [ref=e78]:
+              - link "进入项目" [ref=e79] [cursor=pointer]:
+                - /url: /projects/b27e699a-0e9f-496f-b313-477eb89a41e1
+              - button "删除项目" [ref=e80]
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - link "E2E-1788921493689 宁夏数字政务协同平台 E2E 项目" [ref=e83] [cursor=pointer]:
+              - /url: /projects/994cb5b1-1841-43e4-ae71-f8242288072e
+              - generic [ref=e84] [cursor=pointer]:
+                - generic [ref=e85] [cursor=pointer]: E2E-1788921493689
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e86] [cursor=pointer]
+            - generic [ref=e87]: 进行中
+          - paragraph [ref=e88]: 自动化两阶段主链路验证项目
+          - generic [ref=e89]:
+            - generic [ref=e90]: 最后更新 2026/9/9 10:38:14
+            - generic [ref=e91]:
+              - link "进入项目" [ref=e92] [cursor=pointer]:
+                - /url: /projects/994cb5b1-1841-43e4-ae71-f8242288072e
+              - button "删除项目" [ref=e93]
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - link "REV-1788921491667 第一次修改" [ref=e96] [cursor=pointer]:
+              - /url: /projects/b8d04028-ba57-43ba-821d-12916787df42
+              - generic [ref=e97] [cursor=pointer]:
+                - generic [ref=e98] [cursor=pointer]: REV-1788921491667
+                - heading "第一次修改" [level=3] [ref=e99] [cursor=pointer]
+            - generic [ref=e100]: 进行中
+          - paragraph [ref=e101]: 尚未填写项目说明
+          - generic [ref=e102]:
+            - generic [ref=e103]: 最后更新 2026/9/9 10:38:11
+            - generic [ref=e104]:
+              - link "进入项目" [ref=e105] [cursor=pointer]:
+                - /url: /projects/b8d04028-ba57-43ba-821d-12916787df42
+              - button "删除项目" [ref=e106]
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - link "BAD-1788921489735 错误状态验证项目" [ref=e109] [cursor=pointer]:
+              - /url: /projects/2781d8fd-41b7-4f42-bcbf-836ff9dc45cd
+              - generic [ref=e110] [cursor=pointer]:
+                - generic [ref=e111] [cursor=pointer]: BAD-1788921489735
+                - heading "错误状态验证项目" [level=3] [ref=e112] [cursor=pointer]
+            - generic [ref=e113]: 进行中
+          - paragraph [ref=e114]: 尚未填写项目说明
+          - generic [ref=e115]:
+            - generic [ref=e116]: 最后更新 2026/9/9 10:38:09
+            - generic [ref=e117]:
+              - link "进入项目" [ref=e118] [cursor=pointer]:
+                - /url: /projects/2781d8fd-41b7-4f42-bcbf-836ff9dc45cd
+              - button "删除项目" [ref=e119]
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - link "BTA-UI-1788921424439 测试项目—区域绿色数据中心节能改造" [ref=e122] [cursor=pointer]:
+              - /url: /projects/5a2c060b-37d9-439f-90d4-5c916c2660d8
+              - generic [ref=e123] [cursor=pointer]:
+                - generic [ref=e124] [cursor=pointer]: BTA-UI-1788921424439
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e125] [cursor=pointer]
+            - generic [ref=e126]: 进行中
+          - paragraph [ref=e127]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e128]:
+            - generic [ref=e129]: 最后更新 2026/9/9 10:37:04
+            - generic [ref=e130]:
+              - link "进入项目" [ref=e131] [cursor=pointer]:
+                - /url: /projects/5a2c060b-37d9-439f-90d4-5c916c2660d8
+              - button "删除项目" [ref=e132]
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - link "PROC-E2E-1788919982417 采购方案端到端测试项目" [ref=e135] [cursor=pointer]:
+              - /url: /projects/081ae0e5-5cc1-414c-ac23-6e94d2f8b746
+              - generic [ref=e136] [cursor=pointer]:
+                - generic [ref=e137] [cursor=pointer]: PROC-E2E-1788919982417
+                - heading "采购方案端到端测试项目" [level=3] [ref=e138] [cursor=pointer]
+            - generic [ref=e139]: 进行中
+          - paragraph [ref=e140]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e141]:
+            - generic [ref=e142]: 最后更新 2026/9/9 10:13:02
+            - generic [ref=e143]:
+              - link "进入项目" [ref=e144] [cursor=pointer]:
+                - /url: /projects/081ae0e5-5cc1-414c-ac23-6e94d2f8b746
+              - button "删除项目" [ref=e145]
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - link "E2E-1788919946089 宁夏数字政务协同平台 E2E 项目" [ref=e148] [cursor=pointer]:
+              - /url: /projects/e17fed4e-9fb2-4ef5-8c49-67532eca7813
+              - generic [ref=e149] [cursor=pointer]:
+                - generic [ref=e150] [cursor=pointer]: E2E-1788919946089
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e151] [cursor=pointer]
+            - generic [ref=e152]: 进行中
+          - paragraph [ref=e153]: 自动化两阶段主链路验证项目
+          - generic [ref=e154]:
+            - generic [ref=e155]: 最后更新 2026/9/9 10:12:26
+            - generic [ref=e156]:
+              - link "进入项目" [ref=e157] [cursor=pointer]:
+                - /url: /projects/e17fed4e-9fb2-4ef5-8c49-67532eca7813
+              - button "删除项目" [ref=e158]
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - link "REV-1788919944807 第一次修改" [ref=e161] [cursor=pointer]:
+              - /url: /projects/0a0efdba-876a-4b47-8edd-d055cd8851a8
+              - generic [ref=e162] [cursor=pointer]:
+                - generic [ref=e163] [cursor=pointer]: REV-1788919944807
+                - heading "第一次修改" [level=3] [ref=e164] [cursor=pointer]
+            - generic [ref=e165]: 进行中
+          - paragraph [ref=e166]: 尚未填写项目说明
+          - generic [ref=e167]:
+            - generic [ref=e168]: 最后更新 2026/9/9 10:12:24
+            - generic [ref=e169]:
+              - link "进入项目" [ref=e170] [cursor=pointer]:
+                - /url: /projects/0a0efdba-876a-4b47-8edd-d055cd8851a8
+              - button "删除项目" [ref=e171]
+        - generic [ref=e172]:
+          - generic [ref=e173]:
+            - link "BAD-1788919943504 错误状态验证项目" [ref=e174] [cursor=pointer]:
+              - /url: /projects/440f3601-27d0-4621-b2da-30a1f772c770
+              - generic [ref=e175] [cursor=pointer]:
+                - generic [ref=e176] [cursor=pointer]: BAD-1788919943504
+                - heading "错误状态验证项目" [level=3] [ref=e177] [cursor=pointer]
+            - generic [ref=e178]: 进行中
+          - paragraph [ref=e179]: 尚未填写项目说明
+          - generic [ref=e180]:
+            - generic [ref=e181]: 最后更新 2026/9/9 10:12:23
+            - generic [ref=e182]:
+              - link "进入项目" [ref=e183] [cursor=pointer]:
+                - /url: /projects/440f3601-27d0-4621-b2da-30a1f772c770
+              - button "删除项目" [ref=e184]
+        - generic [ref=e185]:
+          - generic [ref=e186]:
+            - link "BTA-UI-1788919888832 测试项目—区域绿色数据中心节能改造" [ref=e187] [cursor=pointer]:
+              - /url: /projects/c5386fb8-09e9-44d1-9d7e-b25a10bcc665
+              - generic [ref=e188] [cursor=pointer]:
+                - generic [ref=e189] [cursor=pointer]: BTA-UI-1788919888832
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e190] [cursor=pointer]
+            - generic [ref=e191]: 进行中
+          - paragraph [ref=e192]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e193]:
+            - generic [ref=e194]: 最后更新 2026/9/9 10:11:29
+            - generic [ref=e195]:
+              - link "进入项目" [ref=e196] [cursor=pointer]:
+                - /url: /projects/c5386fb8-09e9-44d1-9d7e-b25a10bcc665
+              - button "删除项目" [ref=e197]
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - link "PROC-E2E-1788919059948 采购方案端到端测试项目" [ref=e200] [cursor=pointer]:
+              - /url: /projects/b1bf1272-3f1d-4898-a425-c197fa6ce3ae
+              - generic [ref=e201] [cursor=pointer]:
+                - generic [ref=e202] [cursor=pointer]: PROC-E2E-1788919059948
+                - heading "采购方案端到端测试项目" [level=3] [ref=e203] [cursor=pointer]
+            - generic [ref=e204]: 进行中
+          - paragraph [ref=e205]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e206]:
+            - generic [ref=e207]: 最后更新 2026/9/9 09:57:40
+            - generic [ref=e208]:
+              - link "进入项目" [ref=e209] [cursor=pointer]:
+                - /url: /projects/b1bf1272-3f1d-4898-a425-c197fa6ce3ae
+              - button "删除项目" [ref=e210]
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - link "PROC-E2E-1788879408774 采购方案端到端测试项目" [ref=e213] [cursor=pointer]:
+              - /url: /projects/a1849698-f22c-46ef-b43a-3a0b720a5d86
+              - generic [ref=e214] [cursor=pointer]:
+                - generic [ref=e215] [cursor=pointer]: PROC-E2E-1788879408774
+                - heading "采购方案端到端测试项目" [level=3] [ref=e216] [cursor=pointer]
+            - generic [ref=e217]: 进行中
+          - paragraph [ref=e218]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e219]:
+            - generic [ref=e220]: 最后更新 2026/9/8 22:56:48
+            - generic [ref=e221]:
+              - link "进入项目" [ref=e222] [cursor=pointer]:
+                - /url: /projects/a1849698-f22c-46ef-b43a-3a0b720a5d86
+              - button "删除项目" [ref=e223]
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - link "E2E-1788879367352 宁夏数字政务协同平台 E2E 项目" [ref=e226] [cursor=pointer]:
+              - /url: /projects/a1c4d64b-e7bb-4171-8201-9fdba5b437c0
+              - generic [ref=e227] [cursor=pointer]:
+                - generic [ref=e228] [cursor=pointer]: E2E-1788879367352
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e229] [cursor=pointer]
+            - generic [ref=e230]: 进行中
+          - paragraph [ref=e231]: 自动化两阶段主链路验证项目
+          - generic [ref=e232]:
+            - generic [ref=e233]: 最后更新 2026/9/8 22:56:07
+            - generic [ref=e234]:
+              - link "进入项目" [ref=e235] [cursor=pointer]:
+                - /url: /projects/a1c4d64b-e7bb-4171-8201-9fdba5b437c0
+              - button "删除项目" [ref=e236]
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - link "REV-1788879365971 第一次修改" [ref=e239] [cursor=pointer]:
+              - /url: /projects/894f55ce-daef-4885-b178-105e050d3b76
+              - generic [ref=e240] [cursor=pointer]:
+                - generic [ref=e241] [cursor=pointer]: REV-1788879365971
+                - heading "第一次修改" [level=3] [ref=e242] [cursor=pointer]
+            - generic [ref=e243]: 进行中
+          - paragraph [ref=e244]: 尚未填写项目说明
+          - generic [ref=e245]:
+            - generic [ref=e246]: 最后更新 2026/9/8 22:56:06
+            - generic [ref=e247]:
+              - link "进入项目" [ref=e248] [cursor=pointer]:
+                - /url: /projects/894f55ce-daef-4885-b178-105e050d3b76
+              - button "删除项目" [ref=e249]
+        - generic [ref=e250]:
+          - generic [ref=e251]:
+            - link "BAD-1788879364788 错误状态验证项目" [ref=e252] [cursor=pointer]:
+              - /url: /projects/f6a5552f-70a1-4fc9-bcb7-f36380b5e74b
+              - generic [ref=e253] [cursor=pointer]:
+                - generic [ref=e254] [cursor=pointer]: BAD-1788879364788
+                - heading "错误状态验证项目" [level=3] [ref=e255] [cursor=pointer]
+            - generic [ref=e256]: 进行中
+          - paragraph [ref=e257]: 尚未填写项目说明
+          - generic [ref=e258]:
+            - generic [ref=e259]: 最后更新 2026/9/8 22:56:04
+            - generic [ref=e260]:
+              - link "进入项目" [ref=e261] [cursor=pointer]:
+                - /url: /projects/f6a5552f-70a1-4fc9-bcb7-f36380b5e74b
+              - button "删除项目" [ref=e262]
+        - generic [ref=e263]:
+          - generic [ref=e264]:
+            - link "BTA-UI-1788879313836 测试项目—区域绿色数据中心节能改造" [ref=e265] [cursor=pointer]:
+              - /url: /projects/583288b0-bc8a-46e1-bbea-7a897bc10007
+              - generic [ref=e266] [cursor=pointer]:
+                - generic [ref=e267] [cursor=pointer]: BTA-UI-1788879313836
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e268] [cursor=pointer]
+            - generic [ref=e269]: 进行中
+          - paragraph [ref=e270]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e271]:
+            - generic [ref=e272]: 最后更新 2026/9/8 22:55:14
+            - generic [ref=e273]:
+              - link "进入项目" [ref=e274] [cursor=pointer]:
+                - /url: /projects/583288b0-bc8a-46e1-bbea-7a897bc10007
+              - button "删除项目" [ref=e275]
+        - generic [ref=e276]:
+          - generic [ref=e277]:
+            - link "PROC-E2E-1788878227944 采购方案端到端测试项目" [ref=e278] [cursor=pointer]:
+              - /url: /projects/5ba3be47-9c74-4672-b4a3-266bb0128026
+              - generic [ref=e279] [cursor=pointer]:
+                - generic [ref=e280] [cursor=pointer]: PROC-E2E-1788878227944
+                - heading "采购方案端到端测试项目" [level=3] [ref=e281] [cursor=pointer]
+            - generic [ref=e282]: 进行中
+          - paragraph [ref=e283]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e284]:
+            - generic [ref=e285]: 最后更新 2026/9/8 22:37:07
+            - generic [ref=e286]:
+              - link "进入项目" [ref=e287] [cursor=pointer]:
+                - /url: /projects/5ba3be47-9c74-4672-b4a3-266bb0128026
+              - button "删除项目" [ref=e288]
+        - generic [ref=e289]:
+          - generic [ref=e290]:
+            - link "E2E-1788878176766 宁夏数字政务协同平台 E2E 项目" [ref=e291] [cursor=pointer]:
+              - /url: /projects/ffada2a6-a124-4698-bedf-9a749d6627e3
+              - generic [ref=e292] [cursor=pointer]:
+                - generic [ref=e293] [cursor=pointer]: E2E-1788878176766
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e294] [cursor=pointer]
+            - generic [ref=e295]: 进行中
+          - paragraph [ref=e296]: 自动化两阶段主链路验证项目
+          - generic [ref=e297]:
+            - generic [ref=e298]: 最后更新 2026/9/8 22:36:17
+            - generic [ref=e299]:
+              - link "进入项目" [ref=e300] [cursor=pointer]:
+                - /url: /projects/ffada2a6-a124-4698-bedf-9a749d6627e3
+              - button "删除项目" [ref=e301]
+        - generic [ref=e302]:
+          - generic [ref=e303]:
+            - link "REV-1788878175107 第一次修改" [ref=e304] [cursor=pointer]:
+              - /url: /projects/738eec49-34b8-4dba-ad4f-9d0d43c06ca7
+              - generic [ref=e305] [cursor=pointer]:
+                - generic [ref=e306] [cursor=pointer]: REV-1788878175107
+                - heading "第一次修改" [level=3] [ref=e307] [cursor=pointer]
+            - generic [ref=e308]: 进行中
+          - paragraph [ref=e309]: 尚未填写项目说明
+          - generic [ref=e310]:
+            - generic [ref=e311]: 最后更新 2026/9/8 22:36:15
+            - generic [ref=e312]:
+              - link "进入项目" [ref=e313] [cursor=pointer]:
+                - /url: /projects/738eec49-34b8-4dba-ad4f-9d0d43c06ca7
+              - button "删除项目" [ref=e314]
+        - generic [ref=e315]:
+          - generic [ref=e316]:
+            - link "BAD-1788878173335 错误状态验证项目" [ref=e317] [cursor=pointer]:
+              - /url: /projects/d1a23aa7-f689-491e-b837-7b9be830c710
+              - generic [ref=e318] [cursor=pointer]:
+                - generic [ref=e319] [cursor=pointer]: BAD-1788878173335
+                - heading "错误状态验证项目" [level=3] [ref=e320] [cursor=pointer]
+            - generic [ref=e321]: 进行中
+          - paragraph [ref=e322]: 尚未填写项目说明
+          - generic [ref=e323]:
+            - generic [ref=e324]: 最后更新 2026/9/8 22:36:13
+            - generic [ref=e325]:
+              - link "进入项目" [ref=e326] [cursor=pointer]:
+                - /url: /projects/d1a23aa7-f689-491e-b837-7b9be830c710
+              - button "删除项目" [ref=e327]
+        - generic [ref=e328]:
+          - generic [ref=e329]:
+            - link "BTA-UI-1788878119551 测试项目—区域绿色数据中心节能改造" [ref=e330] [cursor=pointer]:
+              - /url: /projects/b0e133cd-3a8f-4b67-b8f4-25d48d2d99c3
+              - generic [ref=e331] [cursor=pointer]:
+                - generic [ref=e332] [cursor=pointer]: BTA-UI-1788878119551
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e333] [cursor=pointer]
+            - generic [ref=e334]: 进行中
+          - paragraph [ref=e335]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e336]:
+            - generic [ref=e337]: 最后更新 2026/9/8 22:35:19
+            - generic [ref=e338]:
+              - link "进入项目" [ref=e339] [cursor=pointer]:
+                - /url: /projects/b0e133cd-3a8f-4b67-b8f4-25d48d2d99c3
+              - button "删除项目" [ref=e340]
+        - generic [ref=e341]:
+          - generic [ref=e342]:
+            - link "PROC-E2E-1788877958157 采购方案端到端测试项目" [ref=e343] [cursor=pointer]:
+              - /url: /projects/786ad9dd-09ae-4955-b08d-c6e29535f1d5
+              - generic [ref=e344] [cursor=pointer]:
+                - generic [ref=e345] [cursor=pointer]: PROC-E2E-1788877958157
+                - heading "采购方案端到端测试项目" [level=3] [ref=e346] [cursor=pointer]
+            - generic [ref=e347]: 进行中
+          - paragraph [ref=e348]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e349]:
+            - generic [ref=e350]: 最后更新 2026/9/8 22:32:38
+            - generic [ref=e351]:
+              - link "进入项目" [ref=e352] [cursor=pointer]:
+                - /url: /projects/786ad9dd-09ae-4955-b08d-c6e29535f1d5
+              - button "删除项目" [ref=e353]
+        - generic [ref=e354]:
+          - generic [ref=e355]:
+            - link "ROUTE-1788877878917 路由与响应式巡检项目" [ref=e356] [cursor=pointer]:
+              - /url: /projects/4e33150e-5ded-447c-b62f-75e9e91f86aa
+              - generic [ref=e357] [cursor=pointer]:
+                - generic [ref=e358] [cursor=pointer]: ROUTE-1788877878917
+                - heading "路由与响应式巡检项目" [level=3] [ref=e359] [cursor=pointer]
+            - generic [ref=e360]: 进行中
+          - paragraph [ref=e361]: 尚未填写项目说明
+          - generic [ref=e362]:
+            - generic [ref=e363]: 最后更新 2026/9/8 22:31:18
+            - generic [ref=e364]:
+              - link "进入项目" [ref=e365] [cursor=pointer]:
+                - /url: /projects/4e33150e-5ded-447c-b62f-75e9e91f86aa
+              - button "删除项目" [ref=e366]
+        - generic [ref=e367]:
+          - generic [ref=e368]:
+            - link "ROUTE-1788877839513 路由与响应式巡检项目" [ref=e369] [cursor=pointer]:
+              - /url: /projects/0a04e2de-a332-44b0-adc1-971dd2ecb6a0
+              - generic [ref=e370] [cursor=pointer]:
+                - generic [ref=e371] [cursor=pointer]: ROUTE-1788877839513
+                - heading "路由与响应式巡检项目" [level=3] [ref=e372] [cursor=pointer]
+            - generic [ref=e373]: 进行中
+          - paragraph [ref=e374]: 尚未填写项目说明
+          - generic [ref=e375]:
+            - generic [ref=e376]: 最后更新 2026/9/8 22:30:39
+            - generic [ref=e377]:
+              - link "进入项目" [ref=e378] [cursor=pointer]:
+                - /url: /projects/0a04e2de-a332-44b0-adc1-971dd2ecb6a0
+              - button "删除项目" [ref=e379]
+        - generic [ref=e380]:
+          - generic [ref=e381]:
+            - link "PROC-E2E-1788877800440 采购方案端到端测试项目" [ref=e382] [cursor=pointer]:
+              - /url: /projects/930f26d3-7525-401d-918f-813fd46cf376
+              - generic [ref=e383] [cursor=pointer]:
+                - generic [ref=e384] [cursor=pointer]: PROC-E2E-1788877800440
+                - heading "采购方案端到端测试项目" [level=3] [ref=e385] [cursor=pointer]
+            - generic [ref=e386]: 进行中
+          - paragraph [ref=e387]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e388]:
+            - generic [ref=e389]: 最后更新 2026/9/8 22:30:00
+            - generic [ref=e390]:
+              - link "进入项目" [ref=e391] [cursor=pointer]:
+                - /url: /projects/930f26d3-7525-401d-918f-813fd46cf376
+              - button "删除项目" [ref=e392]
+        - generic [ref=e393]:
+          - generic [ref=e394]:
+            - link "PROC-E2E-1788877761129 采购方案端到端测试项目" [ref=e395] [cursor=pointer]:
+              - /url: /projects/ae9365cb-4fce-4855-8847-d75bb949e70f
+              - generic [ref=e396] [cursor=pointer]:
+                - generic [ref=e397] [cursor=pointer]: PROC-E2E-1788877761129
+                - heading "采购方案端到端测试项目" [level=3] [ref=e398] [cursor=pointer]
+            - generic [ref=e399]: 进行中
+          - paragraph [ref=e400]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e401]:
+            - generic [ref=e402]: 最后更新 2026/9/8 22:29:21
+            - generic [ref=e403]:
+              - link "进入项目" [ref=e404] [cursor=pointer]:
+                - /url: /projects/ae9365cb-4fce-4855-8847-d75bb949e70f
+              - button "删除项目" [ref=e405]
+        - generic [ref=e406]:
+          - generic [ref=e407]:
+            - link "E2E-1788877720067 宁夏数字政务协同平台 E2E 项目" [ref=e408] [cursor=pointer]:
+              - /url: /projects/358e8535-cc75-4774-b5df-fc9aefb28e22
+              - generic [ref=e409] [cursor=pointer]:
+                - generic [ref=e410] [cursor=pointer]: E2E-1788877720067
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e411] [cursor=pointer]
+            - generic [ref=e412]: 进行中
+          - paragraph [ref=e413]: 自动化两阶段主链路验证项目
+          - generic [ref=e414]:
+            - generic [ref=e415]: 最后更新 2026/9/8 22:28:40
+            - generic [ref=e416]:
+              - link "进入项目" [ref=e417] [cursor=pointer]:
+                - /url: /projects/358e8535-cc75-4774-b5df-fc9aefb28e22
+              - button "删除项目" [ref=e418]
+        - generic [ref=e419]:
+          - generic [ref=e420]:
+            - link "REV-1788877718564 第一次修改" [ref=e421] [cursor=pointer]:
+              - /url: /projects/bfd3bd52-3353-4ec3-8605-e948e8d55606
+              - generic [ref=e422] [cursor=pointer]:
+                - generic [ref=e423] [cursor=pointer]: REV-1788877718564
+                - heading "第一次修改" [level=3] [ref=e424] [cursor=pointer]
+            - generic [ref=e425]: 进行中
+          - paragraph [ref=e426]: 尚未填写项目说明
+          - generic [ref=e427]:
+            - generic [ref=e428]: 最后更新 2026/9/8 22:28:38
+            - generic [ref=e429]:
+              - link "进入项目" [ref=e430] [cursor=pointer]:
+                - /url: /projects/bfd3bd52-3353-4ec3-8605-e948e8d55606
+              - button "删除项目" [ref=e431]
+        - generic [ref=e432]:
+          - generic [ref=e433]:
+            - link "BAD-1788877717311 错误状态验证项目" [ref=e434] [cursor=pointer]:
+              - /url: /projects/cc505f33-7cea-49a9-8e41-18b6bccb1d69
+              - generic [ref=e435] [cursor=pointer]:
+                - generic [ref=e436] [cursor=pointer]: BAD-1788877717311
+                - heading "错误状态验证项目" [level=3] [ref=e437] [cursor=pointer]
+            - generic [ref=e438]: 进行中
+          - paragraph [ref=e439]: 尚未填写项目说明
+          - generic [ref=e440]:
+            - generic [ref=e441]: 最后更新 2026/9/8 22:28:37
+            - generic [ref=e442]:
+              - link "进入项目" [ref=e443] [cursor=pointer]:
+                - /url: /projects/cc505f33-7cea-49a9-8e41-18b6bccb1d69
+              - button "删除项目" [ref=e444]
+        - generic [ref=e445]:
+          - generic [ref=e446]:
+            - link "BTA-UI-1788877664660 测试项目—区域绿色数据中心节能改造" [ref=e447] [cursor=pointer]:
+              - /url: /projects/2a076a06-81b5-42bf-8bf6-163181c5854d
+              - generic [ref=e448] [cursor=pointer]:
+                - generic [ref=e449] [cursor=pointer]: BTA-UI-1788877664660
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e450] [cursor=pointer]
+            - generic [ref=e451]: 进行中
+          - paragraph [ref=e452]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e453]:
+            - generic [ref=e454]: 最后更新 2026/9/8 22:27:44
+            - generic [ref=e455]:
+              - link "进入项目" [ref=e456] [cursor=pointer]:
+                - /url: /projects/2a076a06-81b5-42bf-8bf6-163181c5854d
+              - button "删除项目" [ref=e457]
+        - generic [ref=e458]:
+          - generic [ref=e459]:
+            - link "PROC-E2E-1788877525117 采购方案端到端测试项目" [ref=e460] [cursor=pointer]:
+              - /url: /projects/ebdbd3d6-58de-461a-ba86-246dcc38b09a
+              - generic [ref=e461] [cursor=pointer]:
+                - generic [ref=e462] [cursor=pointer]: PROC-E2E-1788877525117
+                - heading "采购方案端到端测试项目" [level=3] [ref=e463] [cursor=pointer]
+            - generic [ref=e464]: 进行中
+          - paragraph [ref=e465]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e466]:
+            - generic [ref=e467]: 最后更新 2026/9/8 22:25:25
+            - generic [ref=e468]:
+              - link "进入项目" [ref=e469] [cursor=pointer]:
+                - /url: /projects/ebdbd3d6-58de-461a-ba86-246dcc38b09a
+              - button "删除项目" [ref=e470]
+        - generic [ref=e471]:
+          - generic [ref=e472]:
+            - link "PROC-E2E-1788877485995 采购方案端到端测试项目" [ref=e473] [cursor=pointer]:
+              - /url: /projects/de65f41c-df72-4886-98a9-6c1311561f22
+              - generic [ref=e474] [cursor=pointer]:
+                - generic [ref=e475] [cursor=pointer]: PROC-E2E-1788877485995
+                - heading "采购方案端到端测试项目" [level=3] [ref=e476] [cursor=pointer]
+            - generic [ref=e477]: 进行中
+          - paragraph [ref=e478]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e479]:
+            - generic [ref=e480]: 最后更新 2026/9/8 22:24:46
+            - generic [ref=e481]:
+              - link "进入项目" [ref=e482] [cursor=pointer]:
+                - /url: /projects/de65f41c-df72-4886-98a9-6c1311561f22
+              - button "删除项目" [ref=e483]
+        - generic [ref=e484]:
+          - generic [ref=e485]:
+            - link "E2E-1788877372719 宁夏数字政务协同平台 E2E 项目" [ref=e486] [cursor=pointer]:
+              - /url: /projects/c5875a1c-d13e-49d0-b44d-e021de22841b
+              - generic [ref=e487] [cursor=pointer]:
+                - generic [ref=e488] [cursor=pointer]: E2E-1788877372719
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e489] [cursor=pointer]
+            - generic [ref=e490]: 进行中
+          - paragraph [ref=e491]: 自动化两阶段主链路验证项目
+          - generic [ref=e492]:
+            - generic [ref=e493]: 最后更新 2026/9/8 22:22:52
+            - generic [ref=e494]:
+              - link "进入项目" [ref=e495] [cursor=pointer]:
+                - /url: /projects/c5875a1c-d13e-49d0-b44d-e021de22841b
+              - button "删除项目" [ref=e496]
+        - generic [ref=e497]:
+          - generic [ref=e498]:
+            - link "E2E-1788877257079 宁夏数字政务协同平台 E2E 项目" [ref=e499] [cursor=pointer]:
+              - /url: /projects/ab3d8219-380f-4c4c-841e-9ba2a1d3ca4f
+              - generic [ref=e500] [cursor=pointer]:
+                - generic [ref=e501] [cursor=pointer]: E2E-1788877257079
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e502] [cursor=pointer]
+            - generic [ref=e503]: 进行中
+          - paragraph [ref=e504]: 自动化两阶段主链路验证项目
+          - generic [ref=e505]:
+            - generic [ref=e506]: 最后更新 2026/9/8 22:20:57
+            - generic [ref=e507]:
+              - link "进入项目" [ref=e508] [cursor=pointer]:
+                - /url: /projects/ab3d8219-380f-4c4c-841e-9ba2a1d3ca4f
+              - button "删除项目" [ref=e509]
+        - generic [ref=e510]:
+          - generic [ref=e511]:
+            - link "REV-1788877255187 第一次修改" [ref=e512] [cursor=pointer]:
+              - /url: /projects/b125bebc-6e67-4a66-a98a-018b1a5f01df
+              - generic [ref=e513] [cursor=pointer]:
+                - generic [ref=e514] [cursor=pointer]: REV-1788877255187
+                - heading "第一次修改" [level=3] [ref=e515] [cursor=pointer]
+            - generic [ref=e516]: 进行中
+          - paragraph [ref=e517]: 尚未填写项目说明
+          - generic [ref=e518]:
+            - generic [ref=e519]: 最后更新 2026/9/8 22:20:55
+            - generic [ref=e520]:
+              - link "进入项目" [ref=e521] [cursor=pointer]:
+                - /url: /projects/b125bebc-6e67-4a66-a98a-018b1a5f01df
+              - button "删除项目" [ref=e522]
+        - generic [ref=e523]:
+          - generic [ref=e524]:
+            - link "BAD-1788877253700 错误状态验证项目" [ref=e525] [cursor=pointer]:
+              - /url: /projects/ef6e0d47-1834-4897-a421-5ef3a12618d9
+              - generic [ref=e526] [cursor=pointer]:
+                - generic [ref=e527] [cursor=pointer]: BAD-1788877253700
+                - heading "错误状态验证项目" [level=3] [ref=e528] [cursor=pointer]
+            - generic [ref=e529]: 进行中
+          - paragraph [ref=e530]: 尚未填写项目说明
+          - generic [ref=e531]:
+            - generic [ref=e532]: 最后更新 2026/9/8 22:20:53
+            - generic [ref=e533]:
+              - link "进入项目" [ref=e534] [cursor=pointer]:
+                - /url: /projects/ef6e0d47-1834-4897-a421-5ef3a12618d9
+              - button "删除项目" [ref=e535]
+        - generic [ref=e536]:
+          - generic [ref=e537]:
+            - link "BTA-UI-1788877137339 测试项目—区域绿色数据中心节能改造" [ref=e538] [cursor=pointer]:
+              - /url: /projects/3825fcd1-0008-4bfd-9882-993909d643ed
+              - generic [ref=e539] [cursor=pointer]:
+                - generic [ref=e540] [cursor=pointer]: BTA-UI-1788877137339
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e541] [cursor=pointer]
+            - generic [ref=e542]: 进行中
+          - paragraph [ref=e543]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e544]:
+            - generic [ref=e545]: 最后更新 2026/9/8 22:18:57
+            - generic [ref=e546]:
+              - link "进入项目" [ref=e547] [cursor=pointer]:
+                - /url: /projects/3825fcd1-0008-4bfd-9882-993909d643ed
+              - button "删除项目" [ref=e548]
+        - generic [ref=e549]:
+          - generic [ref=e550]:
+            - link "BTA-UI-1788877016250 测试项目—区域绿色数据中心节能改造" [ref=e551] [cursor=pointer]:
+              - /url: /projects/d8c42b6a-adb9-4a6e-bdae-77a2e39ca78a
+              - generic [ref=e552] [cursor=pointer]:
+                - generic [ref=e553] [cursor=pointer]: BTA-UI-1788877016250
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e554] [cursor=pointer]
+            - generic [ref=e555]: 进行中
+          - paragraph [ref=e556]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e557]:
+            - generic [ref=e558]: 最后更新 2026/9/8 22:16:56
+            - generic [ref=e559]:
+              - link "进入项目" [ref=e560] [cursor=pointer]:
+                - /url: /projects/d8c42b6a-adb9-4a6e-bdae-77a2e39ca78a
+              - button "删除项目" [ref=e561]
+        - generic [ref=e562]:
+          - generic [ref=e563]:
+            - link "PROC-E2E-1788870466510 采购方案端到端测试项目" [ref=e564] [cursor=pointer]:
+              - /url: /projects/f6dce9b4-cfde-4fb7-b2de-846d5f0ae5cb
+              - generic [ref=e565] [cursor=pointer]:
+                - generic [ref=e566] [cursor=pointer]: PROC-E2E-1788870466510
+                - heading "采购方案端到端测试项目" [level=3] [ref=e567] [cursor=pointer]
+            - generic [ref=e568]: 进行中
+          - paragraph [ref=e569]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e570]:
+            - generic [ref=e571]: 最后更新 2026/9/8 20:27:46
+            - generic [ref=e572]:
+              - link "进入项目" [ref=e573] [cursor=pointer]:
+                - /url: /projects/f6dce9b4-cfde-4fb7-b2de-846d5f0ae5cb
+              - button "删除项目" [ref=e574]
+        - generic [ref=e575]:
+          - generic [ref=e576]:
+            - link "E2E-1788870412729 宁夏数字政务协同平台 E2E 项目" [ref=e577] [cursor=pointer]:
+              - /url: /projects/bd847b05-686e-4139-873f-fedd6e7bd7bf
+              - generic [ref=e578] [cursor=pointer]:
+                - generic [ref=e579] [cursor=pointer]: E2E-1788870412729
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e580] [cursor=pointer]
+            - generic [ref=e581]: 进行中
+          - paragraph [ref=e582]: 自动化两阶段主链路验证项目
+          - generic [ref=e583]:
+            - generic [ref=e584]: 最后更新 2026/9/8 20:26:53
+            - generic [ref=e585]:
+              - link "进入项目" [ref=e586] [cursor=pointer]:
+                - /url: /projects/bd847b05-686e-4139-873f-fedd6e7bd7bf
+              - button "删除项目" [ref=e587]
+        - generic [ref=e588]:
+          - generic [ref=e589]:
+            - link "REV-1788870411398 第一次修改" [ref=e590] [cursor=pointer]:
+              - /url: /projects/6363800a-d2ef-4af5-a79b-8c708da8dc6b
+              - generic [ref=e591] [cursor=pointer]:
+                - generic [ref=e592] [cursor=pointer]: REV-1788870411398
+                - heading "第一次修改" [level=3] [ref=e593] [cursor=pointer]
+            - generic [ref=e594]: 进行中
+          - paragraph [ref=e595]: 尚未填写项目说明
+          - generic [ref=e596]:
+            - generic [ref=e597]: 最后更新 2026/9/8 20:26:51
+            - generic [ref=e598]:
+              - link "进入项目" [ref=e599] [cursor=pointer]:
+                - /url: /projects/6363800a-d2ef-4af5-a79b-8c708da8dc6b
+              - button "删除项目" [ref=e600]
+        - generic [ref=e601]:
+          - generic [ref=e602]:
+            - link "BAD-1788870409987 错误状态验证项目" [ref=e603] [cursor=pointer]:
+              - /url: /projects/40201364-ba54-4fd2-b4d7-d293f1b4255d
+              - generic [ref=e604] [cursor=pointer]:
+                - generic [ref=e605] [cursor=pointer]: BAD-1788870409987
+                - heading "错误状态验证项目" [level=3] [ref=e606] [cursor=pointer]
+            - generic [ref=e607]: 进行中
+          - paragraph [ref=e608]: 尚未填写项目说明
+          - generic [ref=e609]:
+            - generic [ref=e610]: 最后更新 2026/9/8 20:26:50
+            - generic [ref=e611]:
+              - link "进入项目" [ref=e612] [cursor=pointer]:
+                - /url: /projects/40201364-ba54-4fd2-b4d7-d293f1b4255d
+              - button "删除项目" [ref=e613]
+        - generic [ref=e614]:
+          - generic [ref=e615]:
+            - link "BTA-UI-1788870337841 测试项目—区域绿色数据中心节能改造" [ref=e616] [cursor=pointer]:
+              - /url: /projects/77abb5c6-eb39-40f4-b153-77db2e40b32b
+              - generic [ref=e617] [cursor=pointer]:
+                - generic [ref=e618] [cursor=pointer]: BTA-UI-1788870337841
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e619] [cursor=pointer]
+            - generic [ref=e620]: 进行中
+          - paragraph [ref=e621]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e622]:
+            - generic [ref=e623]: 最后更新 2026/9/8 20:25:38
+            - generic [ref=e624]:
+              - link "进入项目" [ref=e625] [cursor=pointer]:
+                - /url: /projects/77abb5c6-eb39-40f4-b153-77db2e40b32b
+              - button "删除项目" [ref=e626]
+        - generic [ref=e627]:
+          - generic [ref=e628]:
+            - link "BTA-UI-1788868144555 测试项目—区域绿色数据中心节能改造" [ref=e629] [cursor=pointer]:
+              - /url: /projects/d08772b2-7bfe-4bcd-8d1f-d48e28550274
+              - generic [ref=e630] [cursor=pointer]:
+                - generic [ref=e631] [cursor=pointer]: BTA-UI-1788868144555
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e632] [cursor=pointer]
+            - generic [ref=e633]: 进行中
+          - paragraph [ref=e634]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e635]:
+            - generic [ref=e636]: 最后更新 2026/9/8 19:49:04
+            - generic [ref=e637]:
+              - link "进入项目" [ref=e638] [cursor=pointer]:
+                - /url: /projects/d08772b2-7bfe-4bcd-8d1f-d48e28550274
+              - button "删除项目" [ref=e639]
+        - generic [ref=e640]:
+          - generic [ref=e641]:
+            - link "BTA-UI-1788867477821 测试项目—区域绿色数据中心节能改造" [ref=e642] [cursor=pointer]:
+              - /url: /projects/ab209455-c48e-4149-83bf-f85cf72a4047
+              - generic [ref=e643] [cursor=pointer]:
+                - generic [ref=e644] [cursor=pointer]: BTA-UI-1788867477821
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e645] [cursor=pointer]
+            - generic [ref=e646]: 进行中
+          - paragraph [ref=e647]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e648]:
+            - generic [ref=e649]: 最后更新 2026/9/8 19:37:58
+            - generic [ref=e650]:
+              - link "进入项目" [ref=e651] [cursor=pointer]:
+                - /url: /projects/ab209455-c48e-4149-83bf-f85cf72a4047
+              - button "删除项目" [ref=e652]
+        - generic [ref=e653]:
+          - generic [ref=e654]:
+            - link "BTA-UI-1788865995065 测试项目—区域绿色数据中心节能改造" [ref=e655] [cursor=pointer]:
+              - /url: /projects/7c3e61e2-e136-4a3a-8868-351f69c50075
+              - generic [ref=e656] [cursor=pointer]:
+                - generic [ref=e657] [cursor=pointer]: BTA-UI-1788865995065
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e658] [cursor=pointer]
+            - generic [ref=e659]: 进行中
+          - paragraph [ref=e660]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e661]:
+            - generic [ref=e662]: 最后更新 2026/9/8 19:13:15
+            - generic [ref=e663]:
+              - link "进入项目" [ref=e664] [cursor=pointer]:
+                - /url: /projects/7c3e61e2-e136-4a3a-8868-351f69c50075
+              - button "删除项目" [ref=e665]
+        - generic [ref=e666]:
+          - generic [ref=e667]:
+            - link "BTA-UI-1788865902585 测试项目—区域绿色数据中心节能改造" [ref=e668] [cursor=pointer]:
+              - /url: /projects/3e709930-fd15-43a3-ab11-c16bf21304e1
+              - generic [ref=e669] [cursor=pointer]:
+                - generic [ref=e670] [cursor=pointer]: BTA-UI-1788865902585
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e671] [cursor=pointer]
+            - generic [ref=e672]: 进行中
+          - paragraph [ref=e673]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e674]:
+            - generic [ref=e675]: 最后更新 2026/9/8 19:11:42
+            - generic [ref=e676]:
+              - link "进入项目" [ref=e677] [cursor=pointer]:
+                - /url: /projects/3e709930-fd15-43a3-ab11-c16bf21304e1
+              - button "删除项目" [ref=e678]
+        - generic [ref=e679]:
+          - generic [ref=e680]:
+            - link "BTA-UI-1788863374483 测试项目—区域绿色数据中心节能改造" [ref=e681] [cursor=pointer]:
+              - /url: /projects/bdf27af1-e805-4bed-96ce-c33ad2ac6268
+              - generic [ref=e682] [cursor=pointer]:
+                - generic [ref=e683] [cursor=pointer]: BTA-UI-1788863374483
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e684] [cursor=pointer]
+            - generic [ref=e685]: 进行中
+          - paragraph [ref=e686]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e687]:
+            - generic [ref=e688]: 最后更新 2026/9/8 18:29:34
+            - generic [ref=e689]:
+              - link "进入项目" [ref=e690] [cursor=pointer]:
+                - /url: /projects/bdf27af1-e805-4bed-96ce-c33ad2ac6268
+              - button "删除项目" [ref=e691]
+        - generic [ref=e692]:
+          - generic [ref=e693]:
+            - link "BTA-UI-1788862706441 测试项目—区域绿色数据中心节能改造" [ref=e694] [cursor=pointer]:
+              - /url: /projects/eb79e892-6dc2-42a2-9bec-9372b7c3b67f
+              - generic [ref=e695] [cursor=pointer]:
+                - generic [ref=e696] [cursor=pointer]: BTA-UI-1788862706441
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e697] [cursor=pointer]
+            - generic [ref=e698]: 进行中
+          - paragraph [ref=e699]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e700]:
+            - generic [ref=e701]: 最后更新 2026/9/8 18:18:26
+            - generic [ref=e702]:
+              - link "进入项目" [ref=e703] [cursor=pointer]:
+                - /url: /projects/eb79e892-6dc2-42a2-9bec-9372b7c3b67f
+              - button "删除项目" [ref=e704]
+        - generic [ref=e705]:
+          - generic [ref=e706]:
+            - link "BTA-UI-1788862028053 测试项目—区域绿色数据中心节能改造" [ref=e707] [cursor=pointer]:
+              - /url: /projects/ca95e4f6-9881-42f4-8f57-c014c60b0b98
+              - generic [ref=e708] [cursor=pointer]:
+                - generic [ref=e709] [cursor=pointer]: BTA-UI-1788862028053
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e710] [cursor=pointer]
+            - generic [ref=e711]: 进行中
+          - paragraph [ref=e712]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e713]:
+            - generic [ref=e714]: 最后更新 2026/9/8 18:07:08
+            - generic [ref=e715]:
+              - link "进入项目" [ref=e716] [cursor=pointer]:
+                - /url: /projects/ca95e4f6-9881-42f4-8f57-c014c60b0b98
+              - button "删除项目" [ref=e717]
+        - generic [ref=e718]:
+          - generic [ref=e719]:
+            - link "BTA-UI-1788861771674 测试项目—区域绿色数据中心节能改造" [ref=e720] [cursor=pointer]:
+              - /url: /projects/e2f0f5c0-af1d-4d2e-b398-eb9ebe050f03
+              - generic [ref=e721] [cursor=pointer]:
+                - generic [ref=e722] [cursor=pointer]: BTA-UI-1788861771674
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e723] [cursor=pointer]
+            - generic [ref=e724]: 进行中
+          - paragraph [ref=e725]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e726]:
+            - generic [ref=e727]: 最后更新 2026/9/8 18:02:51
+            - generic [ref=e728]:
+              - link "进入项目" [ref=e729] [cursor=pointer]:
+                - /url: /projects/e2f0f5c0-af1d-4d2e-b398-eb9ebe050f03
+              - button "删除项目" [ref=e730]
+        - generic [ref=e731]:
+          - generic [ref=e732]:
+            - link "BTA-UI-1788859966434 测试项目—区域绿色数据中心节能改造" [ref=e733] [cursor=pointer]:
+              - /url: /projects/8301d77f-a44a-4cff-9a12-087c530d63b4
+              - generic [ref=e734] [cursor=pointer]:
+                - generic [ref=e735] [cursor=pointer]: BTA-UI-1788859966434
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e736] [cursor=pointer]
+            - generic [ref=e737]: 进行中
+          - paragraph [ref=e738]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e739]:
+            - generic [ref=e740]: 最后更新 2026/9/8 17:32:46
+            - generic [ref=e741]:
+              - link "进入项目" [ref=e742] [cursor=pointer]:
+                - /url: /projects/8301d77f-a44a-4cff-9a12-087c530d63b4
+              - button "删除项目" [ref=e743]
+        - generic [ref=e744]:
+          - generic [ref=e745]:
+            - link "BTA-UI-1788859478627 测试项目—区域绿色数据中心节能改造" [ref=e746] [cursor=pointer]:
+              - /url: /projects/f9fbc83e-2214-414a-86a9-72a22cbb1b30
+              - generic [ref=e747] [cursor=pointer]:
+                - generic [ref=e748] [cursor=pointer]: BTA-UI-1788859478627
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e749] [cursor=pointer]
+            - generic [ref=e750]: 进行中
+          - paragraph [ref=e751]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e752]:
+            - generic [ref=e753]: 最后更新 2026/9/8 17:24:38
+            - generic [ref=e754]:
+              - link "进入项目" [ref=e755] [cursor=pointer]:
+                - /url: /projects/f9fbc83e-2214-414a-86a9-72a22cbb1b30
+              - button "删除项目" [ref=e756]
+        - generic [ref=e757]:
+          - generic [ref=e758]:
+            - link "PROC-E2E-1788859361757 采购方案端到端测试项目" [ref=e759] [cursor=pointer]:
+              - /url: /projects/839321f4-2a99-4da8-91b4-02bf51b0ca4e
+              - generic [ref=e760] [cursor=pointer]:
+                - generic [ref=e761] [cursor=pointer]: PROC-E2E-1788859361757
+                - heading "采购方案端到端测试项目" [level=3] [ref=e762] [cursor=pointer]
+            - generic [ref=e763]: 进行中
+          - paragraph [ref=e764]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e765]:
+            - generic [ref=e766]: 最后更新 2026/9/8 17:22:41
+            - generic [ref=e767]:
+              - link "进入项目" [ref=e768] [cursor=pointer]:
+                - /url: /projects/839321f4-2a99-4da8-91b4-02bf51b0ca4e
+              - button "删除项目" [ref=e769]
+        - generic [ref=e770]:
+          - generic [ref=e771]:
+            - link "E2E-1788859322252 宁夏数字政务协同平台 E2E 项目" [ref=e772] [cursor=pointer]:
+              - /url: /projects/44dc7714-f3eb-41f3-8482-db9fac928d15
+              - generic [ref=e773] [cursor=pointer]:
+                - generic [ref=e774] [cursor=pointer]: E2E-1788859322252
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e775] [cursor=pointer]
+            - generic [ref=e776]: 进行中
+          - paragraph [ref=e777]: 自动化两阶段主链路验证项目
+          - generic [ref=e778]:
+            - generic [ref=e779]: 最后更新 2026/9/8 17:22:02
+            - generic [ref=e780]:
+              - link "进入项目" [ref=e781] [cursor=pointer]:
+                - /url: /projects/44dc7714-f3eb-41f3-8482-db9fac928d15
+              - button "删除项目" [ref=e782]
+        - generic [ref=e783]:
+          - generic [ref=e784]:
+            - link "E2E-1788859282470 宁夏数字政务协同平台 E2E 项目" [ref=e785] [cursor=pointer]:
+              - /url: /projects/d1571c27-79bd-4d51-b893-fe26fb7c81ae
+              - generic [ref=e786] [cursor=pointer]:
+                - generic [ref=e787] [cursor=pointer]: E2E-1788859282470
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e788] [cursor=pointer]
+            - generic [ref=e789]: 进行中
+          - paragraph [ref=e790]: 自动化两阶段主链路验证项目
+          - generic [ref=e791]:
+            - generic [ref=e792]: 最后更新 2026/9/8 17:21:22
+            - generic [ref=e793]:
+              - link "进入项目" [ref=e794] [cursor=pointer]:
+                - /url: /projects/d1571c27-79bd-4d51-b893-fe26fb7c81ae
+              - button "删除项目" [ref=e795]
+        - generic [ref=e796]:
+          - generic [ref=e797]:
+            - link "REV-1788859281238 第一次修改" [ref=e798] [cursor=pointer]:
+              - /url: /projects/66459e36-5b83-45a5-a368-8a36904263c0
+              - generic [ref=e799] [cursor=pointer]:
+                - generic [ref=e800] [cursor=pointer]: REV-1788859281238
+                - heading "第一次修改" [level=3] [ref=e801] [cursor=pointer]
+            - generic [ref=e802]: 进行中
+          - paragraph [ref=e803]: 尚未填写项目说明
+          - generic [ref=e804]:
+            - generic [ref=e805]: 最后更新 2026/9/8 17:21:21
+            - generic [ref=e806]:
+              - link "进入项目" [ref=e807] [cursor=pointer]:
+                - /url: /projects/66459e36-5b83-45a5-a368-8a36904263c0
+              - button "删除项目" [ref=e808]
+        - generic [ref=e809]:
+          - generic [ref=e810]:
+            - link "BAD-1788859279656 错误状态验证项目" [ref=e811] [cursor=pointer]:
+              - /url: /projects/71500d15-b161-463c-ba09-e59ff48b1922
+              - generic [ref=e812] [cursor=pointer]:
+                - generic [ref=e813] [cursor=pointer]: BAD-1788859279656
+                - heading "错误状态验证项目" [level=3] [ref=e814] [cursor=pointer]
+            - generic [ref=e815]: 进行中
+          - paragraph [ref=e816]: 尚未填写项目说明
+          - generic [ref=e817]:
+            - generic [ref=e818]: 最后更新 2026/9/8 17:21:19
+            - generic [ref=e819]:
+              - link "进入项目" [ref=e820] [cursor=pointer]:
+                - /url: /projects/71500d15-b161-463c-ba09-e59ff48b1922
+              - button "删除项目" [ref=e821]
+        - generic [ref=e822]:
+          - generic [ref=e823]:
+            - link "BTA-UI-1788859239872 测试项目—区域绿色数据中心节能改造" [ref=e824] [cursor=pointer]:
+              - /url: /projects/cca3eb1c-772e-4bd9-ac8a-9dc5fec23737
+              - generic [ref=e825] [cursor=pointer]:
+                - generic [ref=e826] [cursor=pointer]: BTA-UI-1788859239872
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e827] [cursor=pointer]
+            - generic [ref=e828]: 进行中
+          - paragraph [ref=e829]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e830]:
+            - generic [ref=e831]: 最后更新 2026/9/8 17:20:40
+            - generic [ref=e832]:
+              - link "进入项目" [ref=e833] [cursor=pointer]:
+                - /url: /projects/cca3eb1c-772e-4bd9-ac8a-9dc5fec23737
+              - button "删除项目" [ref=e834]
+        - generic [ref=e835]:
+          - generic [ref=e836]:
+            - link "BTA-UI-1788859200483 测试项目—区域绿色数据中心节能改造" [ref=e837] [cursor=pointer]:
+              - /url: /projects/2ea7f9d9-40b5-426f-b06a-0b1e13abe94a
+              - generic [ref=e838] [cursor=pointer]:
+                - generic [ref=e839] [cursor=pointer]: BTA-UI-1788859200483
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e840] [cursor=pointer]
+            - generic [ref=e841]: 进行中
+          - paragraph [ref=e842]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e843]:
+            - generic [ref=e844]: 最后更新 2026/9/8 17:20:00
+            - generic [ref=e845]:
+              - link "进入项目" [ref=e846] [cursor=pointer]:
+                - /url: /projects/2ea7f9d9-40b5-426f-b06a-0b1e13abe94a
+              - button "删除项目" [ref=e847]
+        - generic [ref=e848]:
+          - generic [ref=e849]:
+            - link "PROC-E2E-1788859031962 采购方案端到端测试项目" [ref=e850] [cursor=pointer]:
+              - /url: /projects/fe576f48-fcd9-4710-83ed-096cf0d56704
+              - generic [ref=e851] [cursor=pointer]:
+                - generic [ref=e852] [cursor=pointer]: PROC-E2E-1788859031962
+                - heading "采购方案端到端测试项目" [level=3] [ref=e853] [cursor=pointer]
+            - generic [ref=e854]: 进行中
+          - paragraph [ref=e855]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e856]:
+            - generic [ref=e857]: 最后更新 2026/9/8 17:17:11
+            - generic [ref=e858]:
+              - link "进入项目" [ref=e859] [cursor=pointer]:
+                - /url: /projects/fe576f48-fcd9-4710-83ed-096cf0d56704
+              - button "删除项目" [ref=e860]
+        - generic [ref=e861]:
+          - generic [ref=e862]:
+            - link "E2E-1788858993018 宁夏数字政务协同平台 E2E 项目" [ref=e863] [cursor=pointer]:
+              - /url: /projects/da93b4df-a4ec-428d-8d7b-cbfaa0ff5d6c
+              - generic [ref=e864] [cursor=pointer]:
+                - generic [ref=e865] [cursor=pointer]: E2E-1788858993018
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e866] [cursor=pointer]
+            - generic [ref=e867]: 进行中
+          - paragraph [ref=e868]: 自动化两阶段主链路验证项目
+          - generic [ref=e869]:
+            - generic [ref=e870]: 最后更新 2026/9/8 17:16:33
+            - generic [ref=e871]:
+              - link "进入项目" [ref=e872] [cursor=pointer]:
+                - /url: /projects/da93b4df-a4ec-428d-8d7b-cbfaa0ff5d6c
+              - button "删除项目" [ref=e873]
+        - generic [ref=e874]:
+          - generic [ref=e875]:
+            - link "E2E-1788858954523 宁夏数字政务协同平台 E2E 项目" [ref=e876] [cursor=pointer]:
+              - /url: /projects/2634f963-d334-450f-a1d4-e0e8a597de6b
+              - generic [ref=e877] [cursor=pointer]:
+                - generic [ref=e878] [cursor=pointer]: E2E-1788858954523
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e879] [cursor=pointer]
+            - generic [ref=e880]: 进行中
+          - paragraph [ref=e881]: 自动化两阶段主链路验证项目
+          - generic [ref=e882]:
+            - generic [ref=e883]: 最后更新 2026/9/8 17:15:54
+            - generic [ref=e884]:
+              - link "进入项目" [ref=e885] [cursor=pointer]:
+                - /url: /projects/2634f963-d334-450f-a1d4-e0e8a597de6b
+              - button "删除项目" [ref=e886]
+        - generic [ref=e887]:
+          - generic [ref=e888]:
+            - link "REV-1788858953335 第一次修改" [ref=e889] [cursor=pointer]:
+              - /url: /projects/8ef22ca6-98fe-4cd5-9ff9-11dabde89e14
+              - generic [ref=e890] [cursor=pointer]:
+                - generic [ref=e891] [cursor=pointer]: REV-1788858953335
+                - heading "第一次修改" [level=3] [ref=e892] [cursor=pointer]
+            - generic [ref=e893]: 进行中
+          - paragraph [ref=e894]: 尚未填写项目说明
+          - generic [ref=e895]:
+            - generic [ref=e896]: 最后更新 2026/9/8 17:15:53
+            - generic [ref=e897]:
+              - link "进入项目" [ref=e898] [cursor=pointer]:
+                - /url: /projects/8ef22ca6-98fe-4cd5-9ff9-11dabde89e14
+              - button "删除项目" [ref=e899]
+        - generic [ref=e900]:
+          - generic [ref=e901]:
+            - link "BAD-1788858951999 错误状态验证项目" [ref=e902] [cursor=pointer]:
+              - /url: /projects/d85cca0d-b1a1-40e0-8535-19c21f2d692e
+              - generic [ref=e903] [cursor=pointer]:
+                - generic [ref=e904] [cursor=pointer]: BAD-1788858951999
+                - heading "错误状态验证项目" [level=3] [ref=e905] [cursor=pointer]
+            - generic [ref=e906]: 进行中
+          - paragraph [ref=e907]: 尚未填写项目说明
+          - generic [ref=e908]:
+            - generic [ref=e909]: 最后更新 2026/9/8 17:15:52
+            - generic [ref=e910]:
+              - link "进入项目" [ref=e911] [cursor=pointer]:
+                - /url: /projects/d85cca0d-b1a1-40e0-8535-19c21f2d692e
+              - button "删除项目" [ref=e912]
+        - generic [ref=e913]:
+          - generic [ref=e914]:
+            - link "BTA-UI-1788858915115 测试项目—区域绿色数据中心节能改造" [ref=e915] [cursor=pointer]:
+              - /url: /projects/becb331f-fc62-46ca-bf53-5d338eeaba26
+              - generic [ref=e916] [cursor=pointer]:
+                - generic [ref=e917] [cursor=pointer]: BTA-UI-1788858915115
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e918] [cursor=pointer]
+            - generic [ref=e919]: 进行中
+          - paragraph [ref=e920]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e921]:
+            - generic [ref=e922]: 最后更新 2026/9/8 17:15:15
+            - generic [ref=e923]:
+              - link "进入项目" [ref=e924] [cursor=pointer]:
+                - /url: /projects/becb331f-fc62-46ca-bf53-5d338eeaba26
+              - button "删除项目" [ref=e925]
+        - generic [ref=e926]:
+          - generic [ref=e927]:
+            - link "BTA-UI-1788858877109 测试项目—区域绿色数据中心节能改造" [ref=e928] [cursor=pointer]:
+              - /url: /projects/94a368f9-98d1-49a5-8491-3e7aff78d06d
+              - generic [ref=e929] [cursor=pointer]:
+                - generic [ref=e930] [cursor=pointer]: BTA-UI-1788858877109
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e931] [cursor=pointer]
+            - generic [ref=e932]: 进行中
+          - paragraph [ref=e933]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e934]:
+            - generic [ref=e935]: 最后更新 2026/9/8 17:14:37
+            - generic [ref=e936]:
+              - link "进入项目" [ref=e937] [cursor=pointer]:
+                - /url: /projects/94a368f9-98d1-49a5-8491-3e7aff78d06d
+              - button "删除项目" [ref=e938]
+        - generic [ref=e939]:
+          - generic [ref=e940]:
+            - link "PROC-E2E-1788858588008 采购方案端到端测试项目" [ref=e941] [cursor=pointer]:
+              - /url: /projects/5b8d35cf-068c-43d8-9a22-ac4cb5d85df8
+              - generic [ref=e942] [cursor=pointer]:
+                - generic [ref=e943] [cursor=pointer]: PROC-E2E-1788858588008
+                - heading "采购方案端到端测试项目" [level=3] [ref=e944] [cursor=pointer]
+            - generic [ref=e945]: 进行中
+          - paragraph [ref=e946]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e947]:
+            - generic [ref=e948]: 最后更新 2026/9/8 17:09:48
+            - generic [ref=e949]:
+              - link "进入项目" [ref=e950] [cursor=pointer]:
+                - /url: /projects/5b8d35cf-068c-43d8-9a22-ac4cb5d85df8
+              - button "删除项目" [ref=e951]
+        - generic [ref=e952]:
+          - generic [ref=e953]:
+            - link "E2E-1788858550449 宁夏数字政务协同平台 E2E 项目" [ref=e954] [cursor=pointer]:
+              - /url: /projects/c38a9de0-6dc3-4c78-bced-fc1e79f67db9
+              - generic [ref=e955] [cursor=pointer]:
+                - generic [ref=e956] [cursor=pointer]: E2E-1788858550449
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e957] [cursor=pointer]
+            - generic [ref=e958]: 进行中
+          - paragraph [ref=e959]: 自动化两阶段主链路验证项目
+          - generic [ref=e960]:
+            - generic [ref=e961]: 最后更新 2026/9/8 17:09:10
+            - generic [ref=e962]:
+              - link "进入项目" [ref=e963] [cursor=pointer]:
+                - /url: /projects/c38a9de0-6dc3-4c78-bced-fc1e79f67db9
+              - button "删除项目" [ref=e964]
+        - generic [ref=e965]:
+          - generic [ref=e966]:
+            - link "E2E-1788858512916 宁夏数字政务协同平台 E2E 项目" [ref=e967] [cursor=pointer]:
+              - /url: /projects/19291448-9748-401b-aac9-23cc276ef1e9
+              - generic [ref=e968] [cursor=pointer]:
+                - generic [ref=e969] [cursor=pointer]: E2E-1788858512916
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e970] [cursor=pointer]
+            - generic [ref=e971]: 进行中
+          - paragraph [ref=e972]: 自动化两阶段主链路验证项目
+          - generic [ref=e973]:
+            - generic [ref=e974]: 最后更新 2026/9/8 17:08:33
+            - generic [ref=e975]:
+              - link "进入项目" [ref=e976] [cursor=pointer]:
+                - /url: /projects/19291448-9748-401b-aac9-23cc276ef1e9
+              - button "删除项目" [ref=e977]
+        - generic [ref=e978]:
+          - generic [ref=e979]:
+            - link "REV-1788858511376 第一次修改" [ref=e980] [cursor=pointer]:
+              - /url: /projects/7dbf6979-93a8-4718-be04-e0b6258c0a62
+              - generic [ref=e981] [cursor=pointer]:
+                - generic [ref=e982] [cursor=pointer]: REV-1788858511376
+                - heading "第一次修改" [level=3] [ref=e983] [cursor=pointer]
+            - generic [ref=e984]: 进行中
+          - paragraph [ref=e985]: 尚未填写项目说明
+          - generic [ref=e986]:
+            - generic [ref=e987]: 最后更新 2026/9/8 17:08:31
+            - generic [ref=e988]:
+              - link "进入项目" [ref=e989] [cursor=pointer]:
+                - /url: /projects/7dbf6979-93a8-4718-be04-e0b6258c0a62
+              - button "删除项目" [ref=e990]
+        - generic [ref=e991]:
+          - generic [ref=e992]:
+            - link "BAD-1788858509988 错误状态验证项目" [ref=e993] [cursor=pointer]:
+              - /url: /projects/b72011bc-d2ef-444f-8f41-5d26b60f7f88
+              - generic [ref=e994] [cursor=pointer]:
+                - generic [ref=e995] [cursor=pointer]: BAD-1788858509988
+                - heading "错误状态验证项目" [level=3] [ref=e996] [cursor=pointer]
+            - generic [ref=e997]: 进行中
+          - paragraph [ref=e998]: 尚未填写项目说明
+          - generic [ref=e999]:
+            - generic [ref=e1000]: 最后更新 2026/9/8 17:08:30
+            - generic [ref=e1001]:
+              - link "进入项目" [ref=e1002] [cursor=pointer]:
+                - /url: /projects/b72011bc-d2ef-444f-8f41-5d26b60f7f88
+              - button "删除项目" [ref=e1003]
+        - generic [ref=e1004]:
+          - generic [ref=e1005]:
+            - link "BTA-UI-1788858472538 测试项目—区域绿色数据中心节能改造" [ref=e1006] [cursor=pointer]:
+              - /url: /projects/58b05734-72ad-4e2d-8338-1c286ea42f8d
+              - generic [ref=e1007] [cursor=pointer]:
+                - generic [ref=e1008] [cursor=pointer]: BTA-UI-1788858472538
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1009] [cursor=pointer]
+            - generic [ref=e1010]: 进行中
+          - paragraph [ref=e1011]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1012]:
+            - generic [ref=e1013]: 最后更新 2026/9/8 17:07:52
+            - generic [ref=e1014]:
+              - link "进入项目" [ref=e1015] [cursor=pointer]:
+                - /url: /projects/58b05734-72ad-4e2d-8338-1c286ea42f8d
+              - button "删除项目" [ref=e1016]
+        - generic [ref=e1017]:
+          - generic [ref=e1018]:
+            - link "BTA-UI-1788858435640 测试项目—区域绿色数据中心节能改造" [ref=e1019] [cursor=pointer]:
+              - /url: /projects/6f493c7d-a892-4119-b2f0-0b85e012a309
+              - generic [ref=e1020] [cursor=pointer]:
+                - generic [ref=e1021] [cursor=pointer]: BTA-UI-1788858435640
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1022] [cursor=pointer]
+            - generic [ref=e1023]: 进行中
+          - paragraph [ref=e1024]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1025]:
+            - generic [ref=e1026]: 最后更新 2026/9/8 17:07:15
+            - generic [ref=e1027]:
+              - link "进入项目" [ref=e1028] [cursor=pointer]:
+                - /url: /projects/6f493c7d-a892-4119-b2f0-0b85e012a309
+              - button "删除项目" [ref=e1029]
+        - generic [ref=e1030]:
+          - generic [ref=e1031]:
+            - link "PROC-E2E-1788858365934 采购方案端到端测试项目" [ref=e1032] [cursor=pointer]:
+              - /url: /projects/d38c0b82-8b23-4b44-8ee5-3f9cafe6847f
+              - generic [ref=e1033] [cursor=pointer]:
+                - generic [ref=e1034] [cursor=pointer]: PROC-E2E-1788858365934
+                - heading "采购方案端到端测试项目" [level=3] [ref=e1035] [cursor=pointer]
+            - generic [ref=e1036]: 进行中
+          - paragraph [ref=e1037]: 脱敏合成材料，仅用于招标流程端到端测试
+          - generic [ref=e1038]:
+            - generic [ref=e1039]: 最后更新 2026/9/8 17:06:05
+            - generic [ref=e1040]:
+              - link "进入项目" [ref=e1041] [cursor=pointer]:
+                - /url: /projects/d38c0b82-8b23-4b44-8ee5-3f9cafe6847f
+              - button "删除项目" [ref=e1042]
+        - generic [ref=e1043]:
+          - generic [ref=e1044]:
+            - link "E2E-1788858325404 宁夏数字政务协同平台 E2E 项目" [ref=e1045] [cursor=pointer]:
+              - /url: /projects/a868394c-fcfb-400d-9e5f-667636ab68ad
+              - generic [ref=e1046] [cursor=pointer]:
+                - generic [ref=e1047] [cursor=pointer]: E2E-1788858325404
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1048] [cursor=pointer]
+            - generic [ref=e1049]: 进行中
+          - paragraph [ref=e1050]: 自动化两阶段主链路验证项目
+          - generic [ref=e1051]:
+            - generic [ref=e1052]: 最后更新 2026/9/8 17:05:25
+            - generic [ref=e1053]:
+              - link "进入项目" [ref=e1054] [cursor=pointer]:
+                - /url: /projects/a868394c-fcfb-400d-9e5f-667636ab68ad
+              - button "删除项目" [ref=e1055]
+        - generic [ref=e1056]:
+          - generic [ref=e1057]:
+            - link "E2E-1788858286032 宁夏数字政务协同平台 E2E 项目" [ref=e1058] [cursor=pointer]:
+              - /url: /projects/e4d0f878-70bc-4409-83eb-c7dcbb4b6c42
+              - generic [ref=e1059] [cursor=pointer]:
+                - generic [ref=e1060] [cursor=pointer]: E2E-1788858286032
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1061] [cursor=pointer]
+            - generic [ref=e1062]: 进行中
+          - paragraph [ref=e1063]: 自动化两阶段主链路验证项目
+          - generic [ref=e1064]:
+            - generic [ref=e1065]: 最后更新 2026/9/8 17:04:46
+            - generic [ref=e1066]:
+              - link "进入项目" [ref=e1067] [cursor=pointer]:
+                - /url: /projects/e4d0f878-70bc-4409-83eb-c7dcbb4b6c42
+              - button "删除项目" [ref=e1068]
+        - generic [ref=e1069]:
+          - generic [ref=e1070]:
+            - link "REV-1788858284923 第一次修改" [ref=e1071] [cursor=pointer]:
+              - /url: /projects/d906bce5-6ed0-498d-87e2-34735894f426
+              - generic [ref=e1072] [cursor=pointer]:
+                - generic [ref=e1073] [cursor=pointer]: REV-1788858284923
+                - heading "第一次修改" [level=3] [ref=e1074] [cursor=pointer]
+            - generic [ref=e1075]: 进行中
+          - paragraph [ref=e1076]: 尚未填写项目说明
+          - generic [ref=e1077]:
+            - generic [ref=e1078]: 最后更新 2026/9/8 17:04:44
+            - generic [ref=e1079]:
+              - link "进入项目" [ref=e1080] [cursor=pointer]:
+                - /url: /projects/d906bce5-6ed0-498d-87e2-34735894f426
+              - button "删除项目" [ref=e1081]
+        - generic [ref=e1082]:
+          - generic [ref=e1083]:
+            - link "BAD-1788858283590 错误状态验证项目" [ref=e1084] [cursor=pointer]:
+              - /url: /projects/bb03bd35-3270-463b-ba7c-8a7cd07c0aec
+              - generic [ref=e1085] [cursor=pointer]:
+                - generic [ref=e1086] [cursor=pointer]: BAD-1788858283590
+                - heading "错误状态验证项目" [level=3] [ref=e1087] [cursor=pointer]
+            - generic [ref=e1088]: 进行中
+          - paragraph [ref=e1089]: 尚未填写项目说明
+          - generic [ref=e1090]:
+            - generic [ref=e1091]: 最后更新 2026/9/8 17:04:43
+            - generic [ref=e1092]:
+              - link "进入项目" [ref=e1093] [cursor=pointer]:
+                - /url: /projects/bb03bd35-3270-463b-ba7c-8a7cd07c0aec
+              - button "删除项目" [ref=e1094]
+        - generic [ref=e1095]:
+          - generic [ref=e1096]:
+            - link "BTA-UI-1788858245266 测试项目—区域绿色数据中心节能改造" [ref=e1097] [cursor=pointer]:
+              - /url: /projects/26826467-12c0-4809-901a-8c78ab3b5b9d
+              - generic [ref=e1098] [cursor=pointer]:
+                - generic [ref=e1099] [cursor=pointer]: BTA-UI-1788858245266
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1100] [cursor=pointer]
+            - generic [ref=e1101]: 进行中
+          - paragraph [ref=e1102]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1103]:
+            - generic [ref=e1104]: 最后更新 2026/9/8 17:04:05
+            - generic [ref=e1105]:
+              - link "进入项目" [ref=e1106] [cursor=pointer]:
+                - /url: /projects/26826467-12c0-4809-901a-8c78ab3b5b9d
+              - button "删除项目" [ref=e1107]
+        - generic [ref=e1108]:
+          - generic [ref=e1109]:
+            - link "BTA-UI-1788857619771 测试项目—区域绿色数据中心节能改造" [ref=e1110] [cursor=pointer]:
+              - /url: /projects/a42c3c04-5a08-4686-8b66-8a462ff701b0
+              - generic [ref=e1111] [cursor=pointer]:
+                - generic [ref=e1112] [cursor=pointer]: BTA-UI-1788857619771
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1113] [cursor=pointer]
+            - generic [ref=e1114]: 进行中
+          - paragraph [ref=e1115]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1116]:
+            - generic [ref=e1117]: 最后更新 2026/9/8 16:53:42
+            - generic [ref=e1118]:
+              - link "进入项目" [ref=e1119] [cursor=pointer]:
+                - /url: /projects/a42c3c04-5a08-4686-8b66-8a462ff701b0
+              - button "删除项目" [ref=e1120]
+        - generic [ref=e1121]:
+          - generic [ref=e1122]:
+            - link "PROC-E2E-1788853386222 采购方案端到端测试项目" [ref=e1123] [cursor=pointer]:
+              - /url: /projects/fae897e0-23a0-4db9-a528-436daa22a410
+              - generic [ref=e1124] [cursor=pointer]:
+                - generic [ref=e1125] [cursor=pointer]: PROC-E2E-1788853386222
+                - heading "采购方案端到端测试项目" [level=3] [ref=e1126] [cursor=pointer]
+            - generic [ref=e1127]: 进行中
+          - paragraph [ref=e1128]: 脱敏合成材料，仅用于采购方案端到端测试
+          - generic [ref=e1129]:
+            - generic [ref=e1130]: 最后更新 2026/9/8 15:43:06
+            - generic [ref=e1131]:
+              - link "进入项目" [ref=e1132] [cursor=pointer]:
+                - /url: /projects/fae897e0-23a0-4db9-a528-436daa22a410
+              - button "删除项目" [ref=e1133]
+        - generic [ref=e1134]:
+          - generic [ref=e1135]:
+            - link "E2E-1788853343883 宁夏数字政务协同平台 E2E 项目" [ref=e1136] [cursor=pointer]:
+              - /url: /projects/1234f538-d3c0-4072-afe0-ef4da7be2ee8
+              - generic [ref=e1137] [cursor=pointer]:
+                - generic [ref=e1138] [cursor=pointer]: E2E-1788853343883
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1139] [cursor=pointer]
+            - generic [ref=e1140]: 进行中
+          - paragraph [ref=e1141]: 自动化两阶段主链路验证项目
+          - generic [ref=e1142]:
+            - generic [ref=e1143]: 最后更新 2026/9/8 15:42:24
+            - generic [ref=e1144]:
+              - link "进入项目" [ref=e1145] [cursor=pointer]:
+                - /url: /projects/1234f538-d3c0-4072-afe0-ef4da7be2ee8
+              - button "删除项目" [ref=e1146]
+        - generic [ref=e1147]:
+          - generic [ref=e1148]:
+            - link "REV-1788853342678 第一次修改" [ref=e1149] [cursor=pointer]:
+              - /url: /projects/3302ea3f-4ee8-428a-af76-baa943677f86
+              - generic [ref=e1150] [cursor=pointer]:
+                - generic [ref=e1151] [cursor=pointer]: REV-1788853342678
+                - heading "第一次修改" [level=3] [ref=e1152] [cursor=pointer]
+            - generic [ref=e1153]: 进行中
+          - paragraph [ref=e1154]: 尚未填写项目说明
+          - generic [ref=e1155]:
+            - generic [ref=e1156]: 最后更新 2026/9/8 15:42:22
+            - generic [ref=e1157]:
+              - link "进入项目" [ref=e1158] [cursor=pointer]:
+                - /url: /projects/3302ea3f-4ee8-428a-af76-baa943677f86
+              - button "删除项目" [ref=e1159]
+        - generic [ref=e1160]:
+          - generic [ref=e1161]:
+            - link "BAD-1788853341504 错误状态验证项目" [ref=e1162] [cursor=pointer]:
+              - /url: /projects/00fafb45-9c0d-4069-ae21-26b7e0891f74
+              - generic [ref=e1163] [cursor=pointer]:
+                - generic [ref=e1164] [cursor=pointer]: BAD-1788853341504
+                - heading "错误状态验证项目" [level=3] [ref=e1165] [cursor=pointer]
+            - generic [ref=e1166]: 进行中
+          - paragraph [ref=e1167]: 尚未填写项目说明
+          - generic [ref=e1168]:
+            - generic [ref=e1169]: 最后更新 2026/9/8 15:42:21
+            - generic [ref=e1170]:
+              - link "进入项目" [ref=e1171] [cursor=pointer]:
+                - /url: /projects/00fafb45-9c0d-4069-ae21-26b7e0891f74
+              - button "删除项目" [ref=e1172]
+        - generic [ref=e1173]:
+          - generic [ref=e1174]:
+            - link "BTA-UI-1788853279904 测试项目—区域绿色数据中心节能改造" [ref=e1175] [cursor=pointer]:
+              - /url: /projects/210e617c-824c-4538-911a-c6608a48e5d9
+              - generic [ref=e1176] [cursor=pointer]:
+                - generic [ref=e1177] [cursor=pointer]: BTA-UI-1788853279904
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1178] [cursor=pointer]
+            - generic [ref=e1179]: 进行中
+          - paragraph [ref=e1180]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1181]:
+            - generic [ref=e1182]: 最后更新 2026/9/8 15:41:20
+            - generic [ref=e1183]:
+              - link "进入项目" [ref=e1184] [cursor=pointer]:
+                - /url: /projects/210e617c-824c-4538-911a-c6608a48e5d9
+              - button "删除项目" [ref=e1185]
+        - generic [ref=e1186]:
+          - generic [ref=e1187]:
+            - link "PROC-E2E-1788848807057 采购方案端到端测试项目" [ref=e1188] [cursor=pointer]:
+              - /url: /projects/e164e5bb-3a4b-4247-9870-c7c13441e512
+              - generic [ref=e1189] [cursor=pointer]:
+                - generic [ref=e1190] [cursor=pointer]: PROC-E2E-1788848807057
+                - heading "采购方案端到端测试项目" [level=3] [ref=e1191] [cursor=pointer]
+            - generic [ref=e1192]: 进行中
+          - paragraph [ref=e1193]: 脱敏合成材料，仅用于采购方案端到端测试
+          - generic [ref=e1194]:
+            - generic [ref=e1195]: 最后更新 2026/9/8 14:26:47
+            - generic [ref=e1196]:
+              - link "进入项目" [ref=e1197] [cursor=pointer]:
+                - /url: /projects/e164e5bb-3a4b-4247-9870-c7c13441e512
+              - button "删除项目" [ref=e1198]
+        - generic [ref=e1199]:
+          - generic [ref=e1200]:
+            - link "E2E-1788848777471 宁夏数字政务协同平台 E2E 项目" [ref=e1201] [cursor=pointer]:
+              - /url: /projects/38932abb-16a8-4ca5-9428-79dc652249a9
+              - generic [ref=e1202] [cursor=pointer]:
+                - generic [ref=e1203] [cursor=pointer]: E2E-1788848777471
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1204] [cursor=pointer]
+            - generic [ref=e1205]: 进行中
+          - paragraph [ref=e1206]: 自动化两阶段主链路验证项目
+          - generic [ref=e1207]:
+            - generic [ref=e1208]: 最后更新 2026/9/8 14:26:17
+            - generic [ref=e1209]:
+              - link "进入项目" [ref=e1210] [cursor=pointer]:
+                - /url: /projects/38932abb-16a8-4ca5-9428-79dc652249a9
+              - button "删除项目" [ref=e1211]
+        - generic [ref=e1212]:
+          - generic [ref=e1213]:
+            - link "REV-1788848776391 第一次修改" [ref=e1214] [cursor=pointer]:
+              - /url: /projects/f11e1d78-b63e-4de4-ab08-e835a57ce37c
+              - generic [ref=e1215] [cursor=pointer]:
+                - generic [ref=e1216] [cursor=pointer]: REV-1788848776391
+                - heading "第一次修改" [level=3] [ref=e1217] [cursor=pointer]
+            - generic [ref=e1218]: 进行中
+          - paragraph [ref=e1219]: 尚未填写项目说明
+          - generic [ref=e1220]:
+            - generic [ref=e1221]: 最后更新 2026/9/8 14:26:16
+            - generic [ref=e1222]:
+              - link "进入项目" [ref=e1223] [cursor=pointer]:
+                - /url: /projects/f11e1d78-b63e-4de4-ab08-e835a57ce37c
+              - button "删除项目" [ref=e1224]
+        - generic [ref=e1225]:
+          - generic [ref=e1226]:
+            - link "BAD-1788848772831 错误状态验证项目" [ref=e1227] [cursor=pointer]:
+              - /url: /projects/14c22233-c182-4677-834c-1d3268d99a40
+              - generic [ref=e1228] [cursor=pointer]:
+                - generic [ref=e1229] [cursor=pointer]: BAD-1788848772831
+                - heading "错误状态验证项目" [level=3] [ref=e1230] [cursor=pointer]
+            - generic [ref=e1231]: 进行中
+          - paragraph [ref=e1232]: 尚未填写项目说明
+          - generic [ref=e1233]:
+            - generic [ref=e1234]: 最后更新 2026/9/8 14:26:15
+            - generic [ref=e1235]:
+              - link "进入项目" [ref=e1236] [cursor=pointer]:
+                - /url: /projects/14c22233-c182-4677-834c-1d3268d99a40
+              - button "删除项目" [ref=e1237]
+        - generic [ref=e1238]:
+          - generic [ref=e1239]:
+            - link "BTA-UI-1788848726778 测试项目—区域绿色数据中心节能改造" [ref=e1240] [cursor=pointer]:
+              - /url: /projects/e325a414-f12d-4679-af0d-e08606095458
+              - generic [ref=e1241] [cursor=pointer]:
+                - generic [ref=e1242] [cursor=pointer]: BTA-UI-1788848726778
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1243] [cursor=pointer]
+            - generic [ref=e1244]: 进行中
+          - paragraph [ref=e1245]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1246]:
+            - generic [ref=e1247]: 最后更新 2026/9/8 14:25:27
+            - generic [ref=e1248]:
+              - link "进入项目" [ref=e1249] [cursor=pointer]:
+                - /url: /projects/e325a414-f12d-4679-af0d-e08606095458
+              - button "删除项目" [ref=e1250]
+        - generic [ref=e1251]:
+          - generic [ref=e1252]:
+            - link "E2E-1788847741544 宁夏数字政务协同平台 E2E 项目" [ref=e1253] [cursor=pointer]:
+              - /url: /projects/40ae00c7-a100-48c3-aa7c-27b32170a63e
+              - generic [ref=e1254] [cursor=pointer]:
+                - generic [ref=e1255] [cursor=pointer]: E2E-1788847741544
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1256] [cursor=pointer]
+            - generic [ref=e1257]: 进行中
+          - paragraph [ref=e1258]: 自动化两阶段主链路验证项目
+          - generic [ref=e1259]:
+            - generic [ref=e1260]: 最后更新 2026/9/8 14:09:01
+            - generic [ref=e1261]:
+              - link "进入项目" [ref=e1262] [cursor=pointer]:
+                - /url: /projects/40ae00c7-a100-48c3-aa7c-27b32170a63e
+              - button "删除项目" [ref=e1263]
+        - generic [ref=e1264]:
+          - generic [ref=e1265]:
+            - link "BTA-UI-1788847693560 测试项目—区域绿色数据中心节能改造" [ref=e1266] [cursor=pointer]:
+              - /url: /projects/9f7c0733-4c58-45dd-b5a2-a5dd931b85a9
+              - generic [ref=e1267] [cursor=pointer]:
+                - generic [ref=e1268] [cursor=pointer]: BTA-UI-1788847693560
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1269] [cursor=pointer]
+            - generic [ref=e1270]: 进行中
+          - paragraph [ref=e1271]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1272]:
+            - generic [ref=e1273]: 最后更新 2026/9/8 14:08:13
+            - generic [ref=e1274]:
+              - link "进入项目" [ref=e1275] [cursor=pointer]:
+                - /url: /projects/9f7c0733-4c58-45dd-b5a2-a5dd931b85a9
+              - button "删除项目" [ref=e1276]
+        - generic [ref=e1277]:
+          - generic [ref=e1278]:
+            - link "E2E-1788847385051 宁夏数字政务协同平台 E2E 项目" [ref=e1279] [cursor=pointer]:
+              - /url: /projects/2a555f89-2a74-429e-aa41-3c1a72ca1b3d
+              - generic [ref=e1280] [cursor=pointer]:
+                - generic [ref=e1281] [cursor=pointer]: E2E-1788847385051
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1282] [cursor=pointer]
+            - generic [ref=e1283]: 进行中
+          - paragraph [ref=e1284]: 自动化两阶段主链路验证项目
+          - generic [ref=e1285]:
+            - generic [ref=e1286]: 最后更新 2026/9/8 14:03:05
+            - generic [ref=e1287]:
+              - link "进入项目" [ref=e1288] [cursor=pointer]:
+                - /url: /projects/2a555f89-2a74-429e-aa41-3c1a72ca1b3d
+              - button "删除项目" [ref=e1289]
+        - generic [ref=e1290]:
+          - generic [ref=e1291]:
+            - link "E2E-1788847324166 宁夏数字政务协同平台 E2E 项目" [ref=e1292] [cursor=pointer]:
+              - /url: /projects/7673f4e1-c4f9-4e85-a46e-644133cb4a2b
+              - generic [ref=e1293] [cursor=pointer]:
+                - generic [ref=e1294] [cursor=pointer]: E2E-1788847324166
+                - heading "宁夏数字政务协同平台 E2E 项目" [level=3] [ref=e1295] [cursor=pointer]
+            - generic [ref=e1296]: 进行中
+          - paragraph [ref=e1297]: 自动化两阶段主链路验证项目
+          - generic [ref=e1298]:
+            - generic [ref=e1299]: 最后更新 2026/9/8 14:02:04
+            - generic [ref=e1300]:
+              - link "进入项目" [ref=e1301] [cursor=pointer]:
+                - /url: /projects/7673f4e1-c4f9-4e85-a46e-644133cb4a2b
+              - button "删除项目" [ref=e1302]
+        - generic [ref=e1303]:
+          - generic [ref=e1304]:
+            - link "BTA-UI-1788847255045 测试项目—区域绿色数据中心节能改造" [ref=e1305] [cursor=pointer]:
+              - /url: /projects/0ef0fb18-75dc-4f85-95db-5e22ecb69ed5
+              - generic [ref=e1306] [cursor=pointer]:
+                - generic [ref=e1307] [cursor=pointer]: BTA-UI-1788847255045
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1308] [cursor=pointer]
+            - generic [ref=e1309]: 进行中
+          - paragraph [ref=e1310]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1311]:
+            - generic [ref=e1312]: 最后更新 2026/9/8 14:00:55
+            - generic [ref=e1313]:
+              - link "进入项目" [ref=e1314] [cursor=pointer]:
+                - /url: /projects/0ef0fb18-75dc-4f85-95db-5e22ecb69ed5
+              - button "删除项目" [ref=e1315]
+        - generic [ref=e1316]:
+          - generic [ref=e1317]:
+            - link "BTA-UI-1788844181419 测试项目—区域绿色数据中心节能改造" [ref=e1318] [cursor=pointer]:
+              - /url: /projects/b6904fd2-afc5-4dfd-8230-b09b1cb946b9
+              - generic [ref=e1319] [cursor=pointer]:
+                - generic [ref=e1320] [cursor=pointer]: BTA-UI-1788844181419
+                - heading "测试项目—区域绿色数据中心节能改造" [level=3] [ref=e1321] [cursor=pointer]
+            - generic [ref=e1322]: 进行中
+          - paragraph [ref=e1323]: 内置模板专项验收固定数据 UI 主链路
+          - generic [ref=e1324]:
+            - generic [ref=e1325]: 最后更新 2026/9/8 13:09:41
+            - generic [ref=e1326]:
+              - link "进入项目" [ref=e1327] [cursor=pointer]:
+                - /url: /projects/b6904fd2-afc5-4dfd-8230-b09b1cb946b9
+              - button "删除项目" [ref=e1328]
+      - dialog "确认删除项目" [ref=e1329]:
+        - generic [ref=e1330]:
+          - heading "确认删除项目" [level=2] [ref=e1331]
+          - paragraph [ref=e1332]: 此操作将永久删除项目、上传文件、解析结果、字段证据、生成记录和定稿文件，删除后无法恢复。
+        - generic [ref=e1333]:
+          - generic [ref=e1334]:
+            - generic [ref=e1335]: 路由与响应式巡检项目
+            - generic [ref=e1336]: 项目编号：ROUTE-1788921748732
+          - generic [ref=e1337]:
+            - text: 请输入项目编号“ROUTE-1788921748732”确认删除
+            - textbox "请输入项目编号“ROUTE-1788921748732”确认删除" [ref=e1338]
+          - generic [ref=e1339]:
+            - button "取消" [ref=e1340]
+            - button "永久删除" [disabled] [ref=e1341]
+```

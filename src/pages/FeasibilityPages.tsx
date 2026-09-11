@@ -491,12 +491,12 @@ export function FeasibilityFieldConfirmationPage({ navigate }: { navigate: (p: P
             <button
               onClick={() => {
                 advanceStage("feasibility", "fields_confirmed");
-                navigate("feasibility-template-selection");
+                navigate("feasibility-generation-setup");
               }}
               disabled={pending > 0}
               className="h-9 rounded-lg bg-[#2E5495] px-5 text-sm font-medium text-white hover:bg-[#24457C] disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
             >
-              进入模板选择 →
+              进入文档生成 →
             </button>
           </div>
         </>

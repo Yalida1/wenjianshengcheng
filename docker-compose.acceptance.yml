@@ -1,0 +1,84 @@
+name: project-document-chain-builtin-acceptance
+
+x-acceptance-environment: &acceptance-environment
+  APP_ENV: test
+  APP_SECRET_KEY: builtin-template-acceptance-only-secret-key-20260907
+  DATABASE_URL: postgresql+psycopg://docchain:docchain@postgres:5432/builtin_template_acceptance
+  REDIS_URL: redis://redis:6379/11
+  S3_ENDPOINT_URL: http://minio:9000
+  S3_ACCESS_KEY: docchain
+  S3_SECRET_KEY: change-this-minio-password
+  S3_BUCKET: project-documents-builtin-template-acceptance
+  STORAGE_BACKEND: s3
+  LLM_PROVIDER: demo
+  SESSION_COOKIE_SECURE: "false"
+  CORS_ORIGINS: http://localhost:18080
+  DEMO_ADMIN_ACCOUNT: admin
+  DEMO_ADMIN_PASSWORD: admin123
+  DEMO_ORGANIZATION_NAME: 内置模板专项验收组织
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: builtin_template_acceptance
+      POSTGRES_USER: docchain
+      POSTGRES_PASSWORD: docchain
+    volumes:
+      - acceptance_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docchain -d builtin_template_acceptance"]
+
+  redis:
+    volumes:
+      - acceptance_redis_data:/data
+
+  minio:
+    environment:
+      MINIO_ROOT_USER: docchain
+      MINIO_ROOT_PASSWORD: change-this-minio-password
+    volumes:
+      - acceptance_minio_data:/data
+
+  minio-init:
+    environment:
+      MINIO_ROOT_USER: docchain
+      MINIO_ROOT_PASSWORD: change-this-minio-password
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >-
+        mc alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}" &&
+        mc mb --ignore-existing local/project-documents-builtin-template-acceptance &&
+        mc anonymous set none local/project-documents-builtin-template-acceptance
+
+  api:
+    environment:
+      <<: *acceptance-environment
+      SERVICE_ROLE: api
+
+  worker:
+    environment:
+      <<: *acceptance-environment
+      SERVICE_ROLE: worker
+      CELERY_CONCURRENCY: "2"
+
+  web:
+    ports: !override
+      - "18080:8080"
+
+  verify:
+    environment:
+      <<: *acceptance-environment
+      E2E_BASE_URL: http://web:8080
+      ACCEPTANCE_API_URL: http://api:8000/api/v1
+      CI: "true"
+    volumes:
+      - ./artifacts:/workspace/artifacts
+      - ./qa/builtin_template_acceptance:/workspace/qa/builtin_template_acceptance
+      - ./BUILTIN_TEMPLATE_ACCEPTANCE_REPORT.md:/workspace/BUILTIN_TEMPLATE_ACCEPTANCE_REPORT.md
+      - ./BUILTIN_TEMPLATE_ACCEPTANCE_RESULTS.json:/workspace/BUILTIN_TEMPLATE_ACCEPTANCE_RESULTS.json
+
+volumes:
+  acceptance_postgres_data:
+  acceptance_redis_data:
+  acceptance_minio_data:

@@ -1,0 +1,12 @@
+{
+  "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+  "p0_field_count": 26,
+  "p0_confirmed_count": 26,
+  "p0_traceable_count": 26,
+  "unconfirmed_ai_p0_count": 0,
+  "negative_gate_count": 18,
+  "negative_gate_passed": 18,
+  "api_500_count": 0,
+  "api_500_requests": [],
+  "status": "passed"
+}

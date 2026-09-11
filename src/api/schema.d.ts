@@ -174,6 +174,23 @@ export interface paths {
     patch: operations["update_content_block_api_v1_documents_blocks__block_id__patch"];
     trace?: never;
   };
+  "/api/v1/documents/blocks/{block_id}/ai-optimize": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Optimize Content Block Text */
+    post: operations["optimize_content_block_text_api_v1_documents_blocks__block_id__ai_optimize_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/documents/comments/{comment_id}/resolve": {
     parameters: {
       query?: never;
@@ -362,6 +379,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/features": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Feature Flags */
+    get: operations["feature_flags_api_v1_features_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/field-conflicts": {
     parameters: {
       query?: never;
@@ -389,7 +423,76 @@ export interface paths {
     /** List Field Definitions */
     get: operations["list_field_definitions_api_v1_field_definitions_get"];
     put?: never;
+    /** Create Field Definition */
+    post: operations["create_field_definition_api_v1_field_definitions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/field-definitions/restore-base": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Base Field Definitions */
+    post: operations["restore_base_field_definitions_api_v1_field_definitions_restore_base_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/field-definitions/{definition_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Patch Field Definition */
+    patch: operations["patch_field_definition_api_v1_field_definitions__definition_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/field-definitions/{definition_id}/activate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Activate Field Definition */
+    post: operations["activate_field_definition_api_v1_field_definitions__definition_id__activate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/field-definitions/{definition_id}/deactivate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Deactivate Field Definition */
+    post: operations["deactivate_field_definition_api_v1_field_definitions__definition_id__deactivate_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -500,6 +603,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/files/{file_id}/auto-draft": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Start File Auto Draft */
+    post: operations["start_file_auto_draft_api_v1_files__file_id__auto_draft_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/files/{file_id}/download": {
     parameters: {
       query?: never;
@@ -511,6 +631,23 @@ export interface paths {
     get: operations["download_file_api_v1_files__file_id__download_get"];
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/files/{file_id}/field-candidates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Extract File Field Candidates */
+    post: operations["extract_file_field_candidates_api_v1_files__file_id__field_candidates_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -773,6 +910,214 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/procurement-analyses/{run_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Procurement Analysis */
+    get: operations["get_procurement_analysis_api_v1_procurement_analyses__run_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-analyses/{run_id}/retry": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Procurement Analysis */
+    post: operations["retry_procurement_analysis_api_v1_procurement_analyses__run_id__retry_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-generation-batches/{batch_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Procurement Generation Batch */
+    get: operations["get_procurement_generation_batch_api_v1_procurement_generation_batches__batch_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-generation-batches/{batch_id}/retry-failed": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Procurement Generation Batch */
+    post: operations["retry_procurement_generation_batch_api_v1_procurement_generation_batches__batch_id__retry_failed_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-issues/{issue_id}/resolve": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve Procurement Issue */
+    post: operations["resolve_procurement_issue_api_v1_procurement_issues__issue_id__resolve_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-plans/{plan_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Procurement Plan */
+    get: operations["get_procurement_plan_api_v1_procurement_plans__plan_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-plans/{plan_id}/confirm": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Confirm Procurement Plan */
+    post: operations["confirm_procurement_plan_api_v1_procurement_plans__plan_id__confirm_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-plans/{plan_id}/ensure-default-grouping": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Ensure Procurement Plan Default Grouping
+     * @description 按用户显式策略补齐待编制清单；无 strategy 时不改动方案（不再静默一包一套）。
+     */
+    post: operations["ensure_procurement_plan_default_grouping_api_v1_procurement_plans__plan_id__ensure_default_grouping_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-plans/{plan_id}/generate-batch": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Generate Procurement Plan Batch */
+    post: operations["generate_procurement_plan_batch_api_v1_procurement_plans__plan_id__generate_batch_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-plans/{plan_id}/structure": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Update Procurement Plan Structure */
+    put: operations["update_procurement_plan_structure_api_v1_procurement_plans__plan_id__structure_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-rule-sets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Procurement Rule Sets */
+    get: operations["list_procurement_rule_sets_api_v1_procurement_rule_sets_get"];
+    put?: never;
+    /** Create Procurement Rule Set */
+    post: operations["create_procurement_rule_set_api_v1_procurement_rule_sets_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/procurement-rule-sets/{rule_set_id}/publish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Publish Procurement Rule Set */
+    post: operations["publish_procurement_rule_set_api_v1_procurement_rule_sets__rule_set_id__publish_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/projects": {
     parameters: {
       query?: never;
@@ -810,6 +1155,23 @@ export interface paths {
     patch: operations["update_project_api_v1_projects__project_id__patch"];
     trace?: never;
   };
+  "/api/v1/projects/{project_id}/document-groups/{group_id}/applicable-fields": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Document Group Applicable Fields */
+    get: operations["get_document_group_applicable_fields_api_v1_projects__project_id__document_groups__group_id__applicable_fields_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/projects/{project_id}/members": {
     parameters: {
       query?: never;
@@ -828,6 +1190,41 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/projects/{project_id}/procurement-analyses": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Procurement Analyses */
+    get: operations["list_procurement_analyses_api_v1_projects__project_id__procurement_analyses_get"];
+    put?: never;
+    /** Start Procurement Analysis */
+    post: operations["start_procurement_analysis_api_v1_projects__project_id__procurement_analyses_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/projects/{project_id}/procurement-plans": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Procurement Plans */
+    get: operations["list_procurement_plans_api_v1_projects__project_id__procurement_plans_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/projects/{project_id}/stages": {
     parameters: {
       query?: never;
@@ -837,6 +1234,23 @@ export interface paths {
     };
     /** List Stages */
     get: operations["list_stages_api_v1_projects__project_id__stages_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/projects/{project_id}/stages/{stage}/applicable-fields": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Stage Applicable Fields */
+    get: operations["list_stage_applicable_fields_api_v1_projects__project_id__stages__stage__applicable_fields_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1211,6 +1625,126 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** AITextOptimizeRequest */
+    AITextOptimizeRequest: {
+      /**
+       * Action
+       * @default polish
+       * @enum {string}
+       */
+      action: "polish" | "rewrite" | "expand" | "simplify";
+      /**
+       * Prompt
+       * @default
+       */
+      prompt: string;
+      /** Selected Text */
+      selected_text: string;
+    };
+    /** AITextOptimizeResponse */
+    AITextOptimizeResponse: {
+      /** Model */
+      model: string;
+      /** Optimized Prompt */
+      optimized_prompt: string;
+      /** Prompt Version */
+      prompt_version: string;
+      /** Provider */
+      provider: string;
+      /** Suggestion */
+      suggestion: string;
+    };
+    /** ApplicableFieldView */
+    ApplicableFieldView: {
+      /** Blocking */
+      blocking: boolean;
+      /** Data Type */
+      data_type: string;
+      /**
+       * Definition Missing
+       * @default false
+       */
+      definition_missing: boolean;
+      /**
+       * Display Order
+       * @default 100
+       */
+      display_order: number;
+      /** Document Group Id */
+      document_group_id: string;
+      /** Empty Reason Code */
+      empty_reason_code?: string | null;
+      /** Empty Reason Message */
+      empty_reason_message?: string | null;
+      /** Field Key */
+      field_key: string;
+      /**
+       * Input Role
+       * @default material
+       */
+      input_role: string;
+      /** Label */
+      label: string;
+      /** Level */
+      level: string;
+      /** Profile */
+      profile: string;
+      /**
+       * Reason
+       * @default
+       */
+      reason: string;
+      /** Required */
+      required: boolean;
+      /**
+       * Required For Phase
+       * @default both
+       */
+      required_for_phase: string;
+      /**
+       * Source
+       * @enum {string}
+       */
+      source: "template" | "profile" | "core" | "global";
+      /** Source Profile */
+      source_profile?: string | null;
+      /**
+       * Source Stage
+       * @default upstream_or_material
+       */
+      source_stage: string;
+      /** Source Template Id */
+      source_template_id?: string | null;
+      /** Unit */
+      unit?: string | null;
+    };
+    /** ApplicableFieldsResponse */
+    ApplicableFieldsResponse: {
+      /** Document Group Id */
+      document_group_id: string;
+      /** Fields */
+      fields?: components["schemas"]["ApplicableFieldView"][];
+      /** Profile */
+      profile: string;
+      /**
+       * Resolution Source
+       * @enum {string}
+       */
+      resolution_source: "template" | "profile" | "core" | "mixed";
+      /**
+       * Setup Incomplete
+       * @default false
+       */
+      setup_incomplete: boolean;
+      /** Setup Incomplete Reason */
+      setup_incomplete_reason?: string | null;
+      /** Source Template Id */
+      source_template_id?: string | null;
+      /** Source Template Version */
+      source_template_version?: number | null;
+      /** Template Config Errors */
+      template_config_errors?: components["schemas"]["TemplateConfigErrorView"][];
+    };
     /** Body_create_template_extraction_api_v1_template_extractions_post */
     Body_create_template_extraction_api_v1_template_extractions_post: {
       /** Upload */
@@ -1270,6 +1804,14 @@ export interface components {
       /** Items */
       items: components["schemas"]["PaymentItem"][];
     };
+    /**
+     * EnsureDefaultGroupingRequest
+     * @description Explicit user action to materialize document groups. No strategy ⇒ no-op.
+     */
+    EnsureDefaultGroupingRequest: {
+      /** Strategy */
+      strategy?: ("one_package_one_document" | "shared_single_document") | null;
+    };
     /** ErrorDetail */
     ErrorDetail: {
       /** Code */
@@ -1316,12 +1858,96 @@ export interface components {
        */
       output_format: "docx" | "pdf" | "xlsx";
     };
+    /** FieldCandidateExtractionView */
+    FieldCandidateExtractionView: {
+      /**
+       * Conflicts
+       * @default 0
+       */
+      conflicts: number;
+      /** Created */
+      created: number;
+      /** Created Keys */
+      created_keys: string[];
+      /** Existing */
+      existing: number;
+      /** Existing Keys */
+      existing_keys: string[];
+      /** File Id */
+      file_id: string;
+      /** File Version Id */
+      file_version_id: string;
+      /**
+       * Revised
+       * @default 0
+       */
+      revised: number;
+      /** Revised Keys */
+      revised_keys?: string[];
+      /** Skipped */
+      skipped: number;
+      /** Skipped Keys */
+      skipped_keys: string[];
+    };
     /** FieldConfirmationRequest */
     FieldConfirmationRequest: {
       /** Evidence Acknowledged */
       evidence_acknowledged: boolean;
       /** Revision */
       revision: number;
+    };
+    /** FieldDefinitionCreate */
+    FieldDefinitionCreate: {
+      /**
+       * Criticality
+       * @default P2
+       * @enum {string}
+       */
+      criticality: "P0" | "P1" | "P2";
+      /**
+       * Data Type
+       * @default string
+       */
+      data_type: string;
+      /** Field Key */
+      field_key: string;
+      /** Field Label */
+      field_label: string;
+      /**
+       * Required
+       * @default false
+       */
+      required: boolean;
+      /** Rules */
+      rules?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Stage
+       * @enum {string}
+       */
+      stage: "requirement" | "feasibility" | "tender" | "contract";
+      /** Unit */
+      unit?: string | null;
+    };
+    /** FieldDefinitionPatch */
+    FieldDefinitionPatch: {
+      /** Criticality */
+      criticality?: ("P0" | "P1" | "P2") | null;
+      /** Data Type */
+      data_type?: string | null;
+      /** Field Label */
+      field_label?: string | null;
+      /** Required */
+      required?: boolean | null;
+      /** Revision */
+      revision: number;
+      /** Rules */
+      rules?: {
+        [key: string]: unknown;
+      } | null;
+      /** Unit */
+      unit?: string | null;
     };
     /** FieldDefinitionView */
     FieldDefinitionView: {
@@ -1335,6 +1961,10 @@ export interface components {
       field_label: string;
       /** Id */
       id: string;
+      /** Is Active */
+      is_active: boolean;
+      /** Is Base */
+      is_base: boolean;
       /** Required */
       required: boolean;
       /** Revision */
@@ -1488,6 +2118,12 @@ export interface components {
     };
     /** FileView */
     FileView: {
+      /** Auto Generate Draft */
+      auto_generate_draft: boolean;
+      /** Auto Generation Error */
+      auto_generation_error: string | null;
+      /** Auto Generation Job Id */
+      auto_generation_job_id: string | null;
       /** Extension */
       extension: string;
       /** Id */
@@ -1574,6 +2210,16 @@ export interface components {
       generation_provider: string;
       /** Id */
       id: string;
+      /** Procurement Batch Id */
+      procurement_batch_id: string | null;
+      /** Procurement Document Group Id */
+      procurement_document_group_id: string | null;
+      /** Procurement Plan Id */
+      procurement_plan_id: string | null;
+      /** Procurement Snapshot */
+      procurement_snapshot: {
+        [key: string]: unknown;
+      } | null;
       /** Project Id */
       project_id: string;
       /** Prompt Version */
@@ -1586,11 +2232,31 @@ export interface components {
       status: string;
       /** Task Id */
       task_id: string | null;
+      /** Template Applicability Confirmed */
+      template_applicability_confirmed: boolean;
     };
     /** GenerationRequest */
     GenerationRequest: {
       /** Idempotency Key */
       idempotency_key: string;
+      /**
+       * Include Descendants
+       * @default true
+       */
+      include_descendants: boolean;
+      /** Procurement Document Group Id */
+      procurement_document_group_id?: string | null;
+      /** Procurement Package Ids */
+      procurement_package_ids?: string[] | null;
+      /** Procurement Plan Id */
+      procurement_plan_id?: string | null;
+      /** Selected Section Keys */
+      selected_section_keys?: string[] | null;
+      /**
+       * Template Applicability Confirmed
+       * @default false
+       */
+      template_applicability_confirmed: boolean;
       /** Template Id */
       template_id: string;
       /** Template Version */
@@ -1655,10 +2321,456 @@ export interface components {
       /** Trigger */
       trigger: string;
     };
-    /** ProjectCreate */
-    ProjectCreate: {
+    /** ProcurementAnalysisRequest */
+    ProcurementAnalysisRequest: {
+      /**
+       * Include Alternative
+       * @default true
+       */
+      include_alternative: boolean;
+      /** Source Kind */
+      source_kind?: ("uploaded_file" | "upstream_final") | null;
+      /** Source Version Id */
+      source_version_id?: string | null;
+    };
+    /** ProcurementAnalysisRunView */
+    ProcurementAnalysisRunView: {
+      /** Coverage Json */
+      coverage_json: {
+        [key: string]: unknown;
+      };
+      /** Error */
+      error: string | null;
+      /** Finished At */
+      finished_at: string | null;
+      /** Id */
+      id: string;
+      /** Model Name */
+      model_name: string;
+      /** Project Id */
+      project_id: string;
+      /** Prompt Version */
+      prompt_version: string;
+      /** Provider Name */
+      provider_name: string;
+      /** Result Sha256 */
+      result_sha256: string | null;
+      /** Revision */
+      revision: number;
+      /** Source Kind */
+      source_kind: string;
+      /** Source Sha256 */
+      source_sha256: string;
+      /** Source Version Id */
+      source_version_id: string;
+      /** Started At */
+      started_at: string | null;
+      /** Status */
+      status: string;
+      /** Task Id */
+      task_id: string | null;
+    };
+    /** ProcurementBatchGenerationRequest */
+    ProcurementBatchGenerationRequest: {
+      /** Group Ids */
+      group_ids: string[];
+      /** Idempotency Key */
+      idempotency_key: string;
+    };
+    /** ProcurementContentItemView */
+    ProcurementContentItemView: {
+      /** Deliverables */
+      deliverables: unknown[];
+      /** Description */
+      description: string | null;
+      /** Evidence Status */
+      evidence_status: string;
+      /** Id */
+      id: string;
+      /** Item Key */
+      item_key: string;
+      /** Name */
+      name: string;
+      /** Phase */
+      phase: string | null;
+      /** Procurement Method */
+      procurement_method: string | null;
+      /** Revision */
+      revision: number;
+      /** Scope Status */
+      scope_status: string;
+    };
+    /** ProcurementEvidenceView */
+    ProcurementEvidenceView: {
+      /** Document Block Id */
+      document_block_id: string | null;
+      /** Entity Id */
+      entity_id: string | null;
+      /** Entity Type */
+      entity_type: string;
+      /** Evidence Type */
+      evidence_type: string;
+      /** Excerpt */
+      excerpt: string | null;
+      /** Extracted Value */
+      extracted_value: unknown;
+      /** Field Key */
+      field_key: string;
+      /** Id */
+      id: string;
+      /** Locator */
+      locator: {
+        [key: string]: unknown;
+      };
+      /** Normalized Value */
+      normalized_value: unknown;
+      /** Page Number */
+      page_number: number | null;
+      /** Section Path */
+      section_path: string | null;
+      /** Source Version Id */
+      source_version_id: string;
+      /** Status */
+      status: string;
+    };
+    /** ProcurementGenerationBatchView */
+    ProcurementGenerationBatchView: {
+      /** Failed Count */
+      failed_count: number;
+      /** Id */
+      id: string;
+      /** Idempotency Key */
+      idempotency_key: string;
+      /** Jobs */
+      jobs: components["schemas"]["GenerationJobView"][];
+      /** Plan Id */
+      plan_id: string;
+      /** Project Id */
+      project_id: string;
+      /** Revision */
+      revision: number;
+      /** Status */
+      status: string;
+      /** Succeeded Count */
+      succeeded_count: number;
+      /** Total Count */
+      total_count: number;
+    };
+    /** ProcurementIssueResolveRequest */
+    ProcurementIssueResolveRequest: {
+      /** Resolution */
+      resolution: string;
+      /** Revision */
+      revision: number;
+    };
+    /** ProcurementIssueView */
+    ProcurementIssueView: {
+      /** Category */
+      category: string;
       /** Code */
       code: string;
+      /** Detail */
+      detail: string;
+      /** Entity Id */
+      entity_id: string | null;
+      /** Entity Type */
+      entity_type: string;
+      /** Id */
+      id: string;
+      /** Impact */
+      impact: string;
+      /** Resolution */
+      resolution: string | null;
+      /** Resolution Guidance */
+      resolution_guidance: string | null;
+      /** Severity */
+      severity: string;
+      /** Status */
+      status: string;
+      /** Title */
+      title: string;
+    };
+    /** ProcurementPackageInput */
+    ProcurementPackageInput: {
+      /** Budget Basis */
+      budget_basis?: string | null;
+      /** Budget Period */
+      budget_period?: string | null;
+      /**
+       * Budget Status
+       * @default missing
+       */
+      budget_status: string;
+      /** Business Subcategory */
+      business_subcategory?: string | null;
+      /** Code */
+      code: string;
+      /** Confirmed Budget */
+      confirmed_budget?: number | string | null;
+      /** Content Item Ids */
+      content_item_ids?: string[];
+      /**
+       * Currency
+       * @default CNY
+       */
+      currency: string;
+      /** Deliverables */
+      deliverables?: unknown[];
+      /** Estimated Amount */
+      estimated_amount?: number | string | null;
+      /**
+       * Evidence Status
+       * @default missing
+       */
+      evidence_status: string;
+      /** Exclusions */
+      exclusions?: string | null;
+      /** Id */
+      id?: string | null;
+      /** Implementation Period */
+      implementation_period?: string | null;
+      /** Maximum Price */
+      maximum_price?: number | string | null;
+      /** Name */
+      name: string;
+      /** Original Unit */
+      original_unit?: string | null;
+      /**
+       * Procurement Category
+       * @default other
+       */
+      procurement_category: string;
+      /**
+       * Procurement Method
+       * @default unknown
+       */
+      procurement_method: string;
+      /** Scope */
+      scope: string;
+      /** Tax Included */
+      tax_included?: boolean | null;
+    };
+    /** ProcurementPackageView */
+    ProcurementPackageView: {
+      /** Budget Basis */
+      budget_basis: string | null;
+      /** Budget Period */
+      budget_period: string | null;
+      /** Budget Status */
+      budget_status: string;
+      /** Business Subcategory */
+      business_subcategory: string | null;
+      /** Code */
+      code: string;
+      /** Confirmed Budget */
+      confirmed_budget: string | null;
+      /** Content Item Ids */
+      content_item_ids: string[];
+      /** Currency */
+      currency: string;
+      /** Deliverables */
+      deliverables: unknown[];
+      /** Estimated Amount */
+      estimated_amount: string | null;
+      /** Evidence Status */
+      evidence_status: string;
+      /** Exclusions */
+      exclusions: string | null;
+      /** Id */
+      id: string;
+      /** Implementation Period */
+      implementation_period: string | null;
+      /** Maximum Price */
+      maximum_price: string | null;
+      /** Name */
+      name: string;
+      /** Original Unit */
+      original_unit: string | null;
+      /** Procurement Category */
+      procurement_category: string;
+      /** Procurement Method */
+      procurement_method: string;
+      /** Revision */
+      revision: number;
+      /** Scope */
+      scope: string;
+      /** Tax Included */
+      tax_included: boolean | null;
+    };
+    /** ProcurementPlanConfirmRequest */
+    ProcurementPlanConfirmRequest: {
+      /** Decision Note */
+      decision_note: string;
+      /** Revision */
+      revision: number;
+    };
+    /** ProcurementPlanStructureUpdate */
+    ProcurementPlanStructureUpdate: {
+      /** Document Groups */
+      document_groups?: components["schemas"]["TenderDocumentGroupInput"][];
+      /** Name */
+      name?: string | null;
+      /** Packages */
+      packages: components["schemas"]["ProcurementPackageInput"][];
+      /** Revision */
+      revision: number;
+    };
+    /** ProcurementPlanView */
+    ProcurementPlanView: {
+      /** Analysis Coverage */
+      analysis_coverage: {
+        [key: string]: unknown;
+      };
+      /** Analysis Run Id */
+      analysis_run_id: string;
+      /** Analysis Summary */
+      analysis_summary: string | null;
+      /** Budget Reconciliation */
+      budget_reconciliation: {
+        [key: string]: unknown;
+      };
+      /** Confirmation Blocked */
+      confirmation_blocked: boolean;
+      /** Confirmed At */
+      confirmed_at: string | null;
+      /** Confirmed Document Count */
+      confirmed_document_count: number | null;
+      /** Content Items */
+      content_items: components["schemas"]["ProcurementContentItemView"][];
+      /** Coverage Check */
+      coverage_check: {
+        [key: string]: unknown;
+      };
+      /** Document Groups */
+      document_groups: components["schemas"]["TenderDocumentGroupView"][];
+      /** Draft Generation Allowed */
+      draft_generation_allowed: boolean;
+      /** Evidence */
+      evidence: components["schemas"]["ProcurementEvidenceView"][];
+      /** Finalization Allowed */
+      finalization_allowed: boolean;
+      /** Id */
+      id: string;
+      /** Is Recommended */
+      is_recommended: boolean;
+      /** Name */
+      name: string;
+      /** Option Key */
+      option_key: string;
+      /** Other Procurement Document Count */
+      other_procurement_document_count: number;
+      /** Packages */
+      packages: components["schemas"]["ProcurementPackageView"][];
+      /** Procurement Package Count */
+      procurement_package_count: number;
+      /** Project Id */
+      project_id: string;
+      /** Recommended Document Count */
+      recommended_document_count: number | null;
+      /** Revision */
+      revision: number;
+      /** Rule Check Results */
+      rule_check_results: {
+        [key: string]: unknown;
+      }[];
+      /** Source Kind */
+      source_kind: string;
+      /** Source Sha256 */
+      source_sha256: string;
+      /** Source Version Id */
+      source_version_id: string;
+      /** Status */
+      status: string;
+      /** Unresolved Items */
+      unresolved_items: components["schemas"]["ProcurementIssueView"][];
+      /** Version */
+      version: number;
+    };
+    /** ProcurementRuleSetCreate */
+    ProcurementRuleSetCreate: {
+      /** Applicable Subject */
+      applicable_subject?: string | null;
+      /** Effective Date */
+      effective_date?: string | null;
+      /** Expiry Date */
+      expiry_date?: string | null;
+      /** Funding Nature */
+      funding_nature?: string | null;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Region */
+      region?: string | null;
+      /** Rules Json */
+      rules_json?: {
+        [key: string]: unknown;
+      };
+      /** Source Name */
+      source_name: string;
+      /** Source Url */
+      source_url?: string | null;
+    };
+    /** ProcurementRuleSetPublishRequest */
+    ProcurementRuleSetPublishRequest: {
+      /** Revision */
+      revision: number;
+    };
+    /** ProcurementRuleSetView */
+    ProcurementRuleSetView: {
+      /** Applicable Subject */
+      applicable_subject: string | null;
+      /** Effective Date */
+      effective_date: string | null;
+      /** Expiry Date */
+      expiry_date: string | null;
+      /** Funding Nature */
+      funding_nature: string | null;
+      /** Id */
+      id: string;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Region */
+      region: string | null;
+      /** Revision */
+      revision: number;
+      /** Rules Json */
+      rules_json: {
+        [key: string]: unknown;
+      };
+      /** Source Name */
+      source_name: string;
+      /** Source Url */
+      source_url: string | null;
+      /** Status */
+      status: string;
+      /** Version */
+      version: number;
+    };
+    /** ProjectApplicableFieldsResponse */
+    ProjectApplicableFieldsResponse: {
+      /** Groups */
+      groups?: components["schemas"]["ApplicableFieldsResponse"][];
+      /** Project Id */
+      project_id: string;
+      /**
+       * Stage
+       * @enum {string}
+       */
+      stage: "requirement" | "feasibility" | "tender" | "contract";
+    };
+    /**
+     * ProjectCreate
+     * @description 新建项目只需名称与类型；编号与说明可由后续材料解析回填。
+     */
+    ProjectCreate: {
+      /**
+       * Code
+       * @description 可选；省略时由服务端生成临时编号，上传依据材料后可解析补齐
+       */
+      code?: string | null;
       /** Description */
       description?: string | null;
       /** Name */
@@ -1712,6 +2824,8 @@ export interface components {
     };
     /** ProjectPatch */
     ProjectPatch: {
+      /** Code */
+      code?: string | null;
       /** Description */
       description?: string | null;
       /** Name */
@@ -1809,6 +2923,13 @@ export interface components {
       /** Status */
       status: string;
     };
+    /** TemplateConfigErrorView */
+    TemplateConfigErrorView: {
+      /** Message */
+      message: string;
+      /** Variable Key */
+      variable_key: string;
+    };
     /** TemplateCreate */
     TemplateCreate: {
       /** Applicability */
@@ -1886,6 +3007,11 @@ export interface components {
     };
     /** TemplateExtractionConfirmation */
     TemplateExtractionConfirmation: {
+      /**
+       * Published
+       * @default false
+       */
+      published: boolean;
       /** Selected Section Ids */
       selected_section_ids: string[];
       /** Selected Variable Ids */
@@ -1937,9 +3063,46 @@ export interface components {
        */
       updated_at: string;
     };
+    /** TemplateExtractionQuality */
+    TemplateExtractionQuality: {
+      /** Checks */
+      checks: components["schemas"]["TemplateExtractionQualityCheck"][];
+      /**
+       * Grade
+       * @enum {string}
+       */
+      grade: "publishable" | "rejected";
+      /** Min Blocks */
+      min_blocks: number;
+      /** Min Sections */
+      min_sections: number;
+      /** Passed */
+      passed: boolean;
+      /**
+       * Preflight Placeholders
+       * @default []
+       */
+      preflight_placeholders: string[];
+      /** Program Section Count */
+      program_section_count: number;
+      /** Reasons */
+      reasons: string[];
+      /** Score */
+      score: number;
+    };
+    /** TemplateExtractionQualityCheck */
+    TemplateExtractionQualityCheck: {
+      /** Detail */
+      detail: string;
+      /** Key */
+      key: string;
+      /** Passed */
+      passed: boolean;
+    };
     /** TemplateExtractionResult */
     TemplateExtractionResult: {
       confirmation?: components["schemas"]["TemplateExtractionConfirmation"] | null;
+      quality?: components["schemas"]["TemplateExtractionQuality"] | null;
       /** Sections */
       sections: components["schemas"]["TemplateExtractionSectionCandidate"][];
       summary: components["schemas"]["TemplateExtractionSummary"];
@@ -1958,6 +3121,13 @@ export interface components {
       id: string;
       /** Key */
       key: string;
+      /**
+       * Level
+       * @default 1
+       */
+      level: number;
+      /** Parent Key */
+      parent_key?: string | null;
       /** Selected */
       selected: boolean;
       /** Source Block Ids */
@@ -2070,6 +3240,11 @@ export interface components {
       document_number: string | null;
       /** Generation Enabled */
       generation_enabled: boolean;
+      /**
+       * Has Docx Source
+       * @default false
+       */
+      has_docx_source: boolean;
       /** Id */
       id: string;
       /** Is Builtin */
@@ -2094,6 +3269,92 @@ export interface components {
       stage: string;
       /** Status */
       status: string;
+    };
+    /** TenderDocumentGroupInput */
+    TenderDocumentGroupInput: {
+      /** Business Subcategory */
+      business_subcategory?: string | null;
+      /** Code */
+      code: string;
+      /** Deliverables */
+      deliverables?: unknown[];
+      /** Exclusions */
+      exclusions?: string | null;
+      /** Id */
+      id?: string | null;
+      /** Implementation Period */
+      implementation_period?: string | null;
+      /** Name */
+      name: string;
+      /** Organization Method */
+      organization_method?: string | null;
+      /** Package Ids */
+      package_ids: string[];
+      /**
+       * Procurement Category
+       * @default other
+       */
+      procurement_category: string;
+      /**
+       * Procurement Method
+       * @default public_tender
+       */
+      procurement_method: string;
+      /** Rationale */
+      rationale: string;
+      /** Scope */
+      scope: string;
+      /**
+       * Status
+       * @default active
+       * @enum {string}
+       */
+      status: "active" | "excluded";
+      /** Template Id */
+      template_id?: string | null;
+      /** Template Match Basis */
+      template_match_basis?: string | null;
+      /** Template Version */
+      template_version?: number | null;
+    };
+    /** TenderDocumentGroupView */
+    TenderDocumentGroupView: {
+      /** Business Subcategory */
+      business_subcategory: string | null;
+      /** Code */
+      code: string;
+      /** Deliverables */
+      deliverables: unknown[];
+      /** Exclusions */
+      exclusions: string | null;
+      /** Id */
+      id: string;
+      /** Implementation Period */
+      implementation_period: string | null;
+      /** Name */
+      name: string;
+      /** Organization Method */
+      organization_method: string | null;
+      /** Package Ids */
+      package_ids: string[];
+      /** Procurement Category */
+      procurement_category: string;
+      /** Procurement Method */
+      procurement_method: string;
+      /** Rationale */
+      rationale: string;
+      /** Revision */
+      revision: number;
+      /** Scope */
+      scope: string;
+      /** Status */
+      status: string;
+      /** Template Id */
+      template_id: string | null;
+      /** Template Match Basis */
+      template_match_basis: string | null;
+      /** Template Version */
+      template_version: number | null;
     };
     /** UserCreate */
     UserCreate: {
@@ -3220,6 +4481,122 @@ export interface operations {
           "application/json": {
             [key: string]: unknown;
           };
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  optimize_content_block_text_api_v1_documents_blocks__block_id__ai_optimize_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        block_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AITextOptimizeRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AITextOptimizeResponse"];
         };
       };
       /** @description 请求不符合业务规则 */
@@ -4584,7 +5961,9 @@ export interface operations {
   };
   download_export_api_v1_exports__job_id__download_get: {
     parameters: {
-      query?: never;
+      query?: {
+        preview?: boolean;
+      };
       header?: never;
       path: {
         job_id: string;
@@ -4600,6 +5979,118 @@ export interface operations {
         };
         content: {
           "application/json": unknown;
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  feature_flags_api_v1_features_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            [key: string]: boolean;
+          };
         };
       };
       /** @description 请求不符合业务规则 */
@@ -4813,6 +6304,7 @@ export interface operations {
     parameters: {
       query?: {
         stage?: string | null;
+        include_inactive?: boolean;
       };
       header?: never;
       path?: never;
@@ -4827,6 +6319,572 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["FieldDefinitionView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  create_field_definition_api_v1_field_definitions_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FieldDefinitionCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldDefinitionView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  restore_base_field_definitions_api_v1_field_definitions_restore_base_post: {
+    parameters: {
+      query: {
+        stage: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldDefinitionView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  patch_field_definition_api_v1_field_definitions__definition_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        definition_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FieldDefinitionPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldDefinitionView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  activate_field_definition_api_v1_field_definitions__definition_id__activate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        definition_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldDefinitionView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  deactivate_field_definition_api_v1_field_definitions__definition_id__deactivate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        definition_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldDefinitionView"];
         };
       };
       /** @description 请求不符合业务规则 */
@@ -5616,6 +7674,7 @@ export interface operations {
       query: {
         project_id: string;
         stage: string;
+        auto_generate_draft?: boolean;
       };
       header?: never;
       path?: never;
@@ -5840,6 +7899,118 @@ export interface operations {
       };
     };
   };
+  start_file_auto_draft_api_v1_files__file_id__auto_draft_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        file_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GenerationJobView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
   download_file_api_v1_files__file_id__download_get: {
     parameters: {
       query?: never;
@@ -5858,6 +8029,118 @@ export interface operations {
         };
         content: {
           "application/json": unknown;
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  extract_file_field_candidates_api_v1_files__file_id__field_candidates_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        file_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FieldCandidateExtractionView"];
         };
       };
       /** @description 请求不符合业务规则 */
@@ -7755,6 +10038,1488 @@ export interface operations {
       };
     };
   };
+  get_procurement_analysis_api_v1_procurement_analyses__run_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        run_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementAnalysisRunView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  retry_procurement_analysis_api_v1_procurement_analyses__run_id__retry_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        run_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementAnalysisRunView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  get_procurement_generation_batch_api_v1_procurement_generation_batches__batch_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        batch_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementGenerationBatchView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  retry_procurement_generation_batch_api_v1_procurement_generation_batches__batch_id__retry_failed_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        batch_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementGenerationBatchView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  resolve_procurement_issue_api_v1_procurement_issues__issue_id__resolve_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        issue_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementIssueResolveRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  get_procurement_plan_api_v1_procurement_plans__plan_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  confirm_procurement_plan_api_v1_procurement_plans__plan_id__confirm_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementPlanConfirmRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  ensure_procurement_plan_default_grouping_api_v1_procurement_plans__plan_id__ensure_default_grouping_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EnsureDefaultGroupingRequest"] | null;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  generate_procurement_plan_batch_api_v1_procurement_plans__plan_id__generate_batch_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementBatchGenerationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementGenerationBatchView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  update_procurement_plan_structure_api_v1_procurement_plans__plan_id__structure_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementPlanStructureUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  list_procurement_rule_sets_api_v1_procurement_rule_sets_get: {
+    parameters: {
+      query?: {
+        status?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementRuleSetView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  create_procurement_rule_set_api_v1_procurement_rule_sets_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementRuleSetCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementRuleSetView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  publish_procurement_rule_set_api_v1_procurement_rule_sets__rule_set_id__publish_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        rule_set_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementRuleSetPublishRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementRuleSetView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
   list_projects_api_v1_projects_get: {
     parameters: {
       query?: {
@@ -8326,6 +12091,119 @@ export interface operations {
       };
     };
   };
+  get_document_group_applicable_fields_api_v1_projects__project_id__document_groups__group_id__applicable_fields_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+        group_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicableFieldsResponse"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
   list_project_members_api_v1_projects__project_id__members_get: {
     parameters: {
       query?: never;
@@ -8554,6 +12432,346 @@ export interface operations {
       };
     };
   };
+  list_procurement_analyses_api_v1_projects__project_id__procurement_analyses_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementAnalysisRunView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  start_procurement_analysis_api_v1_projects__project_id__procurement_analyses_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProcurementAnalysisRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementAnalysisRunView"];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  list_procurement_plans_api_v1_projects__project_id__procurement_plans_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProcurementPlanView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
   list_stages_api_v1_projects__project_id__stages_get: {
     parameters: {
       query?: never;
@@ -8572,6 +12790,119 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["StageView"][];
+        };
+      };
+      /** @description 请求不符合业务规则 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 身份认证失败 */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 没有操作权限 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 资源不存在 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 数据版本冲突 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 上传内容过大 */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 不支持的媒体类型 */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求参数校验失败 */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 请求过于频繁 */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+      /** @description 服务端处理失败 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorEnvelope"];
+        };
+      };
+    };
+  };
+  list_stage_applicable_fields_api_v1_projects__project_id__stages__stage__applicable_fields_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+        stage: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectApplicableFieldsResponse"];
         };
       };
       /** @description 请求不符合业务规则 */
@@ -9581,6 +13912,7 @@ export interface operations {
         stage?: string | null;
         current_only?: boolean;
         generation_only?: boolean;
+        project_id?: string | null;
       };
       header?: never;
       path?: never;

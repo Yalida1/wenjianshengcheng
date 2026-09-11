@@ -1,0 +1,3480 @@
+[
+  {
+    "template_id": "4eaeffd7-38ec-4000-ab87-0d33889cbefe",
+    "name": "一般投资项目可行性研究报告参考模板",
+    "stage": "feasibility",
+    "source_kind": "platform_reference_template",
+    "source_kind_label": "平台参考模板",
+    "issuing_authority": null,
+    "document_number": null,
+    "publish_year": null,
+    "source_url": null,
+    "applicability": "平台通用参考结构，适用于不要求特定正式大纲的可研初稿。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/4eaeffd7-38ec-4000-ab87-0d33889cbefe/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "653c501cb332550f8796a12558c93072880339042af7d597a43edd71fb2ec3ff",
+    "actual_sha256": "653c501cb332550f8796a12558c93072880339042af7d597a43edd71fb2ec3ff",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "summary",
+        "title": "总论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "necessity",
+        "title": "建设背景和必要性",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "demand",
+        "title": "需求分析",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "solution",
+        "title": "建设方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "investment",
+        "title": "投资估算与资金筹措",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "risk",
+        "title": "效益和风险",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "conclusion",
+        "title": "结论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      },
+      {
+        "variable_key": "total_investment",
+        "field_key": "total_investment",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "89282dfe-ff0b-4f81-95dc-50ad3b83eaed",
+    "name": "企业投资项目可研报告适配模板（2023年大纲）",
+    "stage": "feasibility",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会",
+    "document_number": "发改投资规〔2023〕304号",
+    "publish_year": 2023,
+    "source_url": "https://www.ndrc.gov.cn/xxgk/zcfb/ghxwj/202304/t20230407_1353356.html",
+    "applicability": "平台依据官方参考大纲章节适配，可用于生成初稿；不是官方原文。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/89282dfe-ff0b-4f81-95dc-50ad3b83eaed/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "0923b0080d199b4a95c313354e0049b626cd71d1dde566179b9fde75e3aae5d6",
+    "actual_sha256": "0923b0080d199b4a95c313354e0049b626cd71d1dde566179b9fde75e3aae5d6",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "overview",
+        "title": "概述",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "overview_summary",
+        "title": "项目概况",
+        "parent_id": "a3f43895-0965-4492-be11-e1108a58da50",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "overview_basis",
+        "title": "编制依据",
+        "parent_id": "a3f43895-0965-4492-be11-e1108a58da50",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "overview_conclusion",
+        "title": "主要结论和建议",
+        "parent_id": "a3f43895-0965-4492-be11-e1108a58da50",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "background",
+        "title": "项目建设背景和必要性",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "background_policy",
+        "title": "政策与规划符合性",
+        "parent_id": "5ff0b428-710c-40f1-bfe3-c93589444261",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "background_need",
+        "title": "建设必要性",
+        "parent_id": "5ff0b428-710c-40f1-bfe3-c93589444261",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 8,
+        "key": "background_status",
+        "title": "现状与问题",
+        "parent_id": "5ff0b428-710c-40f1-bfe3-c93589444261",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 9,
+        "key": "market",
+        "title": "市场需求分析与产出方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 10,
+        "key": "market_analysis",
+        "title": "市场分析",
+        "parent_id": "fb4cb089-b125-48e4-8ca8-ad9e23a1c18f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 11,
+        "key": "market_output",
+        "title": "产出方案",
+        "parent_id": "fb4cb089-b125-48e4-8ca8-ad9e23a1c18f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 12,
+        "key": "market_scale",
+        "title": "建设规模与内容",
+        "parent_id": "fb4cb089-b125-48e4-8ca8-ad9e23a1c18f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 13,
+        "key": "site",
+        "title": "项目选址与要素保障",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 14,
+        "key": "site_location",
+        "title": "选址方案",
+        "parent_id": "3711ca46-fd87-4c6e-aa3f-a554a24ad4d2",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 15,
+        "key": "site_land",
+        "title": "用地与要素保障",
+        "parent_id": "3711ca46-fd87-4c6e-aa3f-a554a24ad4d2",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 16,
+        "key": "site_conditions",
+        "title": "建设条件",
+        "parent_id": "3711ca46-fd87-4c6e-aa3f-a554a24ad4d2",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 17,
+        "key": "construction",
+        "title": "项目建设方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 18,
+        "key": "construction_tech",
+        "title": "技术方案",
+        "parent_id": "48a7bf74-f9c0-4f42-927e-8596be697212",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 19,
+        "key": "construction_plan",
+        "title": "工程方案",
+        "parent_id": "48a7bf74-f9c0-4f42-927e-8596be697212",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 20,
+        "key": "construction_schedule",
+        "title": "建设工期与进度",
+        "parent_id": "48a7bf74-f9c0-4f42-927e-8596be697212",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 21,
+        "key": "operation",
+        "title": "项目运营方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 22,
+        "key": "operation_model",
+        "title": "运营模式",
+        "parent_id": "26a5ab6a-9014-4f3e-894a-d2d623960685",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 23,
+        "key": "operation_org",
+        "title": "组织与人员",
+        "parent_id": "26a5ab6a-9014-4f3e-894a-d2d623960685",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 24,
+        "key": "operation_service",
+        "title": "服务与保障",
+        "parent_id": "26a5ab6a-9014-4f3e-894a-d2d623960685",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 25,
+        "key": "financing",
+        "title": "项目投融资与财务方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 26,
+        "key": "financing_investment",
+        "title": "投资估算",
+        "parent_id": "c85dbd7f-41b1-476b-8550-29518e3f0b70",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 27,
+        "key": "financing_funding",
+        "title": "资金筹措",
+        "parent_id": "c85dbd7f-41b1-476b-8550-29518e3f0b70",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 28,
+        "key": "financing_financial",
+        "title": "财务评价",
+        "parent_id": "c85dbd7f-41b1-476b-8550-29518e3f0b70",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 29,
+        "key": "impact",
+        "title": "项目影响效果分析",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 30,
+        "key": "impact_economic",
+        "title": "经济影响",
+        "parent_id": "8a17cd76-15df-4f80-8169-ae9506fd3463",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 31,
+        "key": "impact_social",
+        "title": "社会影响",
+        "parent_id": "8a17cd76-15df-4f80-8169-ae9506fd3463",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 32,
+        "key": "impact_environment",
+        "title": "环境影响",
+        "parent_id": "8a17cd76-15df-4f80-8169-ae9506fd3463",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 33,
+        "key": "risk",
+        "title": "项目风险管控方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 34,
+        "key": "risk_identification",
+        "title": "主要风险识别",
+        "parent_id": "efb25943-640d-448e-be0e-847fd8b959c8",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 35,
+        "key": "risk_mitigation",
+        "title": "风险防控措施",
+        "parent_id": "efb25943-640d-448e-be0e-847fd8b959c8",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 36,
+        "key": "conclusion",
+        "title": "研究结论及建议",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 37,
+        "key": "conclusion_summary",
+        "title": "研究结论",
+        "parent_id": "ccdea7c9-189d-4525-8d77-fbaef24e773d",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 38,
+        "key": "conclusion_advice",
+        "title": "相关建议",
+        "parent_id": "ccdea7c9-189d-4525-8d77-fbaef24e773d",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      },
+      {
+        "variable_key": "total_investment",
+        "field_key": "total_investment",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "b23554e7-fc84-492f-adab-9c7d274b7070",
+    "name": "企业投资项目可行性研究报告编写参考大纲（2023年版）",
+    "stage": "feasibility",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会",
+    "document_number": "发改投资规〔2023〕304号",
+    "publish_year": 2023,
+    "source_url": "https://www.ndrc.gov.cn/xxgk/zcfb/ghxwj/202304/t20230407_1353356.html",
+    "applicability": "企业投资项目可行性研究报告编写参考；具体项目按行业和审批要求调整。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "summary",
+        "title": "总论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "necessity",
+        "title": "建设背景和必要性",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "demand",
+        "title": "需求分析",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "solution",
+        "title": "建设方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "investment",
+        "title": "投资估算与资金筹措",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "risk",
+        "title": "效益和风险",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "conclusion",
+        "title": "结论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      },
+      {
+        "variable_key": "total_investment",
+        "field_key": "total_investment",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "f6b4de1d-931e-495a-90a3-127444e8df45",
+    "name": "勘察招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "平台依据官方标准文件目录结构适配，可用于生成初稿；法定引用内容须回到官方原文核对。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/f6b4de1d-931e-495a-90a3-127444e8df45/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "b7c112af4d35a8e8b7779b84049f01020cab44b87457ef25d59c42d377399bd5",
+    "actual_sha256": "b7c112af4d35a8e8b7779b84049f01020cab44b87457ef25d59c42d377399bd5",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告或投标邀请书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款及格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "requirements",
+        "title": "供货或服务要求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "bid_format",
+        "title": "投标文件格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "24d1b54c-4d79-4ac7-8ba9-f612cddd5745",
+    "name": "建设工程施工合同填报模板（GF-2017-0201适配）",
+    "stage": "contract",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "住房城乡建设部、原国家工商行政管理总局",
+    "document_number": "GF-2017-0201",
+    "publish_year": 2017,
+    "source_url": "https://htsfwb.samr.gov.cn/View?id=082423f0-e9cb-41a2-b88c-bdc70b5619d8",
+    "applicability": "平台依据示范文本结构制作的填报版，可用于生成初稿；不是主管部门发布的原始文件。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/24d1b54c-4d79-4ac7-8ba9-f612cddd5745/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "bb790676f90b691a7855bc0f912cc782c699836eec54ea1385b27839c5b36ae6",
+    "actual_sha256": "bb790676f90b691a7855bc0f912cc782c699836eec54ea1385b27839c5b36ae6",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "agreement",
+        "title": "合同协议书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "general_terms",
+        "title": "通用合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "special_terms",
+        "title": "专用合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "attachments",
+        "title": "合同附件",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "acceptance",
+        "field_key": "acceptance",
+        "required": true
+      },
+      {
+        "variable_key": "breach",
+        "field_key": "breach",
+        "required": true
+      },
+      {
+        "variable_key": "contract_duration",
+        "field_key": "contract_duration",
+        "required": true
+      },
+      {
+        "variable_key": "contract_scope",
+        "field_key": "contract_scope",
+        "required": true
+      },
+      {
+        "variable_key": "contract_subject",
+        "field_key": "contract_subject",
+        "required": true
+      },
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": true
+      },
+      {
+        "variable_key": "effective_conditions",
+        "field_key": "effective_conditions",
+        "required": true
+      },
+      {
+        "variable_key": "final_contract_amount",
+        "field_key": "final_contract_amount",
+        "required": true
+      },
+      {
+        "variable_key": "party_a",
+        "field_key": "party_a",
+        "required": true
+      },
+      {
+        "variable_key": "party_b",
+        "field_key": "party_b",
+        "required": true
+      },
+      {
+        "variable_key": "payment_plan",
+        "field_key": "payment_plan",
+        "required": true
+      },
+      {
+        "variable_key": "tax_inclusion",
+        "field_key": "tax_inclusion",
+        "required": true
+      },
+      {
+        "variable_key": "tax_rate",
+        "field_key": "tax_rate",
+        "required": true
+      },
+      {
+        "variable_key": "warranty",
+        "field_key": "warranty",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "8d8d9f83-cd7b-42c2-8bc3-68fd8cc8e8c3",
+    "name": "建设工程施工合同（示范文本）GF-2017-0201",
+    "stage": "contract",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "住房城乡建设部、原国家工商行政管理总局",
+    "document_number": "GF-2017-0201",
+    "publish_year": 2017,
+    "source_url": "https://htsfwb.samr.gov.cn/View?id=082423f0-e9cb-41a2-b88c-bdc70b5619d8",
+    "applicability": "建设工程施工合同订立参考；使用时应结合工程实际及最新监管要求。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "parties",
+        "title": "合同主体",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "subject",
+        "title": "合同标的和范围",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "price",
+        "title": "价款和税费",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "delivery",
+        "title": "履行和交付",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "acceptance",
+        "title": "验收和质保",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "payment",
+        "title": "付款安排",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "liability",
+        "title": "违约和争议解决",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 8,
+        "key": "effective",
+        "title": "生效条件",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "acceptance",
+        "field_key": "acceptance",
+        "required": true
+      },
+      {
+        "variable_key": "breach",
+        "field_key": "breach",
+        "required": true
+      },
+      {
+        "variable_key": "contract_duration",
+        "field_key": "contract_duration",
+        "required": true
+      },
+      {
+        "variable_key": "contract_scope",
+        "field_key": "contract_scope",
+        "required": true
+      },
+      {
+        "variable_key": "contract_subject",
+        "field_key": "contract_subject",
+        "required": true
+      },
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": true
+      },
+      {
+        "variable_key": "effective_conditions",
+        "field_key": "effective_conditions",
+        "required": true
+      },
+      {
+        "variable_key": "final_contract_amount",
+        "field_key": "final_contract_amount",
+        "required": true
+      },
+      {
+        "variable_key": "party_a",
+        "field_key": "party_a",
+        "required": true
+      },
+      {
+        "variable_key": "party_b",
+        "field_key": "party_b",
+        "required": true
+      },
+      {
+        "variable_key": "payment_plan",
+        "field_key": "payment_plan",
+        "required": true
+      },
+      {
+        "variable_key": "tax_inclusion",
+        "field_key": "tax_inclusion",
+        "required": true
+      },
+      {
+        "variable_key": "tax_rate",
+        "field_key": "tax_rate",
+        "required": true
+      },
+      {
+        "variable_key": "warranty",
+        "field_key": "warranty",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+    "name": "政府投资项目可研报告适配模板（2023年大纲）",
+    "stage": "feasibility",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会",
+    "document_number": "发改投资规〔2023〕304号",
+    "publish_year": 2023,
+    "source_url": "https://www.ndrc.gov.cn/xxgk/zcfb/ghxwj/202304/t20230407_1353356.html",
+    "applicability": "平台依据官方通用大纲章节适配，可用于生成初稿；不是官方原文。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/58bae4a5-4c21-47f9-b227-417515b1e024/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "cd7af1428bb7485b83ff613213272de9fa2d6a7f93cadf148ed26f181e0c45b6",
+    "actual_sha256": "cd7af1428bb7485b83ff613213272de9fa2d6a7f93cadf148ed26f181e0c45b6",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "overview",
+        "title": "概述",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "overview_summary",
+        "title": "项目概况",
+        "parent_id": "41bdfb45-a6ba-484e-995f-fd8c1813e976",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "overview_basis",
+        "title": "编制依据",
+        "parent_id": "41bdfb45-a6ba-484e-995f-fd8c1813e976",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "overview_conclusion",
+        "title": "主要结论和建议",
+        "parent_id": "41bdfb45-a6ba-484e-995f-fd8c1813e976",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "background",
+        "title": "项目建设背景和必要性",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "background_policy",
+        "title": "政策与规划符合性",
+        "parent_id": "f13cb92d-5172-4892-b960-2128d3c264a0",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "background_need",
+        "title": "建设必要性",
+        "parent_id": "f13cb92d-5172-4892-b960-2128d3c264a0",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 8,
+        "key": "background_status",
+        "title": "现状与问题",
+        "parent_id": "f13cb92d-5172-4892-b960-2128d3c264a0",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 9,
+        "key": "demand",
+        "title": "项目需求分析与产出方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 10,
+        "key": "demand_analysis",
+        "title": "需求分析",
+        "parent_id": "3bbd0040-312f-4cf9-927b-6c229112a482",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 11,
+        "key": "demand_output",
+        "title": "产出方案",
+        "parent_id": "3bbd0040-312f-4cf9-927b-6c229112a482",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 12,
+        "key": "demand_scale",
+        "title": "建设规模与内容",
+        "parent_id": "3bbd0040-312f-4cf9-927b-6c229112a482",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 13,
+        "key": "site",
+        "title": "项目选址与要素保障",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 14,
+        "key": "site_location",
+        "title": "选址方案",
+        "parent_id": "d15008f6-3ccd-498d-a7df-fb6f6fdda658",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 15,
+        "key": "site_land",
+        "title": "用地与要素保障",
+        "parent_id": "d15008f6-3ccd-498d-a7df-fb6f6fdda658",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 16,
+        "key": "site_conditions",
+        "title": "建设条件",
+        "parent_id": "d15008f6-3ccd-498d-a7df-fb6f6fdda658",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 17,
+        "key": "construction",
+        "title": "项目建设方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 18,
+        "key": "construction_tech",
+        "title": "技术方案",
+        "parent_id": "0202b25f-60af-49f6-a247-671d29d4c023",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 19,
+        "key": "construction_plan",
+        "title": "工程方案",
+        "parent_id": "0202b25f-60af-49f6-a247-671d29d4c023",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 20,
+        "key": "construction_schedule",
+        "title": "建设工期与进度",
+        "parent_id": "0202b25f-60af-49f6-a247-671d29d4c023",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 21,
+        "key": "operation",
+        "title": "项目运营方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 22,
+        "key": "operation_model",
+        "title": "运营模式",
+        "parent_id": "e2390e08-2839-446a-a5b9-3d71aac0b72d",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 23,
+        "key": "operation_org",
+        "title": "组织与人员",
+        "parent_id": "e2390e08-2839-446a-a5b9-3d71aac0b72d",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 24,
+        "key": "operation_service",
+        "title": "服务与保障",
+        "parent_id": "e2390e08-2839-446a-a5b9-3d71aac0b72d",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 25,
+        "key": "financing",
+        "title": "项目投融资与财务方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 26,
+        "key": "financing_investment",
+        "title": "投资估算",
+        "parent_id": "ff4d70c2-66d8-49e0-9c19-caf09ec48d5f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 27,
+        "key": "financing_funding",
+        "title": "资金筹措",
+        "parent_id": "ff4d70c2-66d8-49e0-9c19-caf09ec48d5f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 28,
+        "key": "financing_financial",
+        "title": "财务评价",
+        "parent_id": "ff4d70c2-66d8-49e0-9c19-caf09ec48d5f",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 29,
+        "key": "impact",
+        "title": "项目影响效果分析",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 30,
+        "key": "impact_economic",
+        "title": "经济影响",
+        "parent_id": "d64ea4f5-5fbd-45f9-b9d7-87b9f9d4c211",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 31,
+        "key": "impact_social",
+        "title": "社会影响",
+        "parent_id": "d64ea4f5-5fbd-45f9-b9d7-87b9f9d4c211",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 32,
+        "key": "impact_environment",
+        "title": "环境影响",
+        "parent_id": "d64ea4f5-5fbd-45f9-b9d7-87b9f9d4c211",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 33,
+        "key": "risk",
+        "title": "项目风险管控方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 34,
+        "key": "risk_identification",
+        "title": "主要风险识别",
+        "parent_id": "4e9fb769-a282-49cc-b655-390330557dba",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 35,
+        "key": "risk_mitigation",
+        "title": "风险防控措施",
+        "parent_id": "4e9fb769-a282-49cc-b655-390330557dba",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 36,
+        "key": "conclusion",
+        "title": "研究结论及建议",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 37,
+        "key": "conclusion_summary",
+        "title": "研究结论",
+        "parent_id": "1e67f1f6-5499-4422-a26a-318156053a3c",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 38,
+        "key": "conclusion_advice",
+        "title": "相关建议",
+        "parent_id": "1e67f1f6-5499-4422-a26a-318156053a3c",
+        "level": 2,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      },
+      {
+        "variable_key": "total_investment",
+        "field_key": "total_investment",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "37855d4f-447a-4bdd-9429-b4ef86b0cd6b",
+    "name": "政府投资项目可行性研究报告编写通用大纲（2023年版）",
+    "stage": "feasibility",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会",
+    "document_number": "发改投资规〔2023〕304号",
+    "publish_year": 2023,
+    "source_url": "https://www.ndrc.gov.cn/xxgk/zcfb/ghxwj/202304/t20230407_1353356.html",
+    "applicability": "政府投资项目可行性研究报告编写与审查参考；以官方现行文本和主管部门要求为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "summary",
+        "title": "总论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "necessity",
+        "title": "建设背景和必要性",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "demand",
+        "title": "需求分析",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "solution",
+        "title": "建设方案",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "investment",
+        "title": "投资估算与资金筹措",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "risk",
+        "title": "效益和风险",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "conclusion",
+        "title": "结论",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      },
+      {
+        "variable_key": "total_investment",
+        "field_key": "total_investment",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+    "name": "政府投资项目建议书通用参考模板",
+    "stage": "requirement",
+    "source_kind": "platform_reference_template",
+    "source_kind_label": "平台参考模板",
+    "issuing_authority": null,
+    "document_number": null,
+    "publish_year": null,
+    "source_url": "https://www.ndrc.gov.cn/hdjl/lyxd/202603/t20260320_1404253.html",
+    "applicability": "平台通用参考结构，用于项目建议书初稿；不是国家统一制式文本。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/95f16683-0707-4c7a-ab90-97652a3317fe/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "a0296c68ff67f645b1f8c53b66dcf4db9aa5ea119808b5cfef0ba32208afe0ab",
+    "actual_sha256": "a0296c68ff67f645b1f8c53b66dcf4db9aa5ea119808b5cfef0ba32208afe0ab",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "overview",
+        "title": "项目概况",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "background",
+        "title": "建设背景",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "objectives",
+        "title": "建设目标",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "scope",
+        "title": "建设范围",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "schedule",
+        "title": "实施计划",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "construction_scope",
+        "field_key": "construction_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_location",
+        "field_key": "project_location",
+        "required": false
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      },
+      {
+        "variable_key": "project_owner",
+        "field_key": "project_owner",
+        "required": true
+      },
+      {
+        "variable_key": "project_period",
+        "field_key": "project_period",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+    "name": "政府采购货物买卖合同填报模板（2024年试行文本适配）",
+    "stage": "contract",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "财政部办公厅",
+    "document_number": "财办库〔2024〕84号",
+    "publish_year": 2024,
+    "source_url": "https://www.mof.gov.cn/jrttts/202404/t20240429_3933786.htm",
+    "applicability": "平台依据试行文本结构制作的填报版，可用于生成初稿；不是财政部发布的原始文件。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "85b3a6da6bf4327f064406fa5db9e4237a459c603b5b80a2004edec43b12b8c7",
+    "actual_sha256": "85b3a6da6bf4327f064406fa5db9e4237a459c603b5b80a2004edec43b12b8c7",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "agreement",
+        "title": "合同协议书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "general_terms",
+        "title": "通用合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "special_terms",
+        "title": "专用合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "attachments",
+        "title": "合同附件",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "acceptance",
+        "field_key": "acceptance",
+        "required": true
+      },
+      {
+        "variable_key": "breach",
+        "field_key": "breach",
+        "required": true
+      },
+      {
+        "variable_key": "contract_duration",
+        "field_key": "contract_duration",
+        "required": true
+      },
+      {
+        "variable_key": "contract_scope",
+        "field_key": "contract_scope",
+        "required": true
+      },
+      {
+        "variable_key": "contract_subject",
+        "field_key": "contract_subject",
+        "required": true
+      },
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": true
+      },
+      {
+        "variable_key": "effective_conditions",
+        "field_key": "effective_conditions",
+        "required": true
+      },
+      {
+        "variable_key": "final_contract_amount",
+        "field_key": "final_contract_amount",
+        "required": true
+      },
+      {
+        "variable_key": "party_a",
+        "field_key": "party_a",
+        "required": true
+      },
+      {
+        "variable_key": "party_b",
+        "field_key": "party_b",
+        "required": true
+      },
+      {
+        "variable_key": "payment_plan",
+        "field_key": "payment_plan",
+        "required": true
+      },
+      {
+        "variable_key": "tax_inclusion",
+        "field_key": "tax_inclusion",
+        "required": true
+      },
+      {
+        "variable_key": "tax_rate",
+        "field_key": "tax_rate",
+        "required": true
+      },
+      {
+        "variable_key": "warranty",
+        "field_key": "warranty",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "1dc29183-c5f4-4cca-a3b8-a94e2fe02ac4",
+    "name": "政府采购货物买卖合同（试行）",
+    "stage": "contract",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "财政部办公厅",
+    "document_number": "财办库〔2024〕84号",
+    "publish_year": 2024,
+    "source_url": "https://www.mof.gov.cn/jrttts/202404/t20240429_3933786.htm",
+    "applicability": "政府采购货物买卖合同签订参考；项目专用条款须结合采购结果和真实履约条件填写。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "parties",
+        "title": "合同主体",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "subject",
+        "title": "合同标的和范围",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "price",
+        "title": "价款和税费",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "delivery",
+        "title": "履行和交付",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "acceptance",
+        "title": "验收和质保",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "payment",
+        "title": "付款安排",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "liability",
+        "title": "违约和争议解决",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 8,
+        "key": "effective",
+        "title": "生效条件",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "acceptance",
+        "field_key": "acceptance",
+        "required": true
+      },
+      {
+        "variable_key": "breach",
+        "field_key": "breach",
+        "required": true
+      },
+      {
+        "variable_key": "contract_duration",
+        "field_key": "contract_duration",
+        "required": true
+      },
+      {
+        "variable_key": "contract_scope",
+        "field_key": "contract_scope",
+        "required": true
+      },
+      {
+        "variable_key": "contract_subject",
+        "field_key": "contract_subject",
+        "required": true
+      },
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": true
+      },
+      {
+        "variable_key": "effective_conditions",
+        "field_key": "effective_conditions",
+        "required": true
+      },
+      {
+        "variable_key": "final_contract_amount",
+        "field_key": "final_contract_amount",
+        "required": true
+      },
+      {
+        "variable_key": "party_a",
+        "field_key": "party_a",
+        "required": true
+      },
+      {
+        "variable_key": "party_b",
+        "field_key": "party_b",
+        "required": true
+      },
+      {
+        "variable_key": "payment_plan",
+        "field_key": "payment_plan",
+        "required": true
+      },
+      {
+        "variable_key": "tax_inclusion",
+        "field_key": "tax_inclusion",
+        "required": true
+      },
+      {
+        "variable_key": "tax_rate",
+        "field_key": "tax_rate",
+        "required": true
+      },
+      {
+        "variable_key": "warranty",
+        "field_key": "warranty",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "22c9167a-5ffb-435c-88ca-8cd5320b744b",
+    "name": "材料采购招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "平台依据官方标准文件目录结构适配，可用于生成初稿；法定引用内容须回到官方原文核对。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/22c9167a-5ffb-435c-88ca-8cd5320b744b/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "d4b1382be55cb39d4e6cd445d979bfba326760123c7e3d7ac78cc55e0955c22c",
+    "actual_sha256": "d4b1382be55cb39d4e6cd445d979bfba326760123c7e3d7ac78cc55e0955c22c",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告或投标邀请书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款及格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "requirements",
+        "title": "供货或服务要求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "bid_format",
+        "title": "投标文件格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "76842058-1924-43f9-9cfa-658f6ebdfd59",
+    "name": "标准勘察招标文件（2017年版）",
+    "stage": "tender",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "依法必须招标项目的勘察招标文件编制；依法必须不加修改引用的内容须以官方原文为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "ec64451e-f0eb-402f-9488-359cc6148c49",
+    "name": "标准材料采购招标文件（2017年版）",
+    "stage": "tender",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "依法必须招标项目的材料采购招标文件编制；依法必须不加修改引用的内容须以官方原文为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "8422ece8-5b61-41ad-906b-3215c7ddcd49",
+    "name": "标准监理招标文件（2017年版）",
+    "stage": "tender",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "依法必须招标项目的监理招标文件编制；依法必须不加修改引用的内容须以官方原文为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "8e5fba22-11ec-492e-a59e-3fcb664c35df",
+    "name": "标准设备采购招标文件（2017年版）",
+    "stage": "tender",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "依法必须招标项目的设备采购招标文件编制；依法必须不加修改引用的内容须以官方原文为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "f51572b8-b468-4de4-9603-ffad17426eaf",
+    "name": "标准设计招标文件（2017年版）",
+    "stage": "tender",
+    "source_kind": "national_official_text",
+    "source_kind_label": "国家正式文本",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "依法必须招标项目的设计招标文件编制；依法必须不加修改引用的内容须以官方原文为准。",
+    "is_builtin": true,
+    "generation_enabled": false,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": null,
+    "stored_object_exists": false,
+    "sha256": null,
+    "actual_sha256": null,
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": false,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "bd1acc23-a8e9-4bc5-893a-a27e57a66e90",
+    "name": "监理招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "平台依据官方标准文件目录结构适配，可用于生成初稿；法定引用内容须回到官方原文核对。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/bd1acc23-a8e9-4bc5-893a-a27e57a66e90/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "826719a64de9d14a2077fa865ddd5225729e98c976bf5249e4b6da17eaa6d404",
+    "actual_sha256": "826719a64de9d14a2077fa865ddd5225729e98c976bf5249e4b6da17eaa6d404",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告或投标邀请书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款及格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "requirements",
+        "title": "供货或服务要求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "bid_format",
+        "title": "投标文件格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+    "name": "设备采购招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "平台依据官方标准文件目录结构适配，可用于生成初稿；法定引用内容须回到官方原文核对。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/cb274947-91bc-48dd-8441-c17fbc72dfac/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "aa62766838521c98a361564a29160c2419a05c5f859073c4246d6dcbd6987f33",
+    "actual_sha256": "aa62766838521c98a361564a29160c2419a05c5f859073c4246d6dcbd6987f33",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告或投标邀请书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款及格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "requirements",
+        "title": "供货或服务要求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "bid_format",
+        "title": "投标文件格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "ffd4325f-5acb-4677-a3eb-28655d9d7b05",
+    "name": "设计招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "source_kind": "adapted_from_official_outline",
+    "source_kind_label": "依据正式大纲适配",
+    "issuing_authority": "国家发展和改革委员会等九部委",
+    "document_number": "发改法规〔2017〕1606号",
+    "publish_year": 2017,
+    "source_url": "https://www.ndrc.gov.cn/fzggw/jgsj/fgs/sjdt/201709/t20170912_1107057_ext.html",
+    "applicability": "平台依据官方标准文件目录结构适配，可用于生成初稿；法定引用内容须回到官方原文核对。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/ffd4325f-5acb-4677-a3eb-28655d9d7b05/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "9aff1a396c3d65b2371e04b1be3a0342af217e0fe01ad58fe6008e7b9734e42e",
+    "actual_sha256": "9aff1a396c3d65b2371e04b1be3a0342af217e0fe01ad58fe6008e7b9734e42e",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告或投标邀请书",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款及格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "requirements",
+        "title": "供货或服务要求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "bid_format",
+        "title": "投标文件格式",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "9545d84c-2eb1-4a19-b118-9b0137e1b4c4",
+    "name": "通用采购合同参考模板",
+    "stage": "contract",
+    "source_kind": "platform_reference_template",
+    "source_kind_label": "平台参考模板",
+    "issuing_authority": null,
+    "document_number": null,
+    "publish_year": null,
+    "source_url": null,
+    "applicability": "平台通用参考结构，适用于非特定合同示范文本场景的合同初稿。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/9545d84c-2eb1-4a19-b118-9b0137e1b4c4/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "b4f5ed36c7c5cf7a5282f1d5990ffde28b6f279ba018ca82a37bedcbe754b05f",
+    "actual_sha256": "b4f5ed36c7c5cf7a5282f1d5990ffde28b6f279ba018ca82a37bedcbe754b05f",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "parties",
+        "title": "合同主体",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "subject",
+        "title": "合同标的和范围",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "price",
+        "title": "价款和税费",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "delivery",
+        "title": "履行和交付",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "acceptance",
+        "title": "验收和质保",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 6,
+        "key": "payment",
+        "title": "付款安排",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 7,
+        "key": "liability",
+        "title": "违约和争议解决",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 8,
+        "key": "effective",
+        "title": "生效条件",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "acceptance",
+        "field_key": "acceptance",
+        "required": true
+      },
+      {
+        "variable_key": "breach",
+        "field_key": "breach",
+        "required": true
+      },
+      {
+        "variable_key": "contract_duration",
+        "field_key": "contract_duration",
+        "required": true
+      },
+      {
+        "variable_key": "contract_scope",
+        "field_key": "contract_scope",
+        "required": true
+      },
+      {
+        "variable_key": "contract_subject",
+        "field_key": "contract_subject",
+        "required": true
+      },
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": true
+      },
+      {
+        "variable_key": "effective_conditions",
+        "field_key": "effective_conditions",
+        "required": true
+      },
+      {
+        "variable_key": "final_contract_amount",
+        "field_key": "final_contract_amount",
+        "required": true
+      },
+      {
+        "variable_key": "party_a",
+        "field_key": "party_a",
+        "required": true
+      },
+      {
+        "variable_key": "party_b",
+        "field_key": "party_b",
+        "required": true
+      },
+      {
+        "variable_key": "payment_plan",
+        "field_key": "payment_plan",
+        "required": true
+      },
+      {
+        "variable_key": "tax_inclusion",
+        "field_key": "tax_inclusion",
+        "required": true
+      },
+      {
+        "variable_key": "tax_rate",
+        "field_key": "tax_rate",
+        "required": true
+      },
+      {
+        "variable_key": "warranty",
+        "field_key": "warranty",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  },
+  {
+    "template_id": "b781c7b0-978e-45f8-80a2-b0da91e66a32",
+    "name": "通用采购招标文件参考模板",
+    "stage": "tender",
+    "source_kind": "platform_reference_template",
+    "source_kind_label": "平台参考模板",
+    "issuing_authority": null,
+    "document_number": null,
+    "publish_year": null,
+    "source_url": null,
+    "applicability": "平台通用参考结构，适用于非特定行业采购招标文件初稿。",
+    "is_builtin": true,
+    "generation_enabled": true,
+    "status": "published",
+    "version": 1,
+    "version_status": "published",
+    "effective_date": null,
+    "expiry_date": null,
+    "storage_key": "b5a00052-5459-46c0-894e-2b9fa49818c2/templates/b781c7b0-978e-45f8-80a2-b0da91e66a32/v1/template.docx",
+    "stored_object_exists": true,
+    "sha256": "18bbc9a17c6ed8bd9a703551cd150e2ff7777e9b210af8560a59b0a5e543d84d",
+    "actual_sha256": "18bbc9a17c6ed8bd9a703551cd150e2ff7777e9b210af8560a59b0a5e543d84d",
+    "sha256_matches": true,
+    "format_profile": {
+      "standard": "demo_enterprise_report_cn",
+      "page_size": "A4",
+      "cjk_font": "Noto Sans CJK SC or customer-authorized font",
+      "strict_compliance": false
+    },
+    "sections": [
+      {
+        "sequence": 1,
+        "key": "announcement",
+        "title": "招标公告",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 2,
+        "key": "instructions",
+        "title": "投标人须知",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 3,
+        "key": "requirements",
+        "title": "采购需求",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 4,
+        "key": "contract_terms",
+        "title": "合同条款",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      },
+      {
+        "sequence": 5,
+        "key": "evaluation",
+        "title": "评标办法",
+        "parent_id": null,
+        "level": 1,
+        "section_type": "editable",
+        "required": true
+      }
+    ],
+    "variables": [
+      {
+        "variable_key": "delivery_location",
+        "field_key": "delivery_location",
+        "required": false
+      },
+      {
+        "variable_key": "delivery_period",
+        "field_key": "delivery_period",
+        "required": false
+      },
+      {
+        "variable_key": "maximum_price",
+        "field_key": "maximum_price",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_budget",
+        "field_key": "procurement_budget",
+        "required": true
+      },
+      {
+        "variable_key": "procurement_scope",
+        "field_key": "procurement_scope",
+        "required": true
+      },
+      {
+        "variable_key": "project_name",
+        "field_key": "project_name",
+        "required": true
+      }
+    ],
+    "fixed_clause_count": 0,
+    "can_use_for_new_task": true,
+    "inventory_sources": [
+      "api",
+      "database",
+      "object_storage"
+    ]
+  }
+]

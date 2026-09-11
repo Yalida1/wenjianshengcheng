@@ -12,9 +12,10 @@ import boto3
 from ..config import Settings, get_settings
 from ..errors import APIError
 
-ALLOWED_EXTENSIONS = {".docx", ".pdf", ".xlsx", ".png", ".jpg", ".jpeg"}
+ALLOWED_EXTENSIONS = {".docx", ".doc", ".pdf", ".xlsx", ".png", ".jpg", ".jpeg"}
 EXPECTED_MIME = {
     ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".doc": "application/msword",
     ".pdf": "application/pdf",
     ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     ".png": "image/png",
@@ -51,6 +52,9 @@ def detect_extension(content: bytes) -> str | None:
         return ".jpg"
     if content.startswith(b"PK\x03\x04"):
         return _zip_kind(content)
+    # Legacy OLE Compound Document (.doc)
+    if content.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return ".doc"
     return None
 
 
@@ -58,7 +62,7 @@ def validate_upload(filename: str, content_type: str | None, content: bytes) -> 
     settings = get_settings()
     extension = Path(filename).suffix.lower()
     if extension not in ALLOWED_EXTENSIONS:
-        raise APIError(415, "unsupported_file_type", "仅支持 DOCX、PDF、XLSX、PNG、JPG、JPEG")
+        raise APIError(415, "unsupported_file_type", "仅支持 DOC、DOCX、PDF、XLSX、PNG、JPG、JPEG")
     if not content:
         raise APIError(422, "empty_file", "上传文件为空")
     if len(content) > settings.max_upload_bytes:
@@ -68,7 +72,12 @@ def validate_upload(filename: str, content_type: str | None, content: bytes) -> 
     if detected != normalized:
         raise APIError(415, "file_signature_mismatch", "文件内容与扩展名不一致")
     expected_mime = EXPECTED_MIME[extension]
-    if content_type and content_type not in {expected_mime, "application/octet-stream"}:
+    if content_type and content_type not in {
+        expected_mime,
+        "application/octet-stream",
+        "application/msword",
+        "application/vnd.ms-word",
+    }:
         raise APIError(415, "mime_mismatch", "文件 MIME 类型与扩展名不一致")
     return extension, expected_mime
 

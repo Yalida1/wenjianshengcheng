@@ -1,0 +1,208 @@
+[
+  {
+    "template_id": "4eaeffd7-38ec-4000-ab87-0d33889cbefe",
+    "name": "一般投资项目可行性研究报告参考模板",
+    "stage": "feasibility",
+    "status": "passed",
+    "generation_job_id": "7b0b761e-a5ef-4d05-9b0e-ac8582b0b043",
+    "step_count": 7,
+    "event_count": 3,
+    "document_version_id": "0ccf8eee-ecee-4547-804b-07b2ce3d9e0d",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/一般投资项目可行性研究报告参考模板.docx"
+  },
+  {
+    "template_id": "89282dfe-ff0b-4f81-95dc-50ad3b83eaed",
+    "name": "企业投资项目可研报告适配模板（2023年大纲）",
+    "stage": "feasibility",
+    "status": "passed",
+    "generation_job_id": "0edfcde3-6c6a-4477-8181-06233179d237",
+    "step_count": 38,
+    "event_count": 3,
+    "document_version_id": "0623db87-007c-4511-a198-7d1d25795f2a",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/企业投资项目可研报告适配模板_2023年大纲.docx"
+  },
+  {
+    "template_id": "b23554e7-fc84-492f-adab-9c7d274b7070",
+    "name": "企业投资项目可行性研究报告编写参考大纲（2023年版）",
+    "stage": "feasibility",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "f6b4de1d-931e-495a-90a3-127444e8df45",
+    "name": "勘察招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "2ee53218-bd85-4ee7-ad9b-1da565df8198",
+    "step_count": 6,
+    "event_count": 3,
+    "document_version_id": "69828e87-f617-4ddd-b0d6-d554f9fada63",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/勘察招标文件适配模板_2017年版.docx"
+  },
+  {
+    "template_id": "24d1b54c-4d79-4ac7-8ba9-f612cddd5745",
+    "name": "建设工程施工合同填报模板（GF-2017-0201适配）",
+    "stage": "contract",
+    "status": "passed",
+    "generation_job_id": "27bd143b-da8d-40a8-ae33-02cbd23256ba",
+    "step_count": 4,
+    "event_count": 3,
+    "document_version_id": "0083abf9-ba51-45c3-950d-bb2f77477f95",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/contract/建设工程施工合同填报模板_GF-2017-0201适配.docx"
+  },
+  {
+    "template_id": "8d8d9f83-cd7b-42c2-8bc3-68fd8cc8e8c3",
+    "name": "建设工程施工合同（示范文本）GF-2017-0201",
+    "stage": "contract",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+    "name": "政府投资项目可研报告适配模板（2023年大纲）",
+    "stage": "feasibility",
+    "status": "passed",
+    "generation_job_id": "cab993be-6a4b-4e76-852e-3a0012c15e9f",
+    "step_count": 38,
+    "event_count": 3,
+    "document_version_id": "91a3c62b-9e46-4ae5-94f5-a8681475991f",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/政府投资项目可研报告适配模板_2023年大纲.docx"
+  },
+  {
+    "template_id": "37855d4f-447a-4bdd-9429-b4ef86b0cd6b",
+    "name": "政府投资项目可行性研究报告编写通用大纲（2023年版）",
+    "stage": "feasibility",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+    "name": "政府投资项目建议书通用参考模板",
+    "stage": "requirement",
+    "status": "passed",
+    "generation_job_id": "3fe4467b-b68f-4f72-9ffa-c803c511da68",
+    "step_count": 5,
+    "event_count": 3,
+    "document_version_id": "78a71039-aa9e-4467-972b-51f4c0231ab0",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/requirement/政府投资项目建议书通用参考模板.docx"
+  },
+  {
+    "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+    "name": "政府采购货物买卖合同填报模板（2024年试行文本适配）",
+    "stage": "contract",
+    "status": "passed",
+    "generation_job_id": "94cae3ea-9928-450f-a255-76baea7b81d1",
+    "step_count": 4,
+    "event_count": 3,
+    "document_version_id": "3989e948-4089-4dec-9510-a546c08e7f06",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/contract/政府采购货物买卖合同填报模板_2024年试行文本适配.docx"
+  },
+  {
+    "template_id": "1dc29183-c5f4-4cca-a3b8-a94e2fe02ac4",
+    "name": "政府采购货物买卖合同（试行）",
+    "stage": "contract",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "22c9167a-5ffb-435c-88ca-8cd5320b744b",
+    "name": "材料采购招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "673feb57-370e-470e-bc39-1b1098e3ec9f",
+    "step_count": 6,
+    "event_count": 3,
+    "document_version_id": "d3045395-6be2-4d82-b93c-d29a39c0621d",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/材料采购招标文件适配模板_2017年版.docx"
+  },
+  {
+    "template_id": "76842058-1924-43f9-9cfa-658f6ebdfd59",
+    "name": "标准勘察招标文件（2017年版）",
+    "stage": "tender",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "ec64451e-f0eb-402f-9488-359cc6148c49",
+    "name": "标准材料采购招标文件（2017年版）",
+    "stage": "tender",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "8422ece8-5b61-41ad-906b-3215c7ddcd49",
+    "name": "标准监理招标文件（2017年版）",
+    "stage": "tender",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "8e5fba22-11ec-492e-a59e-3fcb664c35df",
+    "name": "标准设备采购招标文件（2017年版）",
+    "stage": "tender",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "f51572b8-b468-4de4-9603-ffad17426eaf",
+    "name": "标准设计招标文件（2017年版）",
+    "stage": "tender",
+    "status": "reference_only",
+    "reason": "国家正式文本仅作官方来源索引，不提供本地 DOCX 生成源"
+  },
+  {
+    "template_id": "bd1acc23-a8e9-4bc5-893a-a27e57a66e90",
+    "name": "监理招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "53d88d3e-a6c4-4ea3-ba0e-b1befea32936",
+    "step_count": 6,
+    "event_count": 3,
+    "document_version_id": "e9312d0a-034d-420d-9937-9d7e2dc229fe",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/监理招标文件适配模板_2017年版.docx"
+  },
+  {
+    "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+    "name": "设备采购招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "67bb17e9-16c9-404f-9083-404b29a2fbcb",
+    "step_count": 6,
+    "event_count": 3,
+    "document_version_id": "9af2a64f-5ca6-4cb5-b626-991ed26e1bb2",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设备采购招标文件适配模板_2017年版.docx"
+  },
+  {
+    "template_id": "ffd4325f-5acb-4677-a3eb-28655d9d7b05",
+    "name": "设计招标文件适配模板（2017年版）",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "7432cbd5-ebee-432a-8e8d-0766e0022745",
+    "step_count": 6,
+    "event_count": 3,
+    "document_version_id": "9d82b929-e974-4b04-a5e2-107ee6f47206",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设计招标文件适配模板_2017年版.docx"
+  },
+  {
+    "template_id": "9545d84c-2eb1-4a19-b118-9b0137e1b4c4",
+    "name": "通用采购合同参考模板",
+    "stage": "contract",
+    "status": "passed",
+    "generation_job_id": "0a66182c-3e0d-4b12-b016-dbb11fba2ff4",
+    "step_count": 8,
+    "event_count": 3,
+    "document_version_id": "2dde9723-68cc-43cc-a61b-6c27b632603a",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/contract/通用采购合同参考模板.docx"
+  },
+  {
+    "template_id": "b781c7b0-978e-45f8-80a2-b0da91e66a32",
+    "name": "通用采购招标文件参考模板",
+    "stage": "tender",
+    "status": "passed",
+    "generation_job_id": "c9c6abee-4bf4-4182-a6f3-a2e696a029f5",
+    "step_count": 5,
+    "event_count": 3,
+    "document_version_id": "071782ae-6b75-4b75-93b8-29e40ebcd9ee",
+    "output": "artifacts/builtin_template_acceptance/all-template-minimum/tender/通用采购招标文件参考模板.docx"
+  }
+]

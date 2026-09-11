@@ -1,0 +1,382 @@
+[
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/建设工程施工合同填报模板_GF-2017-0201适配.docx",
+    "status": "passed",
+    "size_bytes": 39565,
+    "sha256": "1e950f6ca2be1aaf6ab09be522e45d102483eaf8ad26ba06820c891af9ba5a44",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 5,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2262,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/政府采购货物买卖合同填报模板_2024年试行文本适配.docx",
+    "status": "passed",
+    "size_bytes": 39583,
+    "sha256": "fd27f89868ca195b919406864d6d16c9591234779f67f2ccab9341255aea460e",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 5,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2259,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/contract/通用采购合同参考模板.docx",
+    "status": "passed",
+    "size_bytes": 39599,
+    "sha256": "638e68d6e0d4b0a22b43a09ff2b07c16125538348c9028d5c8502fda41112161",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 9,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 4258,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/一般投资项目可行性研究报告参考模板.docx",
+    "status": "passed",
+    "size_bytes": 39719,
+    "sha256": "d54a8b555286089454f7c98f16462aa34d13ee14cd66f8f5722a726896af4f95",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 8,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2734,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/企业投资项目可研报告适配模板_2023年大纲.docx",
+    "status": "passed",
+    "size_bytes": 40635,
+    "sha256": "86c38c66caff8abf5ed1ab51aea881c79cf19d3a5145acba4b7e5387fd724686",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 39,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 11574,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/feasibility/政府投资项目可研报告适配模板_2023年大纲.docx",
+    "status": "passed",
+    "size_bytes": 40625,
+    "sha256": "93fea4c3b1667ffaee6361887f6be354053aae377a4818afa5cec13c1d64cbd3",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 39,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 11574,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/requirement/政府投资项目建议书通用参考模板.docx",
+    "status": "passed",
+    "size_bytes": 39634,
+    "sha256": "abf772b7da7fc83414c1a14584d84f4f48cb1a1a64434b1b7a9bfaa23224db7e",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 6,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 1900,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/勘察招标文件适配模板_2017年版.docx",
+    "status": "passed",
+    "size_bytes": 41082,
+    "sha256": "c6d4d37c4b700e36a1523efd57d42b16b85f67cadd3dc570ca93a59f96141a71",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2105,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/材料采购招标文件适配模板_2017年版.docx",
+    "status": "passed",
+    "size_bytes": 41087,
+    "sha256": "6d3ebc54c7756f80ccf4911e04cbc1102efba34d0ea05e093d9129c20fb03f36",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2109,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/监理招标文件适配模板_2017年版.docx",
+    "status": "passed",
+    "size_bytes": 41080,
+    "sha256": "6509fb7c4c1dd542c207948715fb07d67784037b8b3cc7f0fd7a47b14a28d9bf",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2105,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设备采购招标文件适配模板_2017年版.docx",
+    "status": "passed",
+    "size_bytes": 41087,
+    "sha256": "b260bfe16b42d75583ccbf8b87370ee6dee40d14c2c1f32ff758052917c6288a",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2109,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/设计招标文件适配模板_2017年版.docx",
+    "status": "passed",
+    "size_bytes": 41083,
+    "sha256": "6889ffefaa46cc27045ff3f33dcd7a5fcedeec400d78236222ad1972f716d487",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2105,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/all-template-minimum/tender/通用采购招标文件参考模板.docx",
+    "status": "passed",
+    "size_bytes": 40851,
+    "sha256": "d4b740080d8dd070783870df06d4f96b4e74dabf5f591215b23a599348de3453",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 6,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 1864,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/contract/合同签约准备版_V1.0.docx",
+    "status": "passed",
+    "size_bytes": 40771,
+    "sha256": "8bb38445271e715b76a761d6a219d34f9961437017865e6cbe2b8e88298e17be",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 5,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 3694,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/contract/合同签署前预草案_V0.9.docx",
+    "status": "passed",
+    "size_bytes": 40354,
+    "sha256": "2605bb8ba7880c83043a5b8f1c0f2efc90e8cd2cb3607c8d0fe18dbc1b3f0124",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 5,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 3018,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/feasibility/可行性研究报告_V1.0.docx",
+    "status": "passed",
+    "size_bytes": 40911,
+    "sha256": "f45162f91332008e1586e89554034f5de6803b97e3f04d4ece980afe4493b803",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 39,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 13223,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/inputs/区域绿色数据中心节能改造需求说明.docx",
+    "status": "passed",
+    "size_bytes": 37227,
+    "sha256": "fb5e28d24c2c9d3a49d0a4ccd4088679df6ddc61ad25fd8c337adaadb1d4e72c",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 2,
+    "table_count": 1,
+    "document_section_count": 1,
+    "a4_page_size": false,
+    "text_length": 258,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/requirement/项目建议书_V1.0.docx",
+    "status": "passed",
+    "size_bytes": 39887,
+    "sha256": "f8f20eaec24ec0f05ef3c58056a4da4998f897f19b99de42d2e40e8f7c93c281",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 6,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2362,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  },
+  {
+    "path": "artifacts/builtin_template_acceptance/tender/招标文件_V1.0.docx",
+    "status": "passed",
+    "size_bytes": 41369,
+    "sha256": "d4941efac4acc0b6c05aa257e0bc87fb7b560def5e3da2ca88231dd7feb9bef0",
+    "ooxml_required_parts": [
+      "[Content_Types].xml",
+      "word/_rels/document.xml.rels",
+      "word/document.xml",
+      "word/styles.xml"
+    ],
+    "heading_count": 7,
+    "table_count": 1,
+    "document_section_count": 2,
+    "a4_page_size": true,
+    "text_length": 2616,
+    "unresolved_variables": [],
+    "libreoffice_opened": true,
+    "errors": []
+  }
+]

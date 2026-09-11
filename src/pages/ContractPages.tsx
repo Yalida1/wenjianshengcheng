@@ -575,7 +575,7 @@ export function ContractElementConfirmationPage({ navigate }: { navigate: (p: Pa
             <button
               onClick={() => {
                 advanceStage("contract", "template_selected");
-                navigate("contract-template-selection");
+                navigate("contract-generation-setup");
               }}
               disabled={!canProceed}
               className="h-9 rounded-lg bg-[#2E5495] px-4 text-sm font-medium text-white hover:bg-[#24457C] disabled:opacity-40 disabled:cursor-not-allowed"

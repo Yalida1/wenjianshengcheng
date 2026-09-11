@@ -1,0 +1,50 @@
+[
+  {
+    "stage": "requirement",
+    "template_id": "95f16683-0707-4c7a-ab90-97652a3317fe",
+    "template_version": 1,
+    "template_sha_match": true,
+    "section_keys_match": true,
+    "header_preserved": true,
+    "format_profile_locked": true,
+    "source_docx_sha256": "a0296c68ff67f645b1f8c53b66dcf4db9aa5ea119808b5cfef0ba32208afe0ab",
+    "export_docx_sha256": "f8f20eaec24ec0f05ef3c58056a4da4998f897f19b99de42d2e40e8f7c93c281",
+    "status": "passed"
+  },
+  {
+    "stage": "feasibility",
+    "template_id": "58bae4a5-4c21-47f9-b227-417515b1e024",
+    "template_version": 1,
+    "template_sha_match": true,
+    "section_keys_match": true,
+    "header_preserved": true,
+    "format_profile_locked": true,
+    "source_docx_sha256": "cd7af1428bb7485b83ff613213272de9fa2d6a7f93cadf148ed26f181e0c45b6",
+    "export_docx_sha256": "f45162f91332008e1586e89554034f5de6803b97e3f04d4ece980afe4493b803",
+    "status": "passed"
+  },
+  {
+    "stage": "tender",
+    "template_id": "cb274947-91bc-48dd-8441-c17fbc72dfac",
+    "template_version": 1,
+    "template_sha_match": true,
+    "section_keys_match": true,
+    "header_preserved": true,
+    "format_profile_locked": true,
+    "source_docx_sha256": "aa62766838521c98a361564a29160c2419a05c5f859073c4246d6dcbd6987f33",
+    "export_docx_sha256": "d4941efac4acc0b6c05aa257e0bc87fb7b560def5e3da2ca88231dd7feb9bef0",
+    "status": "passed"
+  },
+  {
+    "stage": "contract",
+    "template_id": "0a3f1ca0-8c1e-45bc-a3c0-244ba2c1d149",
+    "template_version": 1,
+    "template_sha_match": true,
+    "section_keys_match": true,
+    "header_preserved": true,
+    "format_profile_locked": true,
+    "source_docx_sha256": "85b3a6da6bf4327f064406fa5db9e4237a459c603b5b80a2004edec43b12b8c7",
+    "export_docx_sha256": "8bb38445271e715b76a761d6a219d34f9961437017865e6cbe2b8e88298e17be",
+    "status": "passed"
+  }
+]

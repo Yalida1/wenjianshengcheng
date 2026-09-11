@@ -1,0 +1,228 @@
+[
+  {
+    "case_id": "BTA-MAP-001",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "forbidden_field_mapping",
+    "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+    "request_id": "bta-41d43bd2-ae11-461c-ad24-ef06d1392ccd",
+    "audit_recorded": true,
+    "database_state": "字段记录未创建"
+  },
+  {
+    "case_id": "BTA-MAP-002",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "forbidden_field_mapping",
+    "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+    "request_id": "bta-a6b53618-c60f-453b-b8f9-a24d70bdb1a0",
+    "audit_recorded": true,
+    "database_state": "字段记录未创建"
+  },
+  {
+    "case_id": "BTA-MAP-003",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "forbidden_field_mapping",
+    "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+    "request_id": "bta-4f4dfbbe-801d-42b0-b587-58f7e13559a3",
+    "audit_recorded": true,
+    "database_state": "字段记录未创建"
+  },
+  {
+    "case_id": "BTA-MAP-004",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "forbidden_field_mapping",
+    "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+    "request_id": "bta-d5d9cd34-d5ef-43db-b4bf-0f85cac0d836",
+    "audit_recorded": true,
+    "database_state": "字段记录未创建"
+  },
+  {
+    "case_id": "BTA-MAP-005",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "forbidden_field_mapping",
+    "message": "该上游字段不能直接映射为当前正式字段，必须单独提供来源或人工确认",
+    "request_id": "bta-d8421af6-840d-4b06-8c36-5ea06a487e30",
+    "audit_recorded": true,
+    "database_state": "字段记录未创建"
+  },
+  {
+    "case_id": "BTA-TPL-001",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "template_not_applicable",
+    "message": "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+    "request_id": "bta-9ddaa77b-c0ba-4993-9366-f4c302c1459b",
+    "audit_recorded": true,
+    "database_state": "未创建生成任务"
+  },
+  {
+    "case_id": "BTA-NEG-001",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "缺少必需 P0 字段",
+    "request_id": "bta-8f88f863-9e19-443b-bc6a-a5b3e8b24c37",
+    "audit_recorded": true,
+    "database_state": "合同预草案仍为 draft/可导出但不可定稿"
+  },
+  {
+    "case_id": "BTA-NEG-004",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "最终合同金额为空",
+    "request_id": "bta-8f88f863-9e19-443b-bc6a-a5b3e8b24c37",
+    "audit_recorded": true,
+    "database_state": "合同预草案仍为 draft/可导出但不可定稿"
+  },
+  {
+    "case_id": "BTA-NEG-002",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "存在 P0 问题，不能定稿",
+    "request_id": "bta-094a1e01-7e5b-42e0-973e-a6932c7761de",
+    "audit_recorded": true,
+    "database_state": "招标预算保持 ai_suggested，文档未定稿"
+  },
+  {
+    "case_id": "BTA-NEG-003",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "存在 P0 问题，不能定稿",
+    "request_id": "bta-7ad67e7e-36c0-4e75-9162-d3d4c79d13fc",
+    "audit_recorded": true,
+    "database_state": "项目单位保持 conflict，文档未定稿"
+  },
+  {
+    "case_id": "BTA-NEG-005",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "存在 P0 问题，不能定稿",
+    "request_id": "bta-8e78e513-9095-4cc0-a2b4-f4e78349070a",
+    "audit_recorded": true,
+    "database_state": "付款比例不等于 100%，文档未定稿"
+  },
+  {
+    "case_id": "BTA-NEG-006",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "存在 P0 问题，不能定稿",
+    "request_id": "bta-4f856554-347f-41fc-8862-ed69b1e9bfb6",
+    "audit_recorded": true,
+    "database_state": "付款金额合计不等于合同金额，文档未定稿"
+  },
+  {
+    "case_id": "BTA-NEG-007",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "finalization_blocked",
+    "message": "存在 P0 问题，不能定稿",
+    "request_id": "bta-96308296-0dd0-4f6f-bada-7c6dce063e33",
+    "audit_recorded": true,
+    "database_state": "修订版保持 draft，占位符内容块已保存并由校验阻断"
+  },
+  {
+    "case_id": "BTA-NEG-008",
+    "status": "passed",
+    "http_status": 422,
+    "error_code": "template_not_applicable",
+    "message": "模板未发布、版本不符、不可用于生成或不适用当前阶段",
+    "request_id": "bta-eb9675a1-2d29-4d78-b2ff-b674e88f640f",
+    "audit_recorded": true,
+    "database_state": "过期模板仍发布留痕，但未创建生成任务"
+  },
+  {
+    "case_id": "BTA-NEG-009",
+    "status": "passed",
+    "http_status": 403,
+    "error_code": "fixed_template_block_forbidden",
+    "message": "固定模板条款仅允许模板管理员修改",
+    "request_id": "bta-54470444-3a41-407c-b5de-fae325ed3cfc",
+    "audit_recorded": true,
+    "database_state": "fixed_template 原文未变化"
+  },
+  {
+    "case_id": "BTA-NEG-010",
+    "status": "passed",
+    "http_status": 200,
+    "error_code": null,
+    "message": "上游新定稿后所有已启动下游均标为 stale",
+    "request_id": "bta-7517f9bb-9a64-45ec-b0da-193f2640cca1",
+    "audit_recorded": true,
+    "database_state": [
+      {
+        "id": "58599f9d-0c5e-482c-9b68-fe9e75d77ce8",
+        "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+        "stage": "feasibility",
+        "status": "stale",
+        "source_type": "upstream_final",
+        "source_file_version_id": "b8aff356-9fab-4971-a089-4ca1d8c68deb",
+        "finalized_document_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+        "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+        "revision": 4
+      },
+      {
+        "id": "a378e09b-b960-43f5-8999-b3a419177129",
+        "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+        "stage": "tender",
+        "status": "stale",
+        "source_type": "upstream_final",
+        "source_file_version_id": "0fa207e1-4ba3-4d00-94ef-74db62e9a3d8",
+        "finalized_document_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+        "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+        "revision": 4
+      },
+      {
+        "id": "4fb030a6-f7e5-42dd-85de-5c20bfb6862d",
+        "project_id": "48fcd918-6cf9-45b1-8380-f14088e746ed",
+        "stage": "contract",
+        "status": "stale",
+        "source_type": "upstream_final",
+        "source_file_version_id": "241d89f0-4570-4e11-8a12-2ea4b99270dc",
+        "finalized_document_version_id": "8d9047f7-3532-4462-8fd3-c2215f56469e",
+        "stale_reason": "上游 requirement 已定稿为版本 4，请确认是否更新来源",
+        "revision": 4
+      }
+    ]
+  },
+  {
+    "case_id": "BTA-NEG-011",
+    "status": "passed",
+    "http_status": 409,
+    "error_code": "immutable_version",
+    "message": "已定稿版本不可修改，请创建新修订草稿",
+    "request_id": "bta-c3be11af-8fad-425b-a590-4ad91ced99d8",
+    "audit_recorded": true,
+    "database_state": "原定稿版本 immutable=true，正文未覆盖"
+  },
+  {
+    "case_id": "BTA-NEG-012",
+    "status": "passed",
+    "http_status": [
+      403,
+      403,
+      403
+    ],
+    "error_code": [
+      "forbidden",
+      "forbidden",
+      "forbidden"
+    ],
+    "message": "只读用户确认字段、定稿和导出均被拒绝",
+    "request_id": [
+      "bta-f308d5a7-7c02-4478-8e2c-fc7885fca3f7",
+      "bta-52366d6f-e506-4ace-808a-8d4ab0279fea",
+      "bta-2764637d-7661-4157-9cd2-d41208939853"
+    ],
+    "audit_recorded": true,
+    "database_state": "字段、定稿记录和导出任务均未因只读请求改变"
+  }
+]

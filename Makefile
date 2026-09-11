@@ -1,7 +1,7 @@
 PYTHON ?= python
 PNPM ?= pnpm
 
-.PHONY: install setup dev up down migrate seed lint lint-frontend lint-backend typecheck typecheck-frontend typecheck-backend test test-backend test-frontend test-e2e golden-case golden security environment-check migration-check contract-check clean verify
+.PHONY: install setup dev up down migrate seed lint lint-frontend lint-backend typecheck typecheck-frontend typecheck-backend test test-backend test-frontend test-e2e golden-case golden security environment-check migration-check contract-check clean verify verify-builtin-templates
 
 install setup:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -83,3 +83,14 @@ verify: environment-check
 	$(MAKE) golden-case
 	$(MAKE) security
 	$(PYTHON) -m backend.scripts.delivery_checks final
+
+verify-builtin-templates:
+ifdef ACCEPTANCE_API_URL
+	$(PYTHON) -m backend.scripts.builtin_template_acceptance
+else
+	docker compose -p project-document-chain-builtin-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml down -v --remove-orphans
+	docker compose -p project-document-chain-builtin-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml up -d --build postgres redis minio minio-init api worker web
+	docker compose -p project-document-chain-builtin-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml build verify
+	docker compose -p project-document-chain-builtin-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml run --rm verify make verify-builtin-templates
+	docker compose -p project-document-chain-builtin-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml down -v --remove-orphans
+endif
